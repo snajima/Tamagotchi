@@ -1,7 +1,6 @@
 #require "ounit2";;
 #require "yojson";;
 #require "ANSITerminal";;
+#require "Nottui";;
 #directory "_build";;
-#load "adventure.cmo";;
-#load "command.cmo";;
-#load "state.cmo";;
+#load "prototype.cmo";;
