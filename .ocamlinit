@@ -1,6 +1,7 @@
 #require "ounit2";;
 #require "yojson";;
 #require "ANSITerminal";;
-#require "Nottui";;
+#require "Graphics";;
+#require "nottui";;
 #directory "_build";;
 #load "prototype.cmo";;
