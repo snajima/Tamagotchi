@@ -1,33 +1,1210 @@
-open Notty
-open Notty_unix
+open Graphics
 
-let square = "\xe2\x96\xaa"
+;;
+open_graph " 480x270"
 
-let rec sierp n =
-  if n > 1 then
-    let ss = sierp (pred n) in
-    I.(ss <-> (ss <|> ss))
-  else I.(string A.(fg magenta) square |> hpad 1 0)
+let xr = (size_x () / 2) - 30
 
-let img (double, n) =
-  let s = sierp n in
-  if double then I.(s </> vpad 1 0 s) else s
+and yr = (size_y () / 2) - 26
 
-let rec update t state =
-  Term.image t (img state);
-  loop t state
+and xg = (size_x () / 2) + 30
 
-and loop t ((double, n) as state) =
-  match Term.event t with
-  | `Key (`Enter, _) -> ()
-  | `Key (`Arrow `Left, _) -> update t (double, max 1 (n - 1))
-  | `Key (`Arrow `Right, _) -> update t (double, min 8 (n + 1))
-  | `Key (`ASCII ' ', _) -> update t (not double, n)
-  | `Resize _ -> update t state
-  | _ -> loop t state
+and yg = (size_y () / 2) - 26
 
-let t = Term.create ()
+and xb = size_x () / 2
 
-let _ =
-  update t (false, 1);
-  Term.release t
+and yb = (size_y () / 2) + 26
+
+let point x y =
+  let dr = ((x - xr) * (x - xr)) + ((y - yr) * (y - yr))
+  and dg = ((x - xg) * (x - xg)) + ((y - yg) * (y - yg))
+  and db = ((x - xb) * (x - xb)) + ((y - yb) * (y - yb)) in
+  if dr > dg && dr > db then
+    set_color (rgb 255 (255 * dg / dr) (255 * db / dr))
+  else if dg > db then
+    set_color (rgb (255 * dr / dg) 255 (255 * db / dg))
+  else set_color (rgb (255 * dr / db) (255 * dg / db) 255);
+  fill_rect x y 2 2
+
+;;
+for y = (size_y () - 1) / 2 downto 0 do
+  for x = 0 to (size_x () - 1) / 2 do
+    point (2 * x) (2 * y)
+  done
+done
+
+let n = 0x000000
+
+and w = 0xFFFFFF
+
+and b = 0xFFCC99
+
+and y = 0xFFFF00
+
+and o = 0xCC9966
+
+and v = 0x00BB00
+
+and g = 0x888888
+
+and c = 0xDDDDDD
+
+and t = transp
+
+let caml =
+  make_image
+    [|
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+      |];
+      [|
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        n;
+        n;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+      |];
+      [|
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+      |];
+      [|
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+      |];
+      [|
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        g;
+        g;
+        g;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+      |];
+      [|
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        c;
+        c;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+      |];
+      [|
+        t;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        c;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        b;
+        b;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        t;
+        t;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        t;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        b;
+        b;
+        b;
+        n;
+        n;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        o;
+        o;
+        b;
+        o;
+        b;
+        b;
+        n;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        o;
+        o;
+        n;
+        n;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        b;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        o;
+        n;
+        b;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        b;
+        b;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        n;
+        b;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        y;
+        v;
+        y;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        b;
+        b;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        v;
+        y;
+        o;
+        o;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        b;
+        b;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        o;
+        o;
+        o;
+        y;
+        v;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        b;
+        b;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        o;
+        v;
+        y;
+        o;
+        y;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        b;
+        b;
+        n;
+        n;
+        b;
+        b;
+        n;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        o;
+        y;
+        y;
+        o;
+        o;
+        v;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        b;
+        b;
+        b;
+        n;
+        n;
+        n;
+        b;
+        n;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        v;
+        o;
+        v;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        b;
+        n;
+        n;
+        n;
+        n;
+        b;
+        n;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        t;
+        n;
+        v;
+        o;
+        o;
+        v;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+        t;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        o;
+        n;
+        n;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+      |];
+      [|
+        t;
+        t;
+        t;
+        t;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        n;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+        t;
+      |];
+    |]
+
+(* let x = ref 0 and y = ref 0;; let bg = get_image !x !y 32 32;; while
+   true do let st = wait_next_event [Mouse_motion; Button_down] in if
+   not st.button then draw_image bg !x !y; x := st.mouse_x; y :=
+   st.mouse_y; blit_image bg !x !y; draw_image caml !x !y; done;; *)
+
+;;
+set_color (rgb 0 0 0);
+remember_mode false;
+try
+  while true do
+    let st =
+      wait_next_event [ Mouse_motion; Button_down; Key_pressed ]
+    in
+    synchronize ();
+    if st.keypressed then raise Exit;
+    if st.button then (
+      remember_mode true;
+      draw_image caml st.mouse_x st.mouse_y;
+      remember_mode false);
+    let x = st.mouse_x + 16 and y = st.mouse_y + 16 in
+    moveto 0 y;
+    lineto (x - 25) y;
+    moveto 10000 y;
+    lineto (x + 25) y;
+    moveto x 0;
+    lineto x (y - 25);
+    moveto x 10000;
+    lineto x (y + 25);
+    draw_image caml st.mouse_x st.mouse_y
+  done
+with Exit -> ()
+
+(* open Notty open Notty_unix
+
+   let square = "\xe2\x96\xaa"
+
+   let rec sierp n = if n > 1 then let ss = sierp (pred n) in I.(ss <->
+   (ss <|> ss)) else I.(string A.(fg magenta) square |> hpad 1 0)
+
+   let img (double, n) = let s = sierp n in if double then I.(s </> vpad
+   1 0 s) else s
+
+   let rec update t state = Term.image t (img state); loop t state
+
+   and loop t ((double, n) as state) = match Term.event t with | `Key
+   (`Enter, _) -> () | `Key (`Arrow `Left, _) -> update t (double, max 1
+   (n - 1)) | `Key (`Arrow `Right, _) -> update t (double, min 8 (n +
+   1)) | `Key (`ASCII ' ', _) -> update t (not double, n) | `Resize _ ->
+   update t state | _ -> loop t state
+
+   let t = Term.create ()
+
+   let _ = update t (false, 1); Term.release t *)
+
+(* open Notty open Notty_unix
+
+   let rad n color = let a1 = A.fg color in let a2 = A.(st blink ++ a1)
+   in I.( string a2 "Rad" |> hpad n 0 <-> (string a1 "(⌐■_■)" |> hpad (n
+   + 7) 0))
+
+   let colors = A.[ red; green; yellow; blue; magenta; cyan ]
+
+   let out = colors |> List.mapi I.(fun i c -> rad i c |> pad ~t:i ~l:(2
+   * i)) |> I.zcat *)

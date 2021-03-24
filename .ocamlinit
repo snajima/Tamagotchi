@@ -4,4 +4,4 @@
 #require "Graphics";;
 #require "nottui";;
 #directory "_build";;
-#load "prototype.cmo";;
+#load "main.cmo";;
