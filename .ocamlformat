@@ -7,3 +7,6 @@ margin = 72
 parse-docstrings = true
 type-decl=sparse
 wrap-comments = true
+
+#To stop every element of the array from being on a different line
+break-collection-expressions = wrap
