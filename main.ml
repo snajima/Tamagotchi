@@ -34,3 +34,11 @@ let from_json json =
     inventory =
       json |> member "inventory" |> to_list |> List.map item_of_json;
   }
+
+let add_currency amount tam =
+  let old_amount = tam.money in
+  tam.money <- amount + old_amount
+
+let add_item item tam =
+  let old_inven = tam.inventory in
+  tam.inventory <- item :: old_inven
