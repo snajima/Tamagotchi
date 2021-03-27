@@ -7,7 +7,7 @@ type item = {
 
 type tamagotchi = {
   breed : string;
-  mutable lifeStage : int;
+  mutable lifeStage : string;
   mutable sleep : int;
   mutable cleanliness : int;
   mutable hunger : int;
@@ -25,7 +25,7 @@ let item_of_json json =
 let from_json json =
   {
     breed = json |> member "breed" |> to_string;
-    lifeStage = json |> member "lifeStage" |> to_int;
+    lifeStage = json |> member "lifeStage" |> to_string;
     sleep = json |> member "sleep" |> to_int;
     cleanliness = json |> member "cleanliness" |> to_int;
     hunger = json |> member "hunger" |> to_int;
