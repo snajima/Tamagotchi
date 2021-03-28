@@ -1,6 +1,6 @@
 B _build
 PKG ounit2
 PKG yojson
-PKG Graphics
+PKG graphics
 PKG nottui
 PKG ANSITerminal
