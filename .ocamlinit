@@ -2,6 +2,7 @@
 #require "yojson";;
 #require "ANSITerminal";;
 #require "Graphics";;
-#require "nottui";;
 #directory "_build";;
 #load "main.cmo";;
+#load "animation.cmo";;
+#load "gui.cmo";;

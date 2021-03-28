@@ -1,10 +1,11 @@
-MODULES=main view
+MODULES=main animation gui
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
 TEST=test.byte
 MAIN=main.byte
-VIEW=view.byte
+GUI=gui.byte
+ANIMATION=animation.byte
 OCAMLBUILD=ocamlbuild -use-ocamlfind
 
 default: build
@@ -21,6 +22,9 @@ play:
 
 view:
 	$(OCAMLBUILD) -tag 'debug' $(VIEW) && OCAMLRUNPARAM=b ./$(VIEW)
+
+gui:
+	$(OCAMLBUILD) -tag 'debug' $(GUI) && OCAMLRUNPARAM=b ./$(GUI)
 
 # check:
 # 	@bash check.sh
