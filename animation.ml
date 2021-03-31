@@ -29,7 +29,7 @@ let mirror (img : image) : image =
 
 let n = 0x000000
 
-and t = transp
+and t = 0xFFFFFF
 
 let m_one () =
   scale_augment 10
@@ -229,6 +229,138 @@ let m_nine () =
          [| n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
          [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
        |])
+
+let eat_icon () =
+  scale_augment 5
+    (make_image
+      [|
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; n; t; n; t; n; t; t; t; t; t; n; t; t; t |];
+        [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
+        [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
+        [| t; t; n; t; n; t; n; t; t; t; n; n; n; t; t; t |];
+        [| t; t; n; n; n; n; n; t; t; t; n; n; n; t; t; t |];
+        [| t; t; t; n; n; n; t; t; t; t; n; n; n; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; n; n; n; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      |])
+
+let sleep_icon () =
+  scale_augment 5
+    (make_image
+      [|
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; n; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; n; t; t; t; t; t; t; t; t; n; t; n; t; t |];
+        [| t; n; n; n; n; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; n; n; n; n; n; n; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; n; n; n; n; n; t |];
+        [| t; t; t; n; n; n; n; n; n; t; t; t; t; n; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; n; n; n; n; n; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      |])
+
+let toilet_icon () = 
+  scale_augment 5
+    (make_image
+      [|
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; n; n; n; n; n; n; n; n; n; n; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; n; t |];
+        [| t; t; t; n; t; t; n; n; n; n; t; t; n; t; n; t |];
+        [| t; t; t; n; n; t; t; t; t; t; t; n; n; t; n; t |];
+        [| t; t; t; n; t; n; n; n; n; n; n; t; n; t; n; t |];
+        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+        [| t; t; t; n; t; t; t; t; t; t; t; t; n; n; n; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+        [| t; t; t; t; t; n; n; n; n; n; n; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      |])
+
+let play_icon () =
+  scale_augment 5
+    (make_image
+      [|
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
+        [| t; t; t; n; t; t; t; t; t; n; t; t; n; n; n; t |];
+        [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
+        [| t; n; t; n; t; t; t; t; t; n; t; n; t; n; n; t |];
+        [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
+        [| t; n; t; t; n; t; t; t; n; t; t; n; t; n; n; t |];
+        [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
+        [| t; n; t; n; t; t; t; t; t; n; t; n; t; t; t; t |];
+        [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
+        [| t; t; t; n; t; t; t; t; t; n; t; t; t; t; t; t |];
+        [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      |])
+
+let shop_icon () =
+  scale_augment 5
+    (make_image
+      [|
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
+        [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+        [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+        [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      |])
+
+let inventory_icon () =
+  scale_augment 5
+    (make_image
+      [|
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; n; n; n; t; t; n; n; n; t; t; t; t; t |];
+        [| t; t; n; t; t; t; n; n; t; t; n; n; t; t; t; t |];
+        [| t; t; t; n; n; n; n; n; n; n; t; t; n; t; t; t |];
+        [| t; t; t; n; n; t; t; n; t; t; t; n; n; t; t; t |];
+        [| t; t; n; t; t; n; n; t; n; t; n; t; n; t; t; t |];
+        [| t; t; n; n; n; t; t; t; n; n; t; t; n; t; t; t |];
+        [| t; t; n; t; n; n; n; n; t; n; t; n; n; t; t; t |];
+        [| t; t; n; t; t; n; t; t; t; n; n; t; n; t; t; t |];
+        [| t; t; n; n; t; n; t; t; n; n; t; t; n; t; t; t |];
+        [| t; t; n; t; n; n; n; n; t; n; t; n; t; t; t; t |];
+        [| t; t; n; t; t; n; t; t; t; n; n; t; t; t; t; t |];
+        [| t; t; t; n; t; n; t; t; n; n; t; t; t; t; t; t |];
+        [| t; t; t; t; n; n; n; n; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      |])
 
 type animation = {
   frames : Graphics.image list;
