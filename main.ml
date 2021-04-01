@@ -20,9 +20,6 @@ exception Death
 
 exception NegativeMoney
 
-(*Compare function to be used in [List.sort_uniq]*)
-let compare x y = if x = y then 0 else if x > y then 1 else -1
-
 let item_of_json json =
   {
     name = json |> member "name" |> to_string;
