@@ -24,7 +24,9 @@ let main_tests =
     equal_value_test "breed of baby" "crazy" get_breed babe;
     equal_value_test "LifeStage of baby" "Baby" get_lifeStage babe;
     equal_value_test "LifeStage of teen" "Teenager" get_lifeStage teen;
-    increment_LifeStage babe equal_value_test "";
+    increment_age teen;
+    equal_value_test "LifeStage of teen to adult" "Adult" get_lifeStage teen; 
+    equal_value_test "Age of teen to adult" 11 get_age teen;
   ]
 
 let suite =
