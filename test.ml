@@ -19,7 +19,11 @@ let negative_money_exc name fxn =
 let wrong_lifestage_exc name fxn =
   name >:: fun ctxt -> assert_raises WrongLifeStage fxn
 
-let main_tests = []
+let main_tests =
+  [
+    equal_value_test "breed of baby" "crazy" get_breed babe;
+    equal_value_test "LifeStage of baby" "Baby" get_lifeStage babe;
+  ]
 
 let suite =
   "test suite for Tamagotchi Final Project"
