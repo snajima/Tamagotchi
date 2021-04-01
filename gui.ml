@@ -37,6 +37,27 @@ let handle_char c =
 let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
   f_init ();
   try
+    Graphics.set_color Graphics.white;
+    Graphics.fill_rect 0 (10 * state.scale) (120 * state.scale)
+      (100 * state.scale);
+    Graphics.draw_image
+      (eat_icon ())
+      (0 * state.scale) (90 * state.scale);
+    Graphics.draw_image
+      (sleep_icon ())
+      (45 * state.scale) (90 * state.scale);
+    Graphics.draw_image
+      (toilet_icon ())
+      (90 * state.scale) (90 * state.scale);
+    Graphics.draw_image
+      (play_icon ())
+      (0 * state.scale) (10 * state.scale);
+    Graphics.draw_image
+      (shop_icon ())
+      (45 * state.scale) (10 * state.scale);
+    Graphics.draw_image
+      (inventory_icon ())
+      (90 * state.scale) (10 * state.scale);
     while true do
       try
         let s = Graphics.wait_next_event [ Poll ]
@@ -44,8 +65,6 @@ let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
         and anim = test_anim () in
         step state;
         Graphics.set_color Graphics.white;
-        Graphics.fill_rect 0 (20 * state.scale) (120 * state.scale)
-          (80 * state.scale);
         Graphics.draw_image
           (curr_frame anim state.anim_frame)
           (42 * state.scale) (35 * state.scale);
@@ -55,7 +74,9 @@ let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
           state.anim_frame <- (state.anim_frame + 1) mod anim.total;
         print_endline (string_of_int state.anim_frame);
         (* ------------------------------------------ *)
-        if s.Graphics.keypressed then f_key s.Graphics.key
+        if s.Graphics.keypressed then 
+          (* f_key s.Graphics.key; *)
+          print_endline (string_of_int state.anim_frame)
         else if s.Graphics.button then
           f_mouse s.Graphics.mouse_x s.Graphics.mouse_y
       with
@@ -91,7 +112,8 @@ let exit s () =
      return";
   print_endline ""
 
-let mouse s x y = ()
+let mouse s x y = 
+  print_endline (String.concat " " [(string_of_int x); (string_of_int y)])
 
 let except s ex = ()
 

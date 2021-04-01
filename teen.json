@@ -1,0 +1,15 @@
+{
+  "breed": "fluffy",
+  "lifeStage": "Teenager",
+  "sleep": 45,
+  "cleanliness": 87,
+  "hunger": 83,
+  "age": 10,
+  "money": 10,
+  "inventory": [
+    {
+      "name": "piano",
+      "cost": 10
+    }
+  ]
+}

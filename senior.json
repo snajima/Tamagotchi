@@ -1,0 +1,15 @@
+{
+  "breed": "bald",
+  "lifeStage": "Senior",
+  "sleep": 90,
+  "cleanliness": 70,
+  "hunger": 28,
+  "age": 35,
+  "money": 10,
+  "inventory": [
+    {
+      "name": "piano",
+      "cost": 10
+    }
+  ]
+}
