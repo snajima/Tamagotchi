@@ -23,6 +23,8 @@ let main_tests =
   [
     equal_value_test "breed of baby" "crazy" get_breed babe;
     equal_value_test "LifeStage of baby" "Baby" get_lifeStage babe;
+    equal_value_test "LifeStage of teen" "Teenager" get_lifeStage teen;
+    increment_LifeStage babe equal_value_test "";
   ]
 
 let suite =
