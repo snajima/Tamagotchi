@@ -16,11 +16,12 @@ type tamagotchi = {
   mutable inventory : item list;
 }
 
-exception WrongLifeStage
-
 exception Death
 
 exception NegativeMoney
+
+(*Compare function to be used in [List.sort_uniq]*)
+let compare x y = if x = y then 0 else if x > y then 1 else -1
 
 let item_of_json json =
   {
@@ -45,36 +46,32 @@ let get_breed tam = tam.breed
 
 let get_lifeStage tam = tam.lifeStage
 
-(** This function only increments the lifecycle.*)
-let increment_lifeStage tam =
-  let current_stage = tam.lifeStage in
-  match current_stage with
-  | "Baby" -> tam.lifeStage <- "Teenager"
-  | "Teenager" -> tam.lifeStage <- "Adult"
-  | "Adult" -> tam.lifeStage <- "Senior"
-  | "Senior" -> tam.lifeStage <- raise Death
-  | _ -> raise WrongLifeStage
-
 let get_sleep tam = tam.sleep
 
 (** Amount can be positive or negative*)
 let set_sleep amount tam =
   let new_amount = amount + tam.sleep in
-  if new_amount < 0 then raise Death else tam.sleep <- new_amount
+  if new_amount < 0 then raise Death 
+  else if new_amount <= 100 then tam.sleep <- new_amount
+  else tam.sleep <- 100
 
 let get_cleanliness tam = tam.cleanliness
 
 (** Amount can be positive or negative*)
 let set_cleanliness amount tam =
   let new_amount = amount + tam.cleanliness in
-  if new_amount < 0 then raise Death else tam.cleanliness <- new_amount
+  if new_amount < 0 then raise Death 
+  else if new_amount <= 100 then tam.cleanliness <- new_amount
+  else tam.cleanliness <- 100
 
 let get_hunger tam = tam.hunger
 
 (** Amount can be positive or negative*)
 let set_hunger amount tam =
   let new_amount = amount + tam.hunger in
-  if new_amount < 0 then raise Death else tam.hunger <- new_amount
+  if new_amount < 0 then raise Death 
+  else if new_amount <= 100 then tam.hunger <- new_amount
+  else tam.hunger <- 100
 
 let get_age tam = tam.age
 
@@ -84,9 +81,13 @@ let get_age tam = tam.age
    changes its lifestage too *)
 let increment_age tam =
   let new_age = tam.age + 1 in
-  if new_age = 6 || new_age = 11 || new_age = 26 then
-    increment_lifeStage tam;
+  if new_age = 6 then tam.lifeStage <- "Teenager"
+  else if new_age = 11 then tam.lifeStage <- "Adult"
+  else if new_age = 26 then tam.lifeStage <- "Senior"
+  else if new_age > 26 then raise Death;
   tam.age <- new_age
+
+let get_money tam = tam.money
 
 (** Amount can be positive or negative. Raise Exception NegativeMoney if
     the new amount of money becomes negative.*)
@@ -97,7 +98,6 @@ let set_money amount tam =
 
 let get_inventory tam = tam.inventory
 
-(**Adding item to the list*)
-let set_item item tam =
-  let old_inven = tam.inventory in
-  tam.inventory <- item :: old_inven
+(**Adding item to the list. The list is a set that can contain duplicates*)
+let set_item item tam = 
+  tam.inventory <- item :: tam.inventory
