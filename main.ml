@@ -51,7 +51,7 @@ let get_sleep tam = tam.sleep
 (** Amount can be positive or negative*)
 let set_sleep amount tam =
   let new_amount = amount + tam.sleep in
-  if new_amount < 0 then raise Death 
+  if new_amount < 0 then raise Death
   else if new_amount <= 100 then tam.sleep <- new_amount
   else tam.sleep <- 100
 
@@ -60,7 +60,7 @@ let get_cleanliness tam = tam.cleanliness
 (** Amount can be positive or negative*)
 let set_cleanliness amount tam =
   let new_amount = amount + tam.cleanliness in
-  if new_amount < 0 then raise Death 
+  if new_amount < 0 then raise Death
   else if new_amount <= 100 then tam.cleanliness <- new_amount
   else tam.cleanliness <- 100
 
@@ -69,7 +69,7 @@ let get_hunger tam = tam.hunger
 (** Amount can be positive or negative*)
 let set_hunger amount tam =
   let new_amount = amount + tam.hunger in
-  if new_amount < 0 then raise Death 
+  if new_amount < 0 then raise Death
   else if new_amount <= 100 then tam.hunger <- new_amount
   else tam.hunger <- 100
 
@@ -84,7 +84,7 @@ let increment_age tam =
   if new_age = 6 then tam.lifeStage <- "Teenager"
   else if new_age = 11 then tam.lifeStage <- "Adult"
   else if new_age = 26 then tam.lifeStage <- "Senior"
-  else if new_age > 26 then raise Death;
+  else if new_age > 35 then raise Death;
   tam.age <- new_age
 
 let get_money tam = tam.money
@@ -98,6 +98,6 @@ let set_money amount tam =
 
 let get_inventory tam = tam.inventory
 
-(**Adding item to the list. The list is a set that can contain duplicates*)
-let set_item item tam = 
-  tam.inventory <- item :: tam.inventory
+(**Adding item to the list. The list is a set that can contain
+   duplicates*)
+let set_item item tam = tam.inventory <- item :: tam.inventory
