@@ -59,7 +59,6 @@ let m_two () =
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
          [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-         [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
          [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
          [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
          [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
@@ -233,134 +232,134 @@ let m_nine () =
 let eat_icon () =
   scale_augment 5
     (make_image
-      [|
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; n; t; n; t; n; t; t; t; t; t; n; t; t; t |];
-        [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-        [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-        [| t; t; n; t; n; t; n; t; t; t; n; n; n; t; t; t |];
-        [| t; t; n; n; n; n; n; t; t; t; n; n; n; t; t; t |];
-        [| t; t; t; n; n; n; t; t; t; t; n; n; n; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; n; n; n; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      |])
+       [|
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; n; t; n; t; n; t; t; t; t; t; n; t; t; t |];
+         [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
+         [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
+         [| t; t; n; t; n; t; n; t; t; t; n; n; n; t; t; t |];
+         [| t; t; n; n; n; n; n; t; t; t; n; n; n; t; t; t |];
+         [| t; t; t; n; n; n; t; t; t; t; n; n; n; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; n; n; n; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+       |])
 
 let sleep_icon () =
   scale_augment 5
     (make_image
-      [|
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; n; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; n; t; t; t; t; t; t; t; t; n; t; n; t; t |];
-        [| t; n; n; n; n; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; n; n; n; n; n; n; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; n; n; n; n; n; t |];
-        [| t; t; t; n; n; n; n; n; n; t; t; t; t; n; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; n; n; n; n; n; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      |])
+       [|
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; n; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; n; t; t; t; t; t; t; t; t; n; t; n; t; t |];
+         [| t; n; n; n; n; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; n; n; n; n; n; n; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; n; n; n; n; n; t |];
+         [| t; t; t; n; n; n; n; n; n; t; t; t; t; n; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; n; n; n; n; n; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+       |])
 
-let toilet_icon () = 
+let toilet_icon () =
   scale_augment 5
     (make_image
-      [|
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; n; n; n; n; n; n; n; n; n; n; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; n; t |];
-        [| t; t; t; n; t; t; n; n; n; n; t; t; n; t; n; t |];
-        [| t; t; t; n; n; t; t; t; t; t; t; n; n; t; n; t |];
-        [| t; t; t; n; t; n; n; n; n; n; n; t; n; t; n; t |];
-        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-        [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-        [| t; t; t; n; t; t; t; t; t; t; t; t; n; n; n; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-        [| t; t; t; t; t; n; n; n; n; n; n; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      |])
+       [|
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; n; n; n; n; n; n; n; n; n; n; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; n; t |];
+         [| t; t; t; n; t; t; n; n; n; n; t; t; n; t; n; t |];
+         [| t; t; t; n; n; t; t; t; t; t; t; n; n; t; n; t |];
+         [| t; t; t; n; t; n; n; n; n; n; n; t; n; t; n; t |];
+         [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+         [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+         [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+         [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+         [| t; t; t; n; t; t; t; t; t; t; t; t; n; n; n; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+         [| t; t; t; t; t; n; n; n; n; n; n; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+       |])
 
 let play_icon () =
   scale_augment 5
     (make_image
-      [|
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-        [| t; t; t; n; t; t; t; t; t; n; t; t; n; n; n; t |];
-        [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-        [| t; n; t; n; t; t; t; t; t; n; t; n; t; n; n; t |];
-        [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-        [| t; n; t; t; n; t; t; t; n; t; t; n; t; n; n; t |];
-        [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-        [| t; n; t; n; t; t; t; t; t; n; t; n; t; t; t; t |];
-        [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-        [| t; t; t; n; t; t; t; t; t; n; t; t; t; t; t; t |];
-        [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      |])
+       [|
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
+         [| t; t; t; n; t; t; t; t; t; n; t; t; n; n; n; t |];
+         [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
+         [| t; n; t; n; t; t; t; t; t; n; t; n; t; n; n; t |];
+         [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
+         [| t; n; t; t; n; t; t; t; n; t; t; n; t; n; n; t |];
+         [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
+         [| t; n; t; n; t; t; t; t; t; n; t; n; t; t; t; t |];
+         [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
+         [| t; t; t; n; t; t; t; t; t; n; t; t; t; t; t; t |];
+         [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+       |])
 
 let shop_icon () =
   scale_augment 5
     (make_image
-      [|
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-        [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-        [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-        [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-        [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-        [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      |])
+       [|
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
+         [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+         [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+       |])
 
 let inventory_icon () =
   scale_augment 5
     (make_image
-      [|
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; n; n; n; t; t; n; n; n; t; t; t; t; t |];
-        [| t; t; n; t; t; t; n; n; t; t; n; n; t; t; t; t |];
-        [| t; t; t; n; n; n; n; n; n; n; t; t; n; t; t; t |];
-        [| t; t; t; n; n; t; t; n; t; t; t; n; n; t; t; t |];
-        [| t; t; n; t; t; n; n; t; n; t; n; t; n; t; t; t |];
-        [| t; t; n; n; n; t; t; t; n; n; t; t; n; t; t; t |];
-        [| t; t; n; t; n; n; n; n; t; n; t; n; n; t; t; t |];
-        [| t; t; n; t; t; n; t; t; t; n; n; t; n; t; t; t |];
-        [| t; t; n; n; t; n; t; t; n; n; t; t; n; t; t; t |];
-        [| t; t; n; t; n; n; n; n; t; n; t; n; t; t; t; t |];
-        [| t; t; n; t; t; n; t; t; t; n; n; t; t; t; t; t |];
-        [| t; t; t; n; t; n; t; t; n; n; t; t; t; t; t; t |];
-        [| t; t; t; t; n; n; n; n; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-        [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      |])
+       [|
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; n; n; n; t; t; n; n; n; t; t; t; t; t |];
+         [| t; t; n; t; t; t; n; n; t; t; n; n; t; t; t; t |];
+         [| t; t; t; n; n; n; n; n; n; n; t; t; n; t; t; t |];
+         [| t; t; t; n; n; t; t; n; t; t; t; n; n; t; t; t |];
+         [| t; t; n; t; t; n; n; t; n; t; n; t; n; t; t; t |];
+         [| t; t; n; n; n; t; t; t; n; n; t; t; n; t; t; t |];
+         [| t; t; n; t; n; n; n; n; t; n; t; n; n; t; t; t |];
+         [| t; t; n; t; t; n; t; t; t; n; n; t; n; t; t; t |];
+         [| t; t; n; n; t; n; t; t; n; n; t; t; n; t; t; t |];
+         [| t; t; n; t; n; n; n; n; t; n; t; n; t; t; t; t |];
+         [| t; t; n; t; t; n; t; t; t; n; n; t; t; t; t; t |];
+         [| t; t; t; n; t; n; t; t; n; n; t; t; t; t; t; t |];
+         [| t; t; t; t; n; n; n; n; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+       |])
 
 type animation = {
   frames : Graphics.image list;

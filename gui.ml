@@ -40,24 +40,18 @@ let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
     Graphics.set_color Graphics.white;
     Graphics.fill_rect 0 (10 * state.scale) (120 * state.scale)
       (100 * state.scale);
-    Graphics.draw_image
-      (eat_icon ())
-      (0 * state.scale) (90 * state.scale);
-    Graphics.draw_image
-      (sleep_icon ())
-      (45 * state.scale) (90 * state.scale);
-    Graphics.draw_image
-      (toilet_icon ())
-      (90 * state.scale) (90 * state.scale);
-    Graphics.draw_image
-      (play_icon ())
-      (0 * state.scale) (10 * state.scale);
-    Graphics.draw_image
-      (shop_icon ())
-      (45 * state.scale) (10 * state.scale);
-    Graphics.draw_image
-      (inventory_icon ())
-      (90 * state.scale) (10 * state.scale);
+    Graphics.draw_image (eat_icon ()) (0 * state.scale)
+      (90 * state.scale);
+    Graphics.draw_image (sleep_icon ()) (45 * state.scale)
+      (90 * state.scale);
+    Graphics.draw_image (toilet_icon ()) (90 * state.scale)
+      (90 * state.scale);
+    Graphics.draw_image (play_icon ()) (0 * state.scale)
+      (10 * state.scale);
+    Graphics.draw_image (shop_icon ()) (45 * state.scale)
+      (10 * state.scale);
+    Graphics.draw_image (inventory_icon ()) (90 * state.scale)
+      (10 * state.scale);
     while true do
       try
         let s = Graphics.wait_next_event [ Graphics.Poll ]
@@ -74,7 +68,7 @@ let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
           state.anim_frame <- (state.anim_frame + 1) mod anim.total;
         (* print_endline (string_of_int state.anim_frame); *)
         (* ------------------------------------------ *)
-        if s.Graphics.keypressed then 
+        if s.Graphics.keypressed then
           (* f_key Graphics.read_key () *)
           print_endline (Char.escaped (Graphics.read_key ()))
         else if s.Graphics.button then
@@ -112,8 +106,8 @@ let exit s () =
      return";
   print_endline ""
 
-let mouse s x y = 
-  print_endline (String.concat " " [(string_of_int x); (string_of_int y)])
+let mouse s x y =
+  print_endline (String.concat " " [ string_of_int x; string_of_int y ])
 
 let except s ex = ()
 
