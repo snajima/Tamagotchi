@@ -60,7 +60,7 @@ let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
       (90 * state.scale) (10 * state.scale);
     while true do
       try
-        let s = Graphics.wait_next_event [ Poll ]
+        let s = Graphics.wait_next_event [ Graphics.Poll ]
         (* [ Graphics.Button_down; Graphics.Key_pressed ] *)
         and anim = test_anim () in
         step state;
@@ -72,11 +72,11 @@ let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
         (* Increment animation frame every 100 frames *)
         if state.tick mod 100 = 0 then
           state.anim_frame <- (state.anim_frame + 1) mod anim.total;
-        print_endline (string_of_int state.anim_frame);
+        (* print_endline (string_of_int state.anim_frame); *)
         (* ------------------------------------------ *)
         if s.Graphics.keypressed then 
-          (* f_key s.Graphics.key; *)
-          print_endline (string_of_int state.anim_frame)
+          (* f_key Graphics.read_key () *)
+          print_endline (Char.escaped (Graphics.read_key ()))
         else if s.Graphics.button then
           f_mouse s.Graphics.mouse_x s.Graphics.mouse_y
       with
