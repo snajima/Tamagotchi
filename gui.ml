@@ -140,4 +140,4 @@ let draw () =
   skel sample_state (init sample_state) (exit sample_state)
     (key sample_state) (mouse sample_state) (except sample_state)
 
-let _ = draw ()
+(* let _ = draw () *)
