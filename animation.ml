@@ -260,7 +260,7 @@ let poop () =
          [| t; t; t; n; n; n; n; n; n; n; n; n; n; n; n; n |];
        |])
 
-let shovel () =
+let poop_shovel () =
   scale_augment 5
     (make_image
        [|
