@@ -1,4 +1,4 @@
-MODULES=main animation gui
+MODULES=main animation gui dolphin
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
@@ -6,6 +6,7 @@ TEST=test.byte
 MAIN=main.byte
 GUI=gui.byte
 ANIMATION=animation.byte
+DOLPHIN=dolphin.byte
 OCAMLBUILD=ocamlbuild -use-ocamlfind
 
 default: build
@@ -26,6 +27,9 @@ view:
 gui:
 	$(OCAMLBUILD) -tag 'debug' $(GUI) && OCAMLRUNPARAM=b ./$(GUI)
 
+dolphin:
+	$(OCAMLBUILD) -tag 'debug' $(DOLPHIN) && OCAMLRUNPARAM=b ./$(DOLPHIN)
+
 # check:
 # 	@bash check.sh
 	
@@ -39,12 +43,12 @@ docs: docs-public docs-private
 	
 docs-public: build
 	mkdir -p _doc.public
-	ocamlfind ocamldoc -I _build -package yojson,ANSITerminal \
+	ocamlfind ocamldoc -I _build -package yojson,ANSITerminal,Graphics \
 		-html -stars -d _doc.public $(MLIS)
 
 docs-private: build
 	mkdir -p _doc.private
-	ocamlfind ocamldoc -I _build -package yojson,ANSITerminal \
+	ocamlfind ocamldoc -I _build -package yojson,ANSITerminal,Graphics \
 		-html -stars -d _doc.private \
 		-inv-merge-ml-mli -m A $(MLIS) $(MLS)
 

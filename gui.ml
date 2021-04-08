@@ -5,6 +5,7 @@ exception End
 type viewstate = {
   mutable tick : int;
   mutable anim_frame : int;
+  mutable anim_init_func : unit -> animation;
   maxx : int;
   maxy : int;
   mutable x : int;
@@ -37,32 +38,11 @@ let handle_char c =
 let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
   f_init ();
   try
-    Graphics.set_color Graphics.white;
-    Graphics.fill_rect 0 (10 * state.scale) (120 * state.scale)
-      (100 * state.scale);
-    Graphics.draw_image
-      (eat_icon ())
-      (0 * state.scale) (90 * state.scale);
-    Graphics.draw_image
-      (sleep_icon ())
-      (45 * state.scale) (90 * state.scale);
-    Graphics.draw_image
-      (toilet_icon ())
-      (90 * state.scale) (90 * state.scale);
-    Graphics.draw_image
-      (play_icon ())
-      (0 * state.scale) (10 * state.scale);
-    Graphics.draw_image
-      (shop_icon ())
-      (45 * state.scale) (10 * state.scale);
-    Graphics.draw_image
-      (inventory_icon ())
-      (90 * state.scale) (10 * state.scale);
     while true do
       try
         let s = Graphics.wait_next_event [ Graphics.Poll ]
         (* [ Graphics.Button_down; Graphics.Key_pressed ] *)
-        and anim = test_anim () in
+        and anim = state.anim_init_func () in
         step state;
         Graphics.set_color Graphics.white;
         Graphics.draw_image
@@ -74,9 +54,8 @@ let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
           state.anim_frame <- (state.anim_frame + 1) mod anim.total;
         (* print_endline (string_of_int state.anim_frame); *)
         (* ------------------------------------------ *)
-        if s.Graphics.keypressed then 
-          (* f_key Graphics.read_key () *)
-          print_endline (Char.escaped (Graphics.read_key ()))
+        if s.Graphics.keypressed then f_key (Graphics.read_key ())
+          (* print_endline (Char.escaped (Graphics.read_key ())) *)
         else if s.Graphics.button then
           f_mouse s.Graphics.mouse_x s.Graphics.mouse_y
       with
@@ -90,12 +69,23 @@ let draw_pixel x y s c =
   Graphics.set_color c;
   Graphics.fill_rect (s * x) (s * y) s s
 
-(** Draw the tool bars, setup screen TODO ADD IMAGES*)
+(** Draw the tool bars, setup screen*)
 let setup_toolbars s =
   Graphics.set_color Graphics.black;
   Graphics.fill_rect 0 0 (s.scale * 120) (s.scale * 20);
-  Graphics.fill_rect 0 (100 * s.scale) (s.scale * 120) (s.scale * 20)
+  Graphics.fill_rect 0 (100 * s.scale) (s.scale * 120) (s.scale * 20);
+  Graphics.set_color Graphics.white;
+  Graphics.fill_rect 0 (10 * s.scale) (120 * s.scale) (100 * s.scale);
+  (* Top row *)
+  Graphics.draw_image (eat_icon ()) (0 * s.scale) (90 * s.scale);
+  Graphics.draw_image (sleep_icon ()) (45 * s.scale) (90 * s.scale);
+  Graphics.draw_image (toilet_icon ()) (90 * s.scale) (90 * s.scale);
+  (* Bottom row *)
+  Graphics.draw_image (play_icon ()) (0 * s.scale) (10 * s.scale);
+  Graphics.draw_image (shop_icon ()) (45 * s.scale) (10 * s.scale);
+  Graphics.draw_image (inventory_icon ()) (90 * s.scale) (10 * s.scale)
 
+(** Main init function for HomeMode*)
 let init s () =
   Graphics.open_graph
     (" "
@@ -104,6 +94,7 @@ let init s () =
     ^ string_of_int (s.scale * s.maxy));
   setup_toolbars s
 
+(** Main exit function for HomeMode *)
 let exit s () =
   Graphics.close_graph ();
   print_endline "";
@@ -112,8 +103,8 @@ let exit s () =
      return";
   print_endline ""
 
-let mouse s x y = 
-  print_endline (String.concat " " [(string_of_int x); (string_of_int y)])
+let mouse s x y =
+  print_endline (String.concat " " [ string_of_int x; string_of_int y ])
 
 let except s ex = ()
 
@@ -124,6 +115,7 @@ let key s c =
   | 's' -> if s.y > 0 then s.y <- s.y - 1
   | 'a' -> if s.x > 0 then s.x <- s.x - 1
   | 'd' -> if s.x < s.maxx then s.x <- s.x + 1
+  | 'e' -> s.anim_init_func <- eat_anim
   | 'c' -> Graphics.clear_graph ()
   | 'x' -> raise End
   | _ -> ());
@@ -134,6 +126,7 @@ let sample_state : viewstate =
   {
     tick = 0;
     anim_frame = 0;
+    anim_init_func = test_anim;
     maxx = 120;
     maxy = 120;
     x = 60;
@@ -147,4 +140,4 @@ let draw () =
   skel sample_state (init sample_state) (exit sample_state)
     (key sample_state) (mouse sample_state) (except sample_state)
 
-let _ = draw ()
+(* let _ = draw () *)
