@@ -1,4 +1,5 @@
 open OUnit2
+open Graphics
 open Main
 
 (** [cmp_set_like_lists lst1 lst2] compares two lists to see whether
