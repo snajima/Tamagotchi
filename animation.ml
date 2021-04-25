@@ -54,7 +54,7 @@ let mirror (img : image) : image =
 
 let n = 0x000000
 
-let t = 0xFFFFFF
+let t = 0x00FFFF
 
 let neutral_f1 =
   scale 10

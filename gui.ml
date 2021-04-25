@@ -9,7 +9,7 @@ type viewstate = {
   maxx : int;
   maxy : int;
   scale : int;
-  back_color : Graphics.color;
+  bc : Graphics.color;
   fc : Graphics.color;
 }
 
@@ -20,7 +20,7 @@ let default_vs : viewstate =
     maxx = 120;
     maxy = 120;
     scale = 4;
-    back_color = Graphics.rgb 0 255 255;
+    bc = Graphics.rgb 0 255 255;
     fc = Graphics.black;
   }
 

@@ -6,8 +6,8 @@ let setup_toolbars s =
   Graphics.set_color Graphics.black;
   Graphics.fill_rect 0 0 (s.scale * 120) (s.scale * 20);
   Graphics.fill_rect 0 (100 * s.scale) (s.scale * 120) (s.scale * 20);
-  Graphics.set_color Graphics.white;
-  Graphics.fill_rect 0 (10 * s.scale) (120 * s.scale) (100 * s.scale);
+  (* Graphics.set_color Graphics.white; Graphics.fill_rect 0 (10 *
+     s.scale) (120 * s.scale) (100 * s.scale); *)
   (* Top row *)
   Graphics.draw_image
     (Graphics.make_image eat_icon)
@@ -37,6 +37,8 @@ let init s =
     ^ string_of_int (s.scale * s.maxx)
     ^ "x"
     ^ string_of_int (s.scale * s.maxy));
+  Graphics.set_color s.bc;
+  Graphics.fill_rect 0 0 (s.scale * s.maxx) (s.scale * s.maxy);
   setup_toolbars s
 
 (** Main exit function for HomeMode *)
@@ -50,6 +52,8 @@ let exit s =
 
 let except s ex = ()
 
+(** [key] processes the [c] character pressed and updates the state [s]
+    accordingly *)
 let key s c =
   (* draw_pixel s.x s.y s.scale s.fc; *)
   (match c with
