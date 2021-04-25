@@ -1,25 +1,42 @@
 open Graphics
 
 type animation = {
+  (* Drawing information *)
   frames : Graphics.image list;
+  current : int;
   total : int;
+  (* Position information *)
+  cx : int;
+  cy : int;
 }
+(* ---------------------------------------------------------------- *)
+(* -------------------- Animation Get/Setters --------------------- *)
+(* ---------------------------------------------------------------- *)
 
-(** Get current image in the animation frame *)
+(** [curr_frame] gets the current image in the animation frame *)
 let curr_frame (anim : animation) (frame : int) : Graphics.image =
   List.nth anim.frames frame
+
+(** [next_frame] returns an animation that represents the next animation
+    frame *)
+let next_frame (anim : animation) : animation =
+  { anim with current = anim.current + (1 mod anim.total) }
+
+(* ---------------------------------------------------------------- *)
+(* -------------------- Animation Constructors -------------------- *)
+(* ---------------------------------------------------------------- *)
 
 (** Returns an array with [item] repeated [num] times *)
 let repeat (num : int) (item : 'a) = Array.make num item
 
 (** Vertically scales the inputted image up by [num]*)
-let vert_augment (num : int) (img : image) : image =
+let vert_scale (num : int) (img : image) : image =
   make_image
     (Array.fold_left Array.append [||]
        (Array.map (repeat num) (img |> dump_image)))
 
 (** Horizontally scales the inputted image up by [num]*)
-let hor_augment (num : int) (img : image) : image =
+let hor_scale (num : int) (img : image) : image =
   make_image
     (Array.map
        (fun row ->
@@ -27,8 +44,8 @@ let hor_augment (num : int) (img : image) : image =
        (img |> dump_image))
 
 (** Evenly scales the image up by [num]*)
-let scale_augment (num : int) (img : image) : image =
-  img |> vert_augment num |> hor_augment num
+let scale (num : int) (img : image) : image =
+  img |> vert_scale num |> hor_scale num
 
 let mirror (img : image) : image =
   let array_rev array =
@@ -38,10 +55,10 @@ let mirror (img : image) : image =
 
 let n = 0x000000
 
-and t = 0xFFFFFF
+let t = 0xFFFFFF
 
 let neutral_f1 () =
-  scale_augment 10
+  scale 10
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -63,7 +80,7 @@ let neutral_f1 () =
        |])
 
 let neutral_f2 () =
-  scale_augment 10
+  scale 10
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -85,7 +102,7 @@ let neutral_f2 () =
        |])
 
 let wide_f1 () =
-  scale_augment 10
+  scale 10
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -107,7 +124,7 @@ let wide_f1 () =
        |])
 
 let wide_f2 () =
-  scale_augment 10
+  scale 10
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -129,7 +146,7 @@ let wide_f2 () =
        |])
 
 let idle () =
-  scale_augment 10
+  scale 10
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -151,7 +168,7 @@ let idle () =
        |])
 
 let eat_f1 () =
-  scale_augment 10
+  scale 10
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -173,7 +190,7 @@ let eat_f1 () =
        |])
 
 let eat_f2 () =
-  scale_augment 10
+  scale 10
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -195,7 +212,7 @@ let eat_f2 () =
        |])
 
 let eat_f3 () =
-  scale_augment 10
+  scale 10
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -217,7 +234,7 @@ let eat_f3 () =
        |])
 
 let typing () =
-  scale_augment 10
+  scale 10
     (make_image
        [|
          [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
@@ -239,7 +256,7 @@ let typing () =
        |])
 
 let poop () =
-  scale_augment 5
+  scale 5
     (make_image
        [|
          [| t; t; t; n; t; t; t; n; t; t; t; t; t; t; t; t |];
@@ -261,7 +278,7 @@ let poop () =
        |])
 
 let poop_shovel () =
-  scale_augment 5
+  scale 5
     (make_image
        [|
          [| n; n; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -283,7 +300,7 @@ let poop_shovel () =
        |])
 
 let eat_icon () =
-  scale_augment 5
+  scale 5
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -305,7 +322,7 @@ let eat_icon () =
        |])
 
 let sleep_icon () =
-  scale_augment 5
+  scale 5
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -327,7 +344,7 @@ let sleep_icon () =
        |])
 
 let toilet_icon () =
-  scale_augment 5
+  scale 5
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -349,7 +366,7 @@ let toilet_icon () =
        |])
 
 let play_icon () =
-  scale_augment 5
+  scale 5
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -371,7 +388,7 @@ let play_icon () =
        |])
 
 let shop_icon () =
-  scale_augment 5
+  scale 5
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -393,7 +410,7 @@ let shop_icon () =
        |])
 
 let inventory_icon () =
-  scale_augment 5
+  scale 5
     (make_image
        [|
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
@@ -416,7 +433,19 @@ let inventory_icon () =
 
 (** Temporary animation frame for MS1 *)
 let test_anim () =
-  { frames = [ neutral_f1 (); neutral_f2 () ]; total = 2 }
+  {
+    frames = [ neutral_f1 (); neutral_f2 () ];
+    total = 2;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
 
 let eat_anim () =
-  { frames = [ eat_f1 (); eat_f2 (); eat_f3 () ]; total = 3 }
+  {
+    frames = [ eat_f1 (); eat_f2 (); eat_f3 () ];
+    total = 3;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
