@@ -31,10 +31,6 @@ let handle_char c =
   | '\r' -> next_line ()
   | _ -> Graphics.draw_char c
 
-(* let go () = skel (fun () -> Graphics.clear_graph (); Graphics.moveto
-   0 (Graphics.size_y () - 12)) (fun () -> Graphics.clear_graph ())
-   handle_char (fun x y -> Graphics.moveto x y) (fun e -> ()) *)
-
 let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
   f_init ();
   try
@@ -87,6 +83,7 @@ let setup_toolbars s =
 
 (** Main init function for HomeMode*)
 let init s () =
+  (* Window has width s.scale * maxx and height s.scale * s.maxy *)
   Graphics.open_graph
     (" "
     ^ string_of_int (s.scale * s.maxx)
@@ -126,7 +123,7 @@ let sample_state : viewstate =
   {
     tick = 0;
     anim_frame = 0;
-    anim_init_func = test_anim;
+    anim_init_func = eat_anim;
     maxx = 120;
     maxy = 120;
     x = 60;
@@ -139,5 +136,3 @@ let sample_state : viewstate =
 let draw () =
   skel sample_state (init sample_state) (exit sample_state)
     (key sample_state) (mouse sample_state) (except sample_state)
-
-(* let _ = draw () *)

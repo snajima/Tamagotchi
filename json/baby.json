@@ -1,0 +1,10 @@
+{
+    "breed": "crazy",
+    "lifeStage": "Baby",
+    "sleep": 100,
+    "cleanliness": 100,
+    "hunger": 100,
+    "age": 0,
+    "money": 0,
+    "inventory": []
+}
