@@ -3,20 +3,28 @@ open Animation
 
 exception End
 
+type viewstate = {
+  mutable tick : int;
+  mutable animations : animation list;
+  maxx : int;
+  maxy : int;
+  scale : int;
+  back_color : Graphics.color;
+  fc : Graphics.color;
+}
+
+let default_vs : viewstate =
+  {
+    tick = 0;
+    animations = [];
+    maxx = 120;
+    maxy = 120;
+    scale = 4;
+    back_color = Graphics.rgb 0 255 255;
+    fc = Graphics.black;
+  }
+
 let scale = 4
-
-let next_line () =
-  let x, y = Graphics.current_point () in
-  if y > 12 then Graphics.moveto 0 (y - 12) else Graphics.moveto 0 y
-
-let handle_char c =
-  match c with
-  | '&' -> raise End
-  | '\n' -> next_line ()
-  | '\r' -> next_line ()
-  | _ ->
-      print_endline "hello";
-      draw_char c
 
 (** Draw a single pixel *)
 let draw_pixel x y s c =
@@ -51,3 +59,19 @@ let rec process_anims (anims : animation list) : unit =
     in [anims] incremented to the next frame *)
 let rec increment_anims (anims : animation list) : animation list =
   List.map next_frame anims
+
+let draw_loop (state : viewstate) f_init f_end f_key f_except f_step =
+  f_init state;
+  try
+    while true do
+      try
+        let s = Graphics.wait_next_event [ Graphics.Poll ] in
+        Graphics.set_color Graphics.white;
+        f_step state;
+        process_anims state.animations;
+        if s.Graphics.keypressed then f_key state (Graphics.read_key ())
+      with
+      | End -> raise End
+      | e -> f_except state e
+    done
+  with End -> f_end state
