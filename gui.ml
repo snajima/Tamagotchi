@@ -14,7 +14,9 @@ let handle_char c =
   | '&' -> raise End
   | '\n' -> next_line ()
   | '\r' -> next_line ()
-  | _ -> draw_char c
+  | _ ->
+      print_endline "hello";
+      draw_char c
 
 (** Draw a single pixel *)
 let draw_pixel x y s c =

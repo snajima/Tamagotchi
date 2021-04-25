@@ -22,7 +22,7 @@ let curr_frame (anim : animation) : pixel_array =
 (** [next_frame] returns an animation that represents the next animation
     frame *)
 let next_frame (anim : animation) : animation =
-  { anim with current = anim.current + (1 mod anim.total) }
+  { anim with current = (anim.current + 1) mod anim.total }
 
 (* ---------------------------------------------------------------- *)
 (* -------------------- Animation Constructors -------------------- *)
@@ -414,20 +414,20 @@ let inventory_icon =
     |]
 
 (** Temporary animation frame for MS1 *)
-let test_anim () =
+let test_anim =
   {
     frames = [ neutral_f1; neutral_f2 ];
     total = 2;
     current = 0;
-    cx = 0;
-    cy = 0;
+    cx = 30;
+    cy = 60;
   }
 
-let eat_anim () =
+let eat_anim =
   {
     frames = [ eat_f1; eat_f2; eat_f3 ];
     total = 3;
     current = 0;
-    cx = 0;
-    cy = 0;
+    cx = 90;
+    cy = 60;
   }

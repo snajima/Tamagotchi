@@ -18,7 +18,10 @@ type viewstate = {
 (** [step] increments the tick in the state, used for conservatively
     animating *)
 let step (state : viewstate) : unit =
-  state.tick <- (state.tick + 1) mod 100
+  (* incr animations every 100 frames *)
+  if state.tick mod 1000 = 0 then
+    state.animations <- increment_anims state.animations;
+  state.tick <- (state.tick + 1) mod 1000
 
 (** Draw the tool bars, setup screen*)
 let setup_toolbars s =
@@ -86,19 +89,10 @@ let skel (state : viewstate) f_init f_end f_key f_except =
   try
     while true do
       try
-        let s =
-          Graphics.wait_next_event [ Graphics.Poll ]
-          (* [ Graphics.Button_down; Graphics.Key_pressed ] *)
-          (* and anim = state.anim_init_func ()  *)
-        in
-        step state;
+        let s = Graphics.wait_next_event [ Graphics.Poll ] in
         Graphics.set_color Graphics.white;
+        step state;
         process_anims state.animations;
-        (* ------------------------------------------ *)
-        (* Increment animation frame every 100 frames *)
-        if state.tick mod 100 = 0 then
-          state.animations <- increment_anims state.animations;
-        (* ------------------------------------------ *)
         if s.Graphics.keypressed then f_key (Graphics.read_key ())
       with
       | End -> raise End
@@ -106,13 +100,13 @@ let skel (state : viewstate) f_init f_end f_key f_except =
     done
   with End -> f_end ()
 
-let test_anims = [ test_anim (); eat_anim () ]
+let test_anims = [ test_anim; eat_anim ]
 
 (* This will be the model data *)
 let sample_state : viewstate =
   {
     tick = 0;
-    animations = [];
+    animations = test_anims;
     maxx = 120;
     maxy = 120;
     x = 60;
@@ -123,8 +117,8 @@ let sample_state : viewstate =
   }
 
 let draw () =
-  skel sample_state (init sample_state) (exit sample_state) handle_char
-    (except sample_state)
+  skel sample_state (init sample_state) (exit sample_state)
+    (key sample_state) (except sample_state)
 
 (* For debugging. Uncomment the following line and run [make homemode] *)
 let _ = draw ()
