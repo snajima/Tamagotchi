@@ -67,9 +67,9 @@ let key s c =
     animating *)
 let step (state : viewstate) : unit =
   (* incr animations every 100 frames *)
-  if state.tick mod 100 = 0 then
+  if state.tick mod 10 = 0 then
     state.animations <- increment_anims state.animations;
-  state.tick <- (state.tick + 1) mod 100
+  state.tick <- (state.tick + 1) mod 10
 
 let test_anims = [ test_anim; eat_anim ]
 
