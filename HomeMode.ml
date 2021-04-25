@@ -28,13 +28,25 @@ let setup_toolbars s =
   Graphics.set_color Graphics.white;
   Graphics.fill_rect 0 (10 * s.scale) (120 * s.scale) (100 * s.scale);
   (* Top row *)
-  Graphics.draw_image (eat_icon ()) (0 * s.scale) (90 * s.scale);
-  Graphics.draw_image (sleep_icon ()) (45 * s.scale) (90 * s.scale);
-  Graphics.draw_image (toilet_icon ()) (90 * s.scale) (90 * s.scale);
+  Graphics.draw_image
+    (Graphics.make_image eat_icon)
+    (0 * s.scale) (90 * s.scale);
+  Graphics.draw_image
+    (Graphics.make_image sleep_icon)
+    (45 * s.scale) (90 * s.scale);
+  Graphics.draw_image
+    (Graphics.make_image toilet_icon)
+    (90 * s.scale) (90 * s.scale);
   (* Bottom row *)
-  Graphics.draw_image (play_icon ()) (0 * s.scale) (10 * s.scale);
-  Graphics.draw_image (shop_icon ()) (45 * s.scale) (10 * s.scale);
-  Graphics.draw_image (inventory_icon ()) (90 * s.scale) (10 * s.scale)
+  Graphics.draw_image
+    (Graphics.make_image play_icon)
+    (0 * s.scale) (10 * s.scale);
+  Graphics.draw_image
+    (Graphics.make_image shop_icon)
+    (45 * s.scale) (10 * s.scale);
+  Graphics.draw_image
+    (Graphics.make_image inventory_icon)
+    (90 * s.scale) (10 * s.scale)
 
 (** Main init function for HomeMode*)
 let init s () =

@@ -21,26 +21,29 @@ let draw_pixel x y s c =
   Graphics.set_color c;
   Graphics.fill_rect (s * x) (s * y) s s
 
-(** [draw_img] draws [img] with center at [x] and [y] in screen
-    coordinates *)
-let draw_img img x y =
-  let pixel_array = dump_image img in
-  let w = Array.length (Array.get pixel_array 0)
-  and h = Array.length pixel_array in
-  draw_image img ((x * scale) - (w / 2)) ((y * scale) - (h / 2))
+(** [draw_img] converts [pixel_array] to an image and draws it with
+    center at [x] and [y] in screen coordinates *)
+let draw_img (x : int) (y : int) (p_array : pixel_array) : unit =
+  let w = Array.length (Array.get p_array 0)
+  and h = Array.length p_array in
+  draw_image (p_array |> make_image)
+    ((x * scale) - (w / 2))
+    ((y * scale) - (h / 2))
 
-(** [draw_img] draws [img] with lower left corner at [x] and [y] in
-    screen coordinates *)
-let draw_img_ll img x y =
+(** [draw_img] converts [pixel_array] to an image and draws it with
+    lower left corner at [x] and [y] in screen coordinates *)
+let draw_img_ll (x : int) (y : int) (p_array : pixel_array) : unit =
   Graphics.set_color Graphics.white;
-  Graphics.draw_image img (x * scale) (y * scale)
+  Graphics.draw_image (p_array |> make_image) (x * scale) (y * scale)
 
 (** [process_anims] process a list of animations and render the current
     frame on the graphics context *)
-let process_anims (anims : animation list) : unit =
+let rec process_anims (anims : animation list) : unit =
   match anims with
   | [] -> () (* Done: no more animations *)
-  | anim :: t -> failwith ""
+  | anim :: t ->
+      curr_frame anim |> draw_img anim.cx anim.cy;
+      process_anims t
 
 (** [increment_anims] returns a list of animations with all animations
     in [anims] incremented to the next frame *)
