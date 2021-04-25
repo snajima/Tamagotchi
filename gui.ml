@@ -60,25 +60,29 @@ let rec process_anims (anims : animation list) : unit =
 let rec increment_anims (anims : animation list) : animation list =
   List.map next_frame anims
 
-(** [draw_loop] repeatedly updates the GUI. It first initiates the
-    screen with [f_init] called on the sample function. It then calls
-    [f_step] function to update the [state]. Then, it processes the user
-    key input (if available) with the [f_key] function and updates
-    [state] accordingly. Finally, it draws all the animations based on
-    [state], and repeats the loop. This loop repeats indefinitely until
-    the user issues a quit command. *)
-let draw_loop (state : viewstate) f_init f_end f_key f_except f_step =
-  f_init state;
+(** [draw_loop] repeatedly updates the GUI.
+
+    - It first initiates the screen with [f_init] called on the sample
+      function.
+    - It then calls [f_step] function to update the [vs].
+    - Then, it processes the user key input (if available) with the
+      [f_key] function and updates [vs] accordingly.
+    - Finally, it draws all the stationary animations based on [vs], and
+      repeats the loop.
+
+    This loop repeats indefinitely until the user issues a quit command. *)
+let draw_loop (vs : viewstate) f_init f_end f_key f_except f_step =
+  f_init vs;
   try
     while true do
       try
         let s = Graphics.wait_next_event [ Graphics.Poll ] in
         Graphics.set_color Graphics.white;
-        f_step state;
-        process_anims state.animations;
-        if s.Graphics.keypressed then f_key state (Graphics.read_key ())
+        f_step vs;
+        process_anims vs.animations;
+        if s.Graphics.keypressed then f_key vs (Graphics.read_key ())
       with
       | End -> raise End
-      | e -> f_except state e
+      | e -> f_except vs e
     done
-  with End -> f_end state
+  with End -> f_end vs

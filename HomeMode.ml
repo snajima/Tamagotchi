@@ -6,8 +6,8 @@ let setup_toolbars s =
   Graphics.set_color Graphics.black;
   Graphics.fill_rect 0 0 (s.scale * 120) (s.scale * 20);
   Graphics.fill_rect 0 (100 * s.scale) (s.scale * 120) (s.scale * 20);
-  (* Graphics.set_color Graphics.white; Graphics.fill_rect 0 (10 *
-     s.scale) (120 * s.scale) (100 * s.scale); *)
+  Graphics.set_color Graphics.white;
+  Graphics.fill_rect 0 (10 * s.scale) (120 * s.scale) (100 * s.scale);
   (* Top row *)
   Graphics.draw_image
     (Graphics.make_image eat_icon)
@@ -50,6 +50,7 @@ let exit s =
      return";
   print_endline ""
 
+(** Main exception function for HomeMode *)
 let except s ex = ()
 
 (** [key] processes the [c] character pressed and updates the state [s]
@@ -66,9 +67,9 @@ let key s c =
     animating *)
 let step (state : viewstate) : unit =
   (* incr animations every 100 frames *)
-  if state.tick mod 1000 = 0 then
+  if state.tick mod 100 = 0 then
     state.animations <- increment_anims state.animations;
-  state.tick <- (state.tick + 1) mod 1000
+  state.tick <- (state.tick + 1) mod 100
 
 let test_anims = [ test_anim; eat_anim ]
 
