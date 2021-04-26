@@ -15,11 +15,16 @@ type game_var = {
 }
 
 let g =
-  { game = init_game (); speed = 10; rock_speed = 30; row_scale = 10 }
+  {
+    game = init_game ();
+    speed = 1;
+    rock_speed = 50;
+    row_scale = 120 / Dolphin.max_height;
+  }
 
 let lane_width = 25
 
-let dolphin_cy = 20
+let dolphin_cy = 5
 
 let rock_start_y = 115
 

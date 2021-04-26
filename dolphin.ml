@@ -10,13 +10,16 @@ exception Gameover of int
 
 exception Offscreen
 
+(* --------------------- Data Vars ----------------------- *)
+let max_height = 120
+
 type gamestate = {
   (* --------------------- Time ------------------------ *)
   (* Steps since the game started *)
   step : int;
   (* --------------------- Data ------------------------ *)
   (* Coordinates of the rocks following (lane * height)  *)
-  (* Left lane is 0, Middle 1, left 2, Max height is 12 *)
+  (* Left lane is 0, Middle 1, left 2, Max height is 120 *)
   rocks : (int * int) list;
   current_lane : lane;
 }
@@ -42,7 +45,7 @@ let game_over (gs : gamestate) : bool =
     match gs.current_lane with Left -> 0 | Middle -> 1 | Right -> 2
   in
   let lose_condition (rock_lane, rock_height) =
-    rock_height < 3 && lane_num == rock_lane
+    rock_height < 10 && lane_num == rock_lane
   in
   List.exists lose_condition gs.rocks
 
@@ -78,4 +81,4 @@ let next (gs : gamestate) : gamestate =
 let add_rock (gs : gamestate) : gamestate =
   let lane = int 3 in
   (* Rocks only enter the frame in the next step *)
-  { gs with rocks = (lane, 13) :: gs.rocks }
+  { gs with rocks = (lane, max_height + 1) :: gs.rocks }
