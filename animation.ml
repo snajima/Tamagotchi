@@ -413,6 +413,8 @@ let inventory_icon =
       [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
     |]
 
+let black_sq = scale 5 [| [| n; n; n |]; [| n; n; n |]; [| n; n; n |] |]
+
 (** Temporary animation frame for MS1 *)
 let test_anim =
   {
@@ -430,4 +432,14 @@ let eat_anim =
     current = 0;
     cx = 90;
     cy = 60;
+  }
+
+let rock_static =
+  {
+    (* Temporary art for rocks *)
+    frames = [ black_sq ];
+    total = 1;
+    current = 0;
+    cx = 0;
+    cy = 0;
   }

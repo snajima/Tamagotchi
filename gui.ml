@@ -26,10 +26,21 @@ let default_vs : viewstate =
 
 let scale = 4
 
-(** Draw a single pixel *)
-let draw_pixel x y s c =
+(** [draw_pixels] draws a rectangle of pixels centered at [cx] and [cy]
+    with width [sx] and height [sy] and color [c] *)
+let draw_pixels cx cy sx sy c =
   Graphics.set_color c;
-  Graphics.fill_rect (s * x) (s * y) s s
+  Graphics.fill_rect
+    ((cx - (sx / 2)) * default_vs.scale)
+    ((cy - (sy / 2)) * default_vs.scale)
+    (sx * default_vs.scale) (sy * default_vs.scale)
+
+(** [draw_pixels] draws a rectangle of pixels with lower left corner at
+    [x] and [y] with width [sx] and height [sy] and color [c] *)
+let draw_pixels_ll x y sx sy c =
+  Graphics.set_color c;
+  Graphics.fill_rect (x * default_vs.scale) (y * default_vs.scale)
+    (sx * default_vs.scale) (sy * default_vs.scale)
 
 (** [draw_img] converts [pixel_array] to an image and draws it with
     center at [x] and [y] in screen coordinates *)
@@ -71,15 +82,25 @@ let rec increment_anims (anims : animation list) : animation list =
       repeats the loop.
 
     This loop repeats indefinitely until the user issues a quit command. *)
-let draw_loop (vs : viewstate) f_init f_end f_key f_except f_step =
+let draw_loop
+    (vs : viewstate)
+    f_init
+    f_end
+    f_key
+    f_except
+    f_step
+    f_predraw =
   f_init vs;
+  Graphics.auto_synchronize false;
   try
     while true do
       try
         let s = Graphics.wait_next_event [ Graphics.Poll ] in
         Graphics.set_color Graphics.white;
         f_step vs;
+        f_predraw vs;
         process_anims vs.animations;
+        Graphics.synchronize ();
         if s.Graphics.keypressed then f_key vs (Graphics.read_key ())
       with
       | End -> raise End
