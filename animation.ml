@@ -431,3 +431,22 @@ let eat_anim =
     cx = 90;
     cy = 60;
   }
+
+let don_anim =
+  {
+    frames = [ don_1; don_2 ];
+    total = 2;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
+  
+let ka_anim =
+  {
+    frames = [ ka_1; ka_2 ];
+    total = 2;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
+  
