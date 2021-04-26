@@ -11,7 +11,7 @@ exception Gameover of int
 exception Offscreen
 
 (* --------------------- Data Vars ----------------------- *)
-let max_height = 120
+let max_height = 60
 
 type gamestate = {
   (* --------------------- Time ------------------------ *)
@@ -45,7 +45,7 @@ let game_over (gs : gamestate) : bool =
     match gs.current_lane with Left -> 0 | Middle -> 1 | Right -> 2
   in
   let lose_condition (rock_lane, rock_height) =
-    rock_height < 10 && lane_num == rock_lane
+    rock_height < 5 && lane_num == rock_lane
   in
   List.exists lose_condition gs.rocks
 

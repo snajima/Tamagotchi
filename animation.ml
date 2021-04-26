@@ -56,6 +56,8 @@ let n = 0x000000
 
 let t = 0xFFFFFF
 
+let r = Graphics.red
+
 let neutral_f1 =
   scale 10
     [|
@@ -422,6 +424,21 @@ let black_triangle =
       [| n; n; n; n; n |];
     |]
 
+let gg =
+  scale 5
+    [|
+      [| t; t; r; r; r; r; r; t; t; t; t; t; r; r; r; r; r; t; t; t |];
+      [| t; r; r; r; t; t; t; t; t; t; t; r; r; r; t; t; t; t; t; t |];
+      [| r; r; t; t; t; t; t; t; t; t; r; r; t; t; t; t; t; t; t; t |];
+      [| r; t; t; t; t; t; t; t; t; t; r; t; t; t; t; t; t; t; t; t |];
+      [| r; t; t; t; t; t; t; t; t; t; r; t; t; t; t; t; t; t; t; t |];
+      [| r; t; t; r; r; r; r; t; t; t; r; t; t; r; r; r; r; t; t; t |];
+      [| r; t; t; t; t; t; r; t; t; t; r; t; t; t; t; t; r; t; t; t |];
+      [| t; r; t; t; t; t; r; t; t; t; t; r; t; t; t; t; r; t; t; t |];
+      [| t; r; r; t; t; t; r; t; t; t; t; r; r; t; t; t; r; t; t; t |];
+      [| t; t; r; r; r; r; r; t; t; t; t; t; r; r; r; r; r; t; t; t |];
+    |]
+
 (** Temporary animation frame for MS1 *)
 let test_anim =
   {
@@ -453,8 +470,18 @@ let rock_static =
 
 let dolphin_static =
   {
-    (* Temporary art for rocks *)
+    (* Temporary art for dolphin *)
     frames = [ black_triangle ];
+    total = 1;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
+
+let gg_static =
+  {
+    (* Temporary art for GG animation *)
+    frames = [ gg ];
     total = 1;
     current = 0;
     cx = 0;
