@@ -133,8 +133,8 @@ let dolphin_step s =
   (* Update Animations *)
   if s.tick mod g.speed = 0 then s.animations <- get_animations g.game;
   if s.tick = 3999 then g.speed <- speed_up g.speed;
-  print_endline (string_of_int g.speed);
-  print_endline (string_of_int s.tick);
+  (* print_endline (string_of_int g.speed); *)
+  (* print_endline (string_of_int s.tick); *)
   s.tick <- (s.tick + 1) mod 4000
 
 let dolphin_predraw s =
