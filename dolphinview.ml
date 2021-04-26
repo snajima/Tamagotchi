@@ -10,10 +10,12 @@ type vs = Gui.viewstate
 type game_var = {
   mutable game : Dolphin.gamestate;
   mutable speed : int;
+  mutable rock_speed : int;
   row_scale : int;
 }
 
-let g = { game = init_game (); speed = 10; row_scale = 10 }
+let g =
+  { game = init_game (); speed = 10; rock_speed = 30; row_scale = 10 }
 
 let lane_width = 25
 
@@ -24,15 +26,15 @@ let rock_start_y = 115
 (** [dolphin_cy] calculates the cy position of the dolphin based on the
     lane number.
 
-    - 1 is the Left Lane
-    - 2 is the Middle Lane
-    - 3 is the Right Lane*)
+    - 0 is the Left Lane
+    - 1 is the Middle Lane
+    - 2 is the Right Lane*)
 let lane_cx (lane : int) =
   match lane with
-  | 1 -> 20 (* Left lane *)
-  | 2 -> 60 (* Middle Lane *)
-  | 3 -> 100 (* Right lane *)
-  | _ -> failwith "Invalid lane"
+  | 0 -> 20 (* Left lane *)
+  | 1 -> 60 (* Middle Lane *)
+  | 2 -> 100 (* Right lane *)
+  | _ -> failwith ("Invalid lane: " ^ string_of_int lane)
 
 (** [clear_lane] clears the graphics context of the lane *)
 let clear_lane (lane : int) =
@@ -46,20 +48,23 @@ let dolphin_init s =
     ^ string_of_int (s.scale * s.maxx)
     ^ "x"
     ^ string_of_int (s.scale * s.maxy));
-  (* Reset animations *)
-  s.animations <-
-    [ { rock_static with cx = lane_cx 1; cy = rock_start_y } ];
+  s.animations <- [ { rock_static with cx = lane_cx 0; cy = 120 } ];
   draw_pixels_ll 0 0 5 120 Graphics.black;
   (* draw_pixels 35 0 5 120 Graphics.black; *)
   (* draw_pixels 75 0 5 120 Graphics.black; *)
   draw_pixels_ll 115 0 5 120 Graphics.black
 
-let dolphin_exit s = ()
+let dolphin_exit s =
+  (* REPLACE draw user score on screen for a while then return to home
+     screen*)
+  print_endline "Bye"
 
 let dolphin_except s ex =
   match ex with
-  | Dolphin.Gameover score -> print_endline (string_of_int score)
-  | _ -> failwith "Invalid exception"
+  | Dolphin.Gameover score ->
+      print_endline (string_of_int score);
+      raise Gui.End
+  | _ -> raise ex
 
 let dolphin_key s c =
   match c with
@@ -68,26 +73,54 @@ let dolphin_key s c =
   | 'd' -> g.game <- process_right g.game
   | _ -> print_endline "Invalid Key_pressed"
 
-let rec process_rocks
+let rec get_rocks_anims
     (rocks : (int * int) list)
     (lst_so_far : Animation.animation list) : Animation.animation list =
+  print_endline "Adding rocks";
   match rocks with
   | [] -> lst_so_far
   | (lane, row) :: t ->
-      process_rocks t
+      get_rocks_anims t
         ({ rock_static with cx = lane_cx lane; cy = row * g.row_scale }
          :: lst_so_far)
 
+let get_player_anims (lane : Dolphin.lane) : Animation.animation =
+  let player_cx =
+    match lane with
+    | Left -> lane_cx 0
+    | Middle -> lane_cx 1
+    | Right -> lane_cx 2
+  in
+  { dolphin_static with cx = player_cx; cy = dolphin_cy }
+
+let get_animations (game : Dolphin.gamestate) : Animation.animation list
+    =
+  let rock_anims = get_rocks_anims (get_rocks g.game) [] in
+  let player_anims = get_player_anims (get_dolphin_lane g.game) in
+  player_anims :: rock_anims
+
+(** Debug function to view where the rocks are *)
+let string_of_rocks (rocks : (int * int) list) : string =
+  String.concat " "
+    (List.map
+       (fun (x, y) ->
+         "(" ^ string_of_int x ^ "," ^ string_of_int y ^ ")")
+       rocks)
+
 let dolphin_step s =
-  g.game <- next g.game;
-  if s.tick mod g.speed = 0 then
-    s.animations <- process_rocks (get_rocks g.game) [];
-  s.tick <- (s.tick + 1) mod 10
+  g.game |> get_rocks |> string_of_rocks |> print_endline;
+  (* Add Rocks *)
+  if s.tick mod g.rock_speed = 0 then g.game <- add_rock g.game;
+  (* Step Game *)
+  if s.tick mod g.speed = 0 then g.game <- next g.game;
+  (* Update Animations *)
+  if s.tick mod g.speed = 0 then s.animations <- get_animations g.game;
+  s.tick <- (s.tick + 1) mod 1000
 
 let dolphin_predraw s =
+  clear_lane 0;
   clear_lane 1;
-  clear_lane 2;
-  clear_lane 3
+  clear_lane 2
 
 let vs : viewstate = { default_vs with animations = [] }
 

@@ -53,6 +53,10 @@ let init_game () : gamestate =
 
 let get_rocks (gs : gamestate) = gs.rocks
 
+let get_dolphin_lane (gs : gamestate) : lane = gs.current_lane
+
+let num_rocks (gs : gamestate) : int = List.length (get_rocks gs)
+
 let process_left (gs : gamestate) : gamestate =
   match gs.current_lane with
   | Left -> gs

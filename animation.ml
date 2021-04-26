@@ -415,6 +415,13 @@ let inventory_icon =
 
 let black_sq = scale 5 [| [| n; n; n |]; [| n; n; n |]; [| n; n; n |] |]
 
+let black_triangle =
+  scale 5
+    [|
+      [| t; t; n; t; t |]; [| t; n; n; n; t |]; [| t; n; n; n; t |];
+      [| n; n; n; n; n |];
+    |]
+
 (** Temporary animation frame for MS1 *)
 let test_anim =
   {
@@ -438,6 +445,16 @@ let rock_static =
   {
     (* Temporary art for rocks *)
     frames = [ black_sq ];
+    total = 1;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
+
+let dolphin_static =
+  {
+    (* Temporary art for rocks *)
+    frames = [ black_triangle ];
     total = 1;
     current = 0;
     cx = 0;
