@@ -45,7 +45,7 @@ let game_over (gs : gamestate) : bool =
     match gs.current_lane with Left -> 0 | Middle -> 1 | Right -> 2
   in
   let lose_condition (rock_lane, rock_height) =
-    rock_height < 5 && lane_num == rock_lane
+    rock_height < 5 && rock_height > 2 && lane_num == rock_lane
   in
   List.exists lose_condition gs.rocks
 
