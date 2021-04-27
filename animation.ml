@@ -458,6 +458,73 @@ let blank_template () =
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
        |])
 
+let fireball () =
+  scale_augment 5
+    (make_image
+       [|
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; n; t |];
+         [| t; t; t; t; n; n; t; t; t; t; n; t; t; t; n; t |];
+         [| t; t; t; t; t; n; t; t; n; t; t; t; t; t; n; t |];
+         [| t; t; t; t; t; n; n; t; t; n; t; t; t; n; t; t |];
+         [| t; t; t; n; t; t; n; t; n; n; t; n; t; t; n; t |];
+         [| t; t; t; t; t; n; n; n; n; n; n; t; t; n; t; t |];
+         [| t; t; t; t; n; n; t; n; t; n; n; n; n; t; t; t |];
+         [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t; t |];
+         [| t; t; t; n; t; t; t; t; t; t; t; n; n; t; t; t |];
+         [| t; t; n; n; t; n; t; t; n; t; t; n; n; t; t; t |];
+         [| t; t; n; n; t; n; t; t; n; t; t; n; n; t; t; t |];
+         [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t; t |];
+         [| t; t; n; n; n; t; t; t; t; t; n; n; t; t; t; t |];
+         [| t; t; t; n; n; n; n; n; n; n; n; n; t; t; t; t |];
+         [| t; t; t; t; t; n; n; n; n; n; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+       |])
+
+let leaf () =
+  scale_augment 5
+    (make_image
+       [|
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; n; t; n |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; n; t; n |];
+         [| t; t; t; t; t; t; t; t; t; n; n; n; n; t; n; t |];
+         [| t; t; t; t; t; t; t; n; n; t; t; t; n; n; n; t |];
+         [| t; t; t; t; t; n; n; t; t; t; n; n; t; t; t; n |];
+         [| t; t; t; t; n; t; t; t; n; n; n; t; t; t; t; n |];
+         [| t; t; t; n; t; n; n; n; t; t; n; t; t; t; t; n |];
+         [| t; t; n; n; n; t; n; t; t; t; n; t; t; t; n; t |];
+         [| n; n; n; t; t; t; n; t; t; n; t; t; t; t; n; t |];
+         [| n; t; t; t; t; n; t; t; t; t; t; t; t; n; t; t |];
+         [| t; n; n; t; t; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; n; n; n; t; t; t; t; t; n; n; t; t; t; t |];
+         [| t; t; t; t; t; n; n; n; n; n; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+       |])
+
+let blank_template () =
+  scale_augment 5
+    (make_image
+       [|
+         [| t; t; t; t; t; t; t; n; n; n; t; t; t; t; t; t |];
+         [| t; t; t; t; t; t; n; t; t; t; n; t; t; t; t; t |];
+         [| t; t; t; t; t; n; t; t; t; n; t; t; t; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; n; t; t; t; t; t |];
+         [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t; t |];
+         [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t; t |];
+         [| n; t; t; t; n; n; t; t; t; n; n; t; t; t; n; t |];
+         [| n; t; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; t; t; t; n; t; t; t; n; t; t; t; n; t; t |];
+         [| t; t; n; t; t; t; n; n; n; t; t; t; n; t; t; t |];
+         [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t; t |];
+         [| t; t; t; t; t; n; n; n; n; n; t; t; t; t; t; t |];
+       |])
+
 let rice_ball () =
   scale_augment 5
     (make_image
