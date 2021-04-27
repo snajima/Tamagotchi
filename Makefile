@@ -1,4 +1,4 @@
-MODULES=main animation gui state homemode dolphin 
+MODULES=main animation gui state homemode dolphin dolphinview drum drumview
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
@@ -9,6 +9,9 @@ ANIMATION=animation.byte
 HOMEMODE=homemode.byte
 STATE=state.byte
 DOLPHIN=dolphin.byte
+DOLPHINVIEW=dolphinview.byte
+DRUM=drum.byte
+DRUMVIEW=drumview.byte
 OCAMLBUILD=ocamlbuild -use-ocamlfind
 
 default: build
@@ -37,6 +40,15 @@ homemode:
 
 state:
 	$(OCAMLBUILD) -tag 'debug' $(STATE) && OCAMLRUNPARAM=b ./$(STATE)
+
+dolphinview:
+	$(OCAMLBUILD) -tag 'debug' $(DOLPHINVIEW) && OCAMLRUNPARAM=b ./$(DOLPHINVIEW)	
+
+drum:
+	$(OCAMLBUILD) -tag 'debug' $(DRUM) && OCAMLRUNPARAM=b ./$(DRUM)
+
+drumview:
+	$(OCAMLBUILD) -tag 'debug' $(DRUMVIEW) && OCAMLRUNPARAM=b ./$(DRUMVIEW)	
 	
 # check:
 # 	@bash check.sh

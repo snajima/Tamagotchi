@@ -67,9 +67,11 @@ let key s c =
     animating *)
 let step (state : viewstate) : unit =
   (* incr animations every 100 frames *)
-  if state.tick mod 100 = 0 then
+  if state.tick mod 10 = 0 then
     state.animations <- increment_anims state.animations;
-  state.tick <- (state.tick + 1) mod 100
+  state.tick <- (state.tick + 1) mod 10
+
+let predraw (state : viewstate) : unit = ()
 
 let test_anims = [ test_anim; eat_anim ]
 
@@ -77,7 +79,7 @@ let test_anims = [ test_anim; eat_anim ]
 let sample_state : viewstate =
   { default_vs with animations = test_anims }
 
-let draw () = draw_loop sample_state init exit key except step
+let draw () = draw_loop sample_state init exit key except step predraw
 
 (* For debugging. Uncomment the following line and run [make homemode] *)
 let _ = draw ()
