@@ -503,7 +503,7 @@ let leaf () =
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
        |])
 
-let blank_template () =
+let water () =
   scale_augment 5
     (make_image
        [|
@@ -523,6 +523,27 @@ let blank_template () =
          [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t; t |];
          [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t; t |];
          [| t; t; t; t; t; n; n; n; n; n; t; t; t; t; t; t |];
+       |])
+
+let shoot =
+  scale_augment 10
+    (make_image
+       [|
+         [| t; t; n; n; t; t; t; t; t; n; n; t; t |];
+         [| t; n; n; n; n; t; t; t; n; n; n; n; t |];
+         [| t; n; n; n; n; n; n; n; n; n; n; n; t |];
+         [| t; n; n; t; t; t; t; t; t; t; n; n; t |];
+         [| t; n; t; t; n; t; t; t; n; t; t; n; t |];
+         [| n; t; t; t; t; n; n; t; t; t; t; t; n |];
+         [| n; t; t; t; t; n; n; t; t; t; t; t; n |];
+         [| t; n; t; t; t; t; t; t; n; t; t; n; t |];
+         [| n; t; t; n; t; t; t; n; t; t; t; n; t |];
+         [| t; n; n; t; t; t; t; t; n; n; n; n; t |];
+         [| t; n; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; t; n; t; t; t; t; t; t; t; n; t; t |];
+         [| t; t; t; n; t; n; n; n; t; n; t; t; t |];
+         [| t; t; t; n; t; n; t; t; n; t; t; t; t |];
+         [| t; t; t; t; n; t; t; n; t; t; t; t; t |];
        |])
 
 let rice_ball () =
