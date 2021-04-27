@@ -1,143 +1,109 @@
+open Graphics
 open Animation
 
 exception End
 
 type viewstate = {
   mutable tick : int;
-  mutable anim_frame : int;
-  mutable anim_init_func : unit -> animation;
+  mutable animations : animation list;
   maxx : int;
   maxy : int;
-  mutable x : int;
-  mutable y : int;
   scale : int;
-  back_color : Graphics.color;
+  bc : Graphics.color;
   fc : Graphics.color;
 }
 
-(** [step] increments the tick in the state, used for conservatively
-    animating *)
-let step (state : viewstate) : unit =
-  state.tick <- (state.tick + 1) mod 100
-
-let next_line () =
-  let x, y = Graphics.current_point () in
-  if y > 12 then Graphics.moveto 0 (y - 12) else Graphics.moveto 0 y
-
-let handle_char c =
-  match c with
-  | '&' -> raise End
-  | '\n' -> next_line ()
-  | '\r' -> next_line ()
-  | _ -> Graphics.draw_char c
-
-(* let go () = skel (fun () -> Graphics.clear_graph (); Graphics.moveto
-   0 (Graphics.size_y () - 12)) (fun () -> Graphics.clear_graph ())
-   handle_char (fun x y -> Graphics.moveto x y) (fun e -> ()) *)
-
-let skel (state : viewstate) f_init f_end f_key f_mouse f_except =
-  f_init ();
-  try
-    while true do
-      try
-        let s = Graphics.wait_next_event [ Graphics.Poll ]
-        (* [ Graphics.Button_down; Graphics.Key_pressed ] *)
-        and anim = state.anim_init_func () in
-        step state;
-        Graphics.set_color Graphics.white;
-        Graphics.draw_image
-          (curr_frame anim state.anim_frame)
-          (42 * state.scale) (35 * state.scale);
-        (* ------------------------------------------ *)
-        (* Increment animation frame every 100 frames *)
-        if state.tick mod 100 = 0 then
-          state.anim_frame <- (state.anim_frame + 1) mod anim.total;
-        (* print_endline (string_of_int state.anim_frame); *)
-        (* ------------------------------------------ *)
-        if s.Graphics.keypressed then f_key (Graphics.read_key ())
-          (* print_endline (Char.escaped (Graphics.read_key ())) *)
-        else if s.Graphics.button then
-          f_mouse s.Graphics.mouse_x s.Graphics.mouse_y
-      with
-      | End -> raise End
-      | e -> f_except e
-    done
-  with End -> f_end ()
-
-(** Draw a single pixel *)
-let draw_pixel x y s c =
-  Graphics.set_color c;
-  Graphics.fill_rect (s * x) (s * y) s s
-
-(** Draw the tool bars, setup screen*)
-let setup_toolbars s =
-  Graphics.set_color Graphics.black;
-  Graphics.fill_rect 0 0 (s.scale * 120) (s.scale * 20);
-  Graphics.fill_rect 0 (100 * s.scale) (s.scale * 120) (s.scale * 20);
-  Graphics.set_color Graphics.white;
-  Graphics.fill_rect 0 (10 * s.scale) (120 * s.scale) (100 * s.scale);
-  (* Top row *)
-  Graphics.draw_image (eat_icon ()) (0 * s.scale) (90 * s.scale);
-  Graphics.draw_image (sleep_icon ()) (45 * s.scale) (90 * s.scale);
-  Graphics.draw_image (toilet_icon ()) (90 * s.scale) (90 * s.scale);
-  (* Bottom row *)
-  Graphics.draw_image (play_icon ()) (0 * s.scale) (10 * s.scale);
-  Graphics.draw_image (shop_icon ()) (45 * s.scale) (10 * s.scale);
-  Graphics.draw_image (inventory_icon ()) (90 * s.scale) (10 * s.scale)
-
-(** Main init function for HomeMode*)
-let init s () =
-  Graphics.open_graph
-    (" "
-    ^ string_of_int (s.scale * s.maxx)
-    ^ "x"
-    ^ string_of_int (s.scale * s.maxy));
-  setup_toolbars s
-
-(** Main exit function for HomeMode *)
-let exit s () =
-  Graphics.close_graph ();
-  print_endline "";
-  print_endline
-    "Thanks for playing! Your Tamagotchi will be waiting for your \
-     return";
-  print_endline ""
-
-let mouse s x y =
-  print_endline (String.concat " " [ string_of_int x; string_of_int y ])
-
-let except s ex = ()
-
-let key s c =
-  draw_pixel s.x s.y s.scale s.fc;
-  (match c with
-  | 'w' -> if s.y < s.maxy then s.y <- s.y + 1
-  | 's' -> if s.y > 0 then s.y <- s.y - 1
-  | 'a' -> if s.x > 0 then s.x <- s.x - 1
-  | 'd' -> if s.x < s.maxx then s.x <- s.x + 1
-  | 'e' -> s.anim_init_func <- eat_anim
-  | 'c' -> Graphics.clear_graph ()
-  | 'x' -> raise End
-  | _ -> ());
-  print_endline (Char.escaped c)
-
-(* This will be the model data *)
-let sample_state : viewstate =
+let default_vs : viewstate =
   {
     tick = 0;
-    anim_frame = 0;
-    anim_init_func = test_anim;
+    animations = [];
     maxx = 120;
     maxy = 120;
-    x = 60;
-    y = 60;
     scale = 4;
-    back_color = Graphics.rgb 255 255 255;
+    bc = Graphics.rgb 255 255 255;
     fc = Graphics.black;
   }
 
-let draw () =
-  skel sample_state (init sample_state) (exit sample_state)
-    (key sample_state) (mouse sample_state) (except sample_state)
+let scale = 4
 
-(* let _ = draw () *)
+(** [draw_pixels] draws a rectangle of pixels centered at [cx] and [cy]
+    with width [sx] and height [sy] and color [c] *)
+let draw_pixels cx cy sx sy c =
+  Graphics.set_color c;
+  Graphics.fill_rect
+    ((cx - (sx / 2)) * default_vs.scale)
+    ((cy - (sy / 2)) * default_vs.scale)
+    (sx * default_vs.scale) (sy * default_vs.scale)
+
+(** [draw_pixels] draws a rectangle of pixels with lower left corner at
+    [x] and [y] with width [sx] and height [sy] and color [c] *)
+let draw_pixels_ll x y sx sy c =
+  Graphics.set_color c;
+  Graphics.fill_rect (x * default_vs.scale) (y * default_vs.scale)
+    (sx * default_vs.scale) (sy * default_vs.scale)
+
+(** [draw_img] converts [pixel_array] to an image and draws it with
+    center at [x] and [y] in screen coordinates *)
+let draw_img (x : int) (y : int) (p_array : pixel_array) : unit =
+  let w = Array.length (Array.get p_array 0)
+  and h = Array.length p_array in
+  draw_image (p_array |> make_image)
+    ((x * scale) - (w / 2))
+    ((y * scale) - (h / 2))
+
+(** [draw_img] converts [pixel_array] to an image and draws it with
+    lower left corner at [x] and [y] in screen coordinates *)
+let draw_img_ll (x : int) (y : int) (p_array : pixel_array) : unit =
+  Graphics.set_color Graphics.white;
+  Graphics.draw_image (p_array |> make_image) (x * scale) (y * scale)
+
+(** [process_anims] process a list of animations and render the current
+    frame on the graphics context *)
+let rec process_anims (anims : animation list) : unit =
+  match anims with
+  | [] -> () (* Done: no more animations *)
+  | anim :: t ->
+      curr_frame anim |> draw_img anim.cx anim.cy;
+      process_anims t
+
+(** [increment_anims] returns a list of animations with all animations
+    in [anims] incremented to the next frame *)
+let rec increment_anims (anims : animation list) : animation list =
+  List.map next_frame anims
+
+(** [draw_loop] repeatedly updates the GUI.
+
+    - It first initiates the screen with [f_init] called on the sample
+      function.
+    - It then calls [f_step] function to update the [vs].
+    - Then, it processes the user key input (if available) with the
+      [f_key] function and updates [vs] accordingly.
+    - Finally, it draws all the stationary animations based on [vs], and
+      repeats the loop.
+
+    This loop repeats indefinitely until the user issues a quit command. *)
+let draw_loop
+    (vs : viewstate)
+    f_init
+    f_end
+    f_key
+    f_except
+    f_step
+    f_predraw =
+  f_init vs;
+  Graphics.auto_synchronize false;
+  try
+    while true do
+      try
+        let s = Graphics.wait_next_event [ Graphics.Poll ] in
+        Graphics.set_color Graphics.white;
+        f_step vs;
+        f_predraw vs;
+        process_anims vs.animations;
+        Graphics.synchronize ();
+        if s.Graphics.keypressed then f_key vs (Graphics.read_key ())
+      with
+      | End -> raise End
+      | e -> f_except vs e
+    done
+  with End -> f_end vs
