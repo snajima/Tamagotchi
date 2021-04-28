@@ -1,4 +1,5 @@
 open Random
+open Gui
 
 type color =
   | Don
@@ -10,7 +11,7 @@ exception Gameover of int
 exception Miss
 
 (* --------------------- Data Vars ----------------------- *)
-let max_height = 60
+let max_height = 120
 
 type gamestate = {
   (* -------------------- Scoring ----------------------- *)
@@ -27,6 +28,8 @@ type gamestate = {
   good_range : int;
   ok_range : int;
   bad_range : int;
+  game_length : int;
+  num_beats : int;
 }
 
 type hit = Good | Ok | Bad | OutOfRange
@@ -34,8 +37,12 @@ type hit = Good | Ok | Bad | OutOfRange
 let beats = [
   [( max_height + 1, Don )];
   [( max_height + 1, Ka )];
-  [( max_height + 1, Don ); ( max_height + 6, Don ); ( max_height + 11, Don )];
-  [( max_height + 1, Ka ); ( max_height + 6, Ka ); ( max_height + 11, Ka )];
+  [( max_height + 1, Don ); ( max_height + 16, Don ); ( max_height + 31, Don )];
+  [( max_height + 1, Ka ); ( max_height + 16, Ka ); ( max_height + 31, Ka )];
+  [( max_height + 1, Don ); ( max_height + 16, Ka ); ( max_height + 31, Don )];
+  [( max_height + 1, Ka ); ( max_height + 16, Don ); ( max_height + 31, Ka )];
+  [( max_height + 1, Don ); ( max_height + 21, Don )];
+  [( max_height + 1, Ka ); ( max_height + 21, Ka )];
 ]
 
 (* ----------------- Internal functions ------------------- *)
@@ -60,7 +67,7 @@ let game_over (gs : gamestate) : bool =
 (* ----------------- External functions ------------------- *)
 
 let init_game () : gamestate =
-  { combo = 0; score = 0; beats = []; good_multiplier = 1.6; combo_multiplier = 10; player_x = 10; good_range = 5; ok_range = 8; bad_range = 10 }
+  { combo = 0; score = 0; beats = []; good_multiplier = 1.6; combo_multiplier = 10; player_x = 10; good_range = 2; ok_range = 4; bad_range = 5; game_length = 10; num_beats = 0 }
 
 let get_beats (gs : gamestate) = gs.beats
 
@@ -70,13 +77,28 @@ let get_score (gs : gamestate) = gs.score
 let range (beat_x : int) (gs : gamestate) (right_beat : bool) : hit =
   let diff = Int.abs (beat_x - gs.player_x) in 
   if right_beat then (
-    if diff < gs.good_range then Good
-    else if diff < gs.ok_range then Ok
-    else if diff < gs.bad_range then Bad
-    else OutOfRange
+    if diff < gs.good_range then (
+      print_endline "Good";
+      draw_pixels 10 85 10 1 Graphics.red;
+      Good)
+    else if diff < gs.ok_range then (
+      print_endline "Ok";
+      draw_pixels 10 85 10 1 Graphics.green;
+      Ok)
+    else if diff < gs.bad_range then (
+      print_endline "Bad";
+      draw_pixels 10 85 10 1 Graphics.black;
+      Bad)
+    else (
+      print_endline "OutOfRange";
+      OutOfRange)
   ) else (
-    if diff < gs.bad_range then Bad
-    else OutOfRange
+    if diff < gs.bad_range then (
+      print_endline "Bad";
+    Bad)
+    else (
+      print_endline "OutOfRange";
+      OutOfRange)
   )
 
 (** Calculates the score based on hit type *)
@@ -94,13 +116,14 @@ let calc_combo (hit_type : hit) (gs : gamestate) : int =
   | Bad -> 0
   | OutOfRange -> gs.combo
 
-let calc_beats (hit_type : hit) (gs : gamestate) : (int * color) list =
+(* let calc_beats (hit_type : hit) (gs : gamestate) : (int * color) list =
   match hit_type with
   | OutOfRange -> gs.beats
-  | _ -> List.tl gs.beats
+  | _ -> List.tl gs.beats *)
 
-(** Returns beats list with the beat closest to player as the list head *)
-(* let rec closest_to_player (min : int) (beats : (int * color) list) (so_far : (int * color) list) (gs : gamestate) : ((int * color) list * (int * color)) = 
+(** Returns (beats list, beat) with beats list containing every beat but the one closest to the drum and
+  beat being the element that got removed *)
+let rec closest_to_player (min : int) (beats : (int * color) list) (so_far : (int * color) list) (gs : gamestate) : ((int * color) list * (int * color)) = 
   match beats with 
   | h :: t -> (
     let diff = Int.abs ((fst h) - gs.player_x) in
@@ -114,7 +137,7 @@ let calc_beats (hit_type : hit) (otherwise : (int * color) list) (gs : gamestate
   | _ -> otherwise
   
 let process_left (gs : gamestate) : gamestate =
-  let closest = closest_to_player (Int.abs (fst (List.hd gs.beats) - gs.player_x)) (gs.beats) [] gs in
+  let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
   match (snd closest) with
   | (ht, Don) -> (
     let hit_type = range ht gs false in
@@ -122,7 +145,7 @@ let process_left (gs : gamestate) : gamestate =
       gs with 
       score = calc_score hit_type gs;
       combo = calc_combo hit_type gs;
-      beats = calc_beats hit_type (fst closest) gs
+      beats = calc_beats hit_type (fst closest) gs;
     }
   )
   | (ht, Ka) -> (
@@ -131,12 +154,12 @@ let process_left (gs : gamestate) : gamestate =
         gs with 
         score = calc_score hit_type gs;
         combo = calc_combo hit_type gs;
-        beats = calc_beats hit_type (fst closest) gs
+        beats = calc_beats hit_type (fst closest) gs;
       }
   )
 
 let process_right (gs : gamestate) : gamestate =
-  let closest = closest_to_player (Int.abs (fst (List.hd gs.beats) - gs.player_x)) (gs.beats) [] gs in
+  let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
   match (snd closest) with
   | (ht, Don) -> (
     let hit_type = range ht gs true in
@@ -144,7 +167,7 @@ let process_right (gs : gamestate) : gamestate =
       gs with 
       score = calc_score hit_type gs;
       combo = calc_combo hit_type gs;
-      beats = calc_beats hit_type (fst closest) gs
+      beats = calc_beats hit_type (fst closest) gs;
     }
   )
   | (ht, Ka) -> (
@@ -153,11 +176,11 @@ let process_right (gs : gamestate) : gamestate =
       gs with 
       score = calc_score hit_type gs;
       combo = calc_combo hit_type gs;
-      beats = calc_beats hit_type (fst closest) gs
+      beats = calc_beats hit_type (fst closest) gs;
     }
-  ) *)
+  )
 
-let process_left (gs : gamestate) : gamestate =
+(* let process_left (gs : gamestate) : gamestate =
   match gs.beats with
   | (ht, Don) :: t -> (
     let hit_type = range ht gs false in
@@ -177,11 +200,11 @@ let process_left (gs : gamestate) : gamestate =
         beats = calc_beats hit_type gs
       }
   )
-  | [] -> gs
+  | [] -> gs *)
 
 let process_middle (gs : gamestate) : gamestate = gs
 
-let process_right (gs : gamestate) : gamestate =
+(* let process_right (gs : gamestate) : gamestate =
   match gs.beats with
   | (ht, Don) :: t -> (
     let hit_type = range ht gs true in
@@ -201,13 +224,14 @@ let process_right (gs : gamestate) : gamestate =
       beats = calc_beats hit_type gs
     }
   )
-  | [] -> gs
+  | [] -> gs *)
 
 let next (gs : gamestate) : gamestate =
-  if game_over gs then raise (Gameover gs.score)
-  else { gs with beats = fall_beats gs.beats }
+  (* if game_over gs then raise (Gameover gs.score)
+  else *)
+    { gs with beats = fall_beats gs.beats }
 
 let add_beat (gs : gamestate) : gamestate =
   let beat_set = List.nth beats (Random.int (List.length beats)) in
   (* Beats only enter the frame in the next step *)
-  { gs with beats = gs.beats @ beat_set }
+  { gs with beats = gs.beats @ beat_set; num_beats = gs.num_beats + 1 }

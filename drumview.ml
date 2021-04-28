@@ -17,14 +17,14 @@ type game_var = {
 let g =
   {
     game = init_game ();
-    speed = 5;
+    speed = 1;
     beat_speed = 100;
     row_scale = 120 / Drum.max_height;
   }
 
 let lane_width = 25
 
-let beat_start_x = 115
+let beat_start_x = 120
 
 let game = init_game ()
 
@@ -64,6 +64,8 @@ let drum_key s c =
     g.game <- process_middle g.game)
   | 'd' -> (print_endline (string_of_int (get_score g.game));
     g.game <- process_right g.game)
+  | 'x' -> (print_endline (string_of_int (get_score g.game));
+    raise End)
   | _ -> print_endline "Invalid Key_pressed"
 
 let rec get_beats_anims
@@ -82,19 +84,14 @@ let rec get_beats_anims
 
 let get_animations (game : Drum.gamestate) : Animation.animation list
     =
-  let rock_anims = get_beats_anims (get_beats g.game) [] in
-  rock_anims
+  get_beats_anims (get_beats g.game) []
 
 let drum_step s =
-  (* g.game |> get_rocks |> string_of_rocks |> print_endline; *)
-  (* Add Rocks *)
   if s.tick mod g.beat_speed = 0 then g.game <- add_beat g.game;
   (* Step Game *)
   if s.tick mod g.speed = 0 then g.game <- next g.game;
   (* Update Animations *)
   if s.tick mod g.speed = 0 then s.animations <- get_animations g.game;
-  (* print_endline (string_of_int g.speed); *)
-  (* print_endline (string_of_int s.tick); *)
   s.tick <- (s.tick + 1) mod 4000
 
 let drum_predraw s =
