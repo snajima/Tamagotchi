@@ -546,6 +546,48 @@ let shoot =
          [| t; t; t; t; n; t; t; n; t; t; t; t; t |];
        |])
 
+let robot =
+  scale_augment 10
+    (make_image
+       [|
+         [| t; t; t; t; n; n; n; n; n; t; t; t; t |];
+         [| t; t; t; n; n; n; n; n; n; n; t; t; t |];
+         [| t; n; t; t; t; t; t; t; t; t; n; t; t |];
+         [| t; n; n; t; n; t; t; t; n; t; n; n; t |];
+         [| t; t; n; t; t; t; t; t; t; t; n; t; t |];
+         [| t; t; n; n; n; n; n; n; n; n; n; t; t |];
+         [| t; t; t; t; t; n; n; n; t; t; t; t; t |];
+         [| t; n; n; n; n; n; n; n; n; n; n; n; t |];
+         [| t; n; t; n; n; n; n; n; n; n; t; n; t |];
+         [| t; n; t; n; n; n; n; n; n; n; t; n; t |];
+         [| t; n; n; t; n; n; n; n; n; t; n; n; t |];
+         [| t; t; t; n; t; n; n; n; t; n; t; t; t |];
+         [| t; t; t; t; n; t; t; t; n; t; t; t; t |];
+         [| t; t; t; t; n; t; t; t; n; t; t; t; t |];
+         [| t; t; t; n; n; t; t; t; n; n; t; t; t |];
+       |])
+
+let dolphin =
+  scale_augment 10
+    (make_image
+       [|
+         [| t; t; t; t; t; t; t; t; n; n; t; t; t; t; t |];
+         [| t; t; t; t; t; t; t; n; t; n; t; t; t; t; t |];
+         [| t; t; t; t; n; n; n; t; t; n; n; t; t; t; t |];
+         [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+         [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
+         [| t; n; n; t; n; t; t; t; t; t; t; t; t; n; t |];
+         [| n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; n; n; n; n; n; t; t; n; t; t; t; t; n |];
+         [| t; t; t; t; n; t; n; n; t; n; n; t; t; t; n |];
+         [| t; t; t; t; t; n; t; t; n; n; t; n; t; t; n |];
+         [| t; t; t; t; t; t; t; t; t; t; t; n; t; n; t |];
+         [| t; t; t; t; t; t; t; t; t; t; n; n; t; n; t |];
+         [| t; t; t; t; t; t; t; t; t; n; t; t; n; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; n; t; n; t; t |];
+         [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
+       |])
+
 let rice_ball () =
   scale_augment 5
     (make_image
@@ -566,6 +608,28 @@ let rice_ball () =
          [| n; t; t; n; n; t; t; n; t; t; n; t; n; t; t; n |];
          [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
          [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+       |])
+
+let rock () =
+  scale_augment 5
+    (make_image
+       [|
+         [| t; t; t; t; t; t; n; n; n; t; t; t; t; t; t; t |];
+         [| t; t; t; t; n; n; n; t; n; n; n; t; t; t; t; t |];
+         [| t; t; t; t; n; t; t; t; t; t; n; n; t; t; t; t |];
+         [| t; t; n; n; t; t; t; t; t; t; n; n; n; n; t; t |];
+         [| t; t; n; t; t; t; t; t; t; t; t; t; t; n; n; t |];
+         [| t; t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+         [| t; n; n; t; t; t; t; t; t; t; t; t; t; t; n; n |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
+         [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; n |];
+         [| t; n; n; n; t; t; t; t; t; t; t; t; t; n; n; t |];
+         [| t; t; t; n; n; t; t; t; t; t; t; n; n; n; t; t |];
+         [| t; t; t; t; n; n; t; t; n; n; n; n; t; t; t; t |];
+         [| t; t; t; t; t; t; n; n; n; t; t; t; t; t; t; t |];
        |])
 
 (** Temporary animation frame for MS1 *)
