@@ -4,3 +4,17 @@ opam install Graphics
 opam install ANSITerminal
 opam install yojson
 opam install ounit2
+
+Test Commands:
+Dolphin Game:
+- make dolphinview 
+
+Drum Game:
+- make drumview for Drum game
+
+Home Screen:
+- make homemode
+
+Elementals Game
+- make build
+- load the "elementals.ml" game into utop

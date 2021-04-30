@@ -1,4 +1,4 @@
-MODULES=main animation gui state homemode dolphin dolphinview drum drumview
+MODULES=main animation gui state homemode dolphin dolphinview drum drumview elementals  
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
@@ -12,6 +12,8 @@ DOLPHIN=dolphin.byte
 DOLPHINVIEW=dolphinview.byte
 DRUM=drum.byte
 DRUMVIEW=drumview.byte
+ELEMENTALS=elementalist.byte
+# ELEMENTALISTVIEW=elementalistview.byte
 OCAMLBUILD=ocamlbuild -use-ocamlfind
 
 default: build
@@ -32,14 +34,14 @@ view:
 gui:
 	$(OCAMLBUILD) -tag 'debug' $(GUI) && OCAMLRUNPARAM=b ./$(GUI)
 
-dolphin:
-	$(OCAMLBUILD) -tag 'debug' $(DOLPHIN) && OCAMLRUNPARAM=b ./$(DOLPHIN)
-
 homemode:
 	$(OCAMLBUILD) -tag 'debug' $(HOMEMODE) && OCAMLRUNPARAM=b ./$(HOMEMODE)
 
 state:
 	$(OCAMLBUILD) -tag 'debug' $(STATE) && OCAMLRUNPARAM=b ./$(STATE)
+
+dolphin:
+	$(OCAMLBUILD) -tag 'debug' $(DOLPHIN) && OCAMLRUNPARAM=b ./$(DOLPHIN)
 
 dolphinview:
 	$(OCAMLBUILD) -tag 'debug' $(DOLPHINVIEW) && OCAMLRUNPARAM=b ./$(DOLPHINVIEW)	
@@ -49,6 +51,9 @@ drum:
 
 drumview:
 	$(OCAMLBUILD) -tag 'debug' $(DRUMVIEW) && OCAMLRUNPARAM=b ./$(DRUMVIEW)	
+
+elementals:
+	$(OCAMLBUILD) -tag 'debug' $(ELEMENTALS) && OCAMLRUNPARAM=b ./$(ELEMENTALS)	
 	
 # check:
 # 	@bash check.sh

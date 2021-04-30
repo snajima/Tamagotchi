@@ -23,7 +23,7 @@ val init_game : unit -> gamestate
 
 val get_ours : gamestate -> element
 
-val get_opponents : gamestate -> element
+val get_opponent : gamestate -> element
 
 val get_wins : gamestate -> int
 
