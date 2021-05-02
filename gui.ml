@@ -110,7 +110,7 @@ let draw_loop
     f_except
     f_step
     f_predraw =
-  f_init vs;
+  (try f_init vs with Graphic_failure msg -> print_endline msg);
   Graphics.auto_synchronize false;
   try
     while true do
@@ -126,7 +126,9 @@ let draw_loop
       | End -> raise End
       | e -> f_except vs e
     done
-  with End -> f_end vs
+  with
+  | End -> f_end vs
+  | Graphic_failure msg -> print_endline msg
 
 let gameover_screen
     (length : int)

@@ -56,12 +56,8 @@ let clear_lane (lane : int) =
     default_vs.maxy Graphics.white
 
 let dolphin_init s =
-  (* REMOVE LATER *)
-  Graphics.open_graph
-    (" "
-    ^ string_of_int (s.scale * s.maxx)
-    ^ "x"
-    ^ string_of_int (s.scale * s.maxy));
+  Graphics.clear_graph ();
+  g.game <- init_game ();
   s.animations <- [ { rock_static with cx = lane_cx 0; cy = 120 } ];
   draw_pixels_ll 0 0 5 120 Graphics.black;
   (* draw_pixels_ll 35 0 5 120 Graphics.black; *)
@@ -145,4 +141,4 @@ let draw () =
     dolphin_step dolphin_predraw
 
 (* For debugging. Uncomment the following line and run [make homemode] *)
-let _ = draw ()
+(* let _ = draw () *)

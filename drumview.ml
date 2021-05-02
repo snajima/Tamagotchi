@@ -29,19 +29,15 @@ let beat_start_x = 120
 let game = init_game ()
 
 let drum_init s =
-  (* REMOVE LATER *)
-  Graphics.open_graph
-    (" "
-    ^ string_of_int (s.scale * s.maxx)
-    ^ "x"
-    ^ string_of_int (s.scale * s.maxy));
+  Graphics.clear_graph ();
+  g.game <- init_game ();
   draw_pixels_ll 0 80 120 1 Graphics.black;
   draw_pixels_ll 0 40 120 1 Graphics.black
 
-let drum_exit s = 
+let drum_exit s =
   (* REPLACE draw user score on screen for a while then return to home
      screen*)
-     print_endline "Bye"
+  print_endline "Bye"
 
 let drum_except s ex =
   match ex with
@@ -58,14 +54,18 @@ let drum_except s ex =
 
 let drum_key s c =
   match c with
-  | 'a' -> (print_endline (string_of_int (get_score g.game));
-    g.game <- process_left g.game)
-  | 's' -> (print_endline (string_of_int (get_score g.game));
-    g.game <- process_middle g.game)
-  | 'd' -> (print_endline (string_of_int (get_score g.game));
-    g.game <- process_right g.game)
-  | 'x' -> (print_endline (string_of_int (get_score g.game));
-    raise End)
+  | 'a' ->
+      print_endline (string_of_int (get_score g.game));
+      g.game <- process_left g.game
+  | 's' ->
+      print_endline (string_of_int (get_score g.game));
+      g.game <- process_middle g.game
+  | 'd' ->
+      print_endline (string_of_int (get_score g.game));
+      g.game <- process_right g.game
+  | 'x' ->
+      print_endline (string_of_int (get_score g.game));
+      raise End
   | _ -> print_endline "Invalid Key_pressed"
 
 let rec get_beats_anims
@@ -75,15 +75,22 @@ let rec get_beats_anims
   | [] -> lst_so_far
   | (height, Drum.Ka) :: t ->
       get_beats_anims t
-        ({ ka_anim with cx = height * g.row_scale; cy = default_vs.maxy / 2 }
+        ({
+           ka_anim with
+           cx = height * g.row_scale;
+           cy = default_vs.maxy / 2;
+         }
          :: lst_so_far)
   | (height, Drum.Don) :: t ->
       get_beats_anims t
-        ({ don_anim with cx = height * g.row_scale; cy = default_vs.maxy / 2 }
+        ({
+           don_anim with
+           cx = height * g.row_scale;
+           cy = default_vs.maxy / 2;
+         }
          :: lst_so_far)
 
-let get_animations (game : Drum.gamestate) : Animation.animation list
-    =
+let get_animations (game : Drum.gamestate) : Animation.animation list =
   get_beats_anims (get_beats g.game) []
 
 let drum_step s =
@@ -95,9 +102,9 @@ let drum_step s =
   s.tick <- (s.tick + 1) mod 4000
 
 let drum_predraw s =
-(* TODO: Draw out pixels and calculate inputs of draw_pixels *)
-  draw_pixels (default_vs.maxx / 2) (default_vs.maxy / 2) default_vs.maxx
-    lane_width Graphics.white;
+  (* TODO: Draw out pixels and calculate inputs of draw_pixels *)
+  draw_pixels (default_vs.maxx / 2) (default_vs.maxy / 2)
+    default_vs.maxx lane_width Graphics.white;
   draw_pixels 5 60 1 10 Graphics.black;
   draw_pixels 15 60 1 11 Graphics.black;
   draw_pixels 10 65 10 1 Graphics.black;
@@ -106,8 +113,8 @@ let drum_predraw s =
 let vs : viewstate = { default_vs with animations = [] }
 
 let draw () =
-  draw_loop vs drum_init drum_exit drum_key drum_except
-    drum_step drum_predraw
+  draw_loop vs drum_init drum_exit drum_key drum_except drum_step
+    drum_predraw
 
-(* For debugging. Uncomment the following line and run [make homemode] *)
-let _ = draw ()
+(* For debugging. Uncomment the following line and run [make drumview] *)
+(* let _ = draw () *)

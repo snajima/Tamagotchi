@@ -1,6 +1,25 @@
 open Animation
 open Gui
 
+exception PlayDolphin
+
+exception PlayDrum
+
+exception PlayElements
+
+type game_flags = {
+  mutable dolphin : bool;
+  mutable drum : bool;
+  mutable elements : bool;
+}
+
+let my_game_flags = { dolphin = false; drum = false; elements = false }
+
+let reset_game_flags () =
+  my_game_flags.dolphin <- false;
+  my_game_flags.drum <- false;
+  my_game_flags.elements <- false
+
 (** Draw the tool bars, setup screen*)
 let setup_toolbars s =
   Graphics.set_color Graphics.black;
@@ -58,7 +77,9 @@ let except s ex = ()
 let key s c =
   (* draw_pixel s.x s.y s.scale s.fc; *)
   (match c with
-  | 'c' -> Graphics.clear_graph ()
+  | '1' -> Dolphinview.draw ()
+  | '2' -> Drumview.draw ()
+  | '3' -> failwith "unimplemented"
   | 'x' -> raise End
   | _ -> ());
   print_endline (Char.escaped c)
@@ -69,7 +90,12 @@ let step (state : viewstate) : unit =
   (* incr animations every 100 frames *)
   if state.tick mod 10 = 0 then
     state.animations <- increment_anims state.animations;
-  state.tick <- (state.tick + 1) mod 10
+  state.tick <- (state.tick + 1) mod 10;
+  Graphics.set_color state.bc;
+  Graphics.fill_rect 0 0
+    (state.scale * state.maxx)
+    (state.scale * state.maxy);
+  setup_toolbars state
 
 let predraw (state : viewstate) : unit = ()
 
