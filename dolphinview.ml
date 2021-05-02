@@ -22,6 +22,8 @@ let g =
     row_scale = 120 / Dolphin.max_height;
   }
 
+let vs : viewstate = { default_vs with animations = [] }
+
 (* Lower the number, the faster the speed. Thus this value is a lower
    bound on the speed *)
 let max_speed = 1
@@ -74,14 +76,10 @@ let dolphin_exit s =
 let dolphin_except s ex =
   match ex with
   | Dolphin.Gameover score ->
-      print_endline (string_of_int score);
-      s.animations <-
-        {
-          gg_static with
-          cx = default_vs.maxx / 2;
-          cy = default_vs.maxy / 2;
-        }
-        :: s.animations
+      gameover_screen 500 score "You're Trash"
+        { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
+        s
+      (* print_endline (string_of_int score) *)
   | _ -> raise ex
 
 let dolphin_key s c =
@@ -141,8 +139,6 @@ let dolphin_predraw s =
   clear_lane 0;
   clear_lane 1;
   clear_lane 2
-
-let vs : viewstate = { default_vs with animations = [] }
 
 let draw () =
   draw_loop vs dolphin_init dolphin_exit dolphin_key dolphin_except

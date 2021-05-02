@@ -57,6 +57,24 @@ let draw_img_ll (x : int) (y : int) (p_array : pixel_array) : unit =
   Graphics.set_color Graphics.white;
   Graphics.draw_image (p_array |> make_image) (x * scale) (y * scale)
 
+let draw_message
+    (cx : int)
+    (cy : int)
+    (size : int)
+    (c : color)
+    (message : string) =
+  (* Setup *)
+  set_font
+    ("-*-fixed-medium-r-semicondensed--" ^ string_of_int size
+   ^ "-*-*-*-*-*-iso8859-1");
+  set_color c;
+  (* Pointer positioning*)
+  moveto cx cy;
+  let mx, my = text_size message in
+  rmoveto (-mx / 2) (-my / 2);
+  (* Draw *)
+  draw_string message
+
 (** [process_anims] process a list of animations and render the current
     frame on the graphics context *)
 let rec process_anims (anims : animation list) : unit =
@@ -76,6 +94,8 @@ let rec increment_anims (anims : animation list) : animation list =
     - It first initiates the screen with [f_init] called on the sample
       function.
     - It then calls [f_step] function to update the [vs].
+    - Then, it calls the [f_predraw] function and updates [vs]
+      accordingly.
     - Then, it processes the user key input (if available) with the
       [f_key] function and updates [vs] accordingly.
     - Finally, it draws all the stationary animations based on [vs], and
@@ -107,3 +127,37 @@ let draw_loop
       | e -> f_except vs e
     done
   with End -> f_end vs
+
+let gameover_screen
+    (length : int)
+    (score : int)
+    (message : string)
+    (anim : animation)
+    (vs : viewstate) =
+  draw_loop vs
+    (* Init *)
+      (fun s ->
+      s.tick <- 0;
+      s.animations <- anim :: s.animations;
+      let cx = vs.maxx * scale / 2
+      and cy = vs.maxy * scale / 2
+      and dy = vs.maxy * scale / 10
+      and score_string = "Score: " ^ string_of_int score
+      and quit_string = "Press 'S' to Quit" in
+      (* Draw Score *)
+      draw_message cx (cy - dy) 50 red score_string;
+      (* Draw Custom Message *)
+      draw_message cx (cy - (2 * dy)) 40 red message;
+      (* Draw Quit message *)
+      draw_message cx (cy - (3 * dy)) 30 green quit_string;
+      set_color white)
+    (fun s -> ())
+    (fun s c ->
+      match c with
+      | 's' -> raise End
+      | _ -> print_endline "Invalid Key_pressed")
+    (fun s ex -> ())
+    (fun s ->
+      if s.tick = length then raise End else s.tick <- s.tick + 1)
+    (fun s -> ());
+  raise End
