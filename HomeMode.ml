@@ -1,12 +1,6 @@
 open Animation
 open Gui
 
-exception PlayDolphin
-
-exception PlayDrum
-
-exception PlayElements
-
 type game_flags = {
   mutable dolphin : bool;
   mutable drum : bool;
@@ -22,11 +16,9 @@ let reset_game_flags () =
 
 (** Draw the tool bars, setup screen*)
 let setup_toolbars s =
-  Graphics.set_color Graphics.black;
-  Graphics.fill_rect 0 0 (s.scale * 120) (s.scale * 20);
-  Graphics.fill_rect 0 (100 * s.scale) (s.scale * 120) (s.scale * 20);
-  Graphics.set_color Graphics.white;
-  Graphics.fill_rect 0 (10 * s.scale) (120 * s.scale) (100 * s.scale);
+  (* Draw top and bottom black bars *)
+  draw_pixels_ll 0 0 120 10 Graphics.black;
+  draw_pixels_ll 0 110 120 10 Graphics.black;
   (* Top row *)
   Graphics.draw_image
     (Graphics.make_image eat_icon)
@@ -63,6 +55,7 @@ let init s =
 (** Main exit function for HomeMode *)
 let exit s =
   Graphics.close_graph ();
+  (* TODO: save the current state of Tamagotchi to json *)
   print_endline "";
   print_endline
     "Thanks for playing! Your Tamagotchi will be waiting for your \
@@ -108,4 +101,6 @@ let sample_state : viewstate =
 let draw () = draw_loop sample_state init exit key except step predraw
 
 (* For debugging. Uncomment the following line and run [make homemode] *)
+(* TODO: Load from json (if it exists), otherwise launch new Tamagotchi
+   session *)
 let _ = draw ()
