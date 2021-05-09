@@ -2,6 +2,6 @@
     "eat_icon": {
         "name": "eat_icon",
         "scale": 5,
-        "data": [[], [], []]
+        "data": [[1], [], []]
     }
 }
