@@ -1,11 +1,83 @@
 open Animation
 open Gui
+open State
+
+let delta = 30
+
+let default_anim_length = 300
+
+let vs : viewstate = { default_vs with animations = [] }
+
+type button =
+  | Eat
+  | Sleep
+  | Toilet
+  | Play
+  | Shop
+  | Inventory
+
+type avatar_anim =
+  | Eating
+  | Sleeping
+  | Cleaning
+  | Idle
+
+type homestate = {
+  (* 0 = Eat, 1 = Sleep, 2 = Toilet, 3 = Play, 4 = Shop, 5 = Inventory *)
+  (* mutable tam_state : tamagotchi; *)
+  total_icons : int;
+  mutable active_icon : int;
+  mutable active_anim : avatar_anim;
+  mutable anim_counter : int;
+}
 
 type game_flags = {
   mutable dolphin : bool;
   mutable drum : bool;
   mutable elements : bool;
 }
+
+let my_home =
+  {
+    (* tam_state = from_json "./json/baby.json"; *)
+    total_icons = 6;
+    active_icon = 0;
+    anim_counter = 0;
+    active_anim = Idle;
+  }
+
+(** [button_of_int] returns the corresponding button for the int *
+    representation of [active_icon_num]
+
+    Precondition: [active_icon_num] must be an integer between 0 and 5
+    inclusive*)
+let button_of_int (active_icon_num : int) =
+  match active_icon_num with
+  | 0 -> Eat
+  | 1 -> Sleep
+  | 2 -> Toilet
+  | 3 -> Play
+  | 4 -> Shop
+  | 5 -> Inventory
+  | _ -> failwith "Impossible: Precondition violation"
+
+let activate_button (active_button : button) =
+  match active_button with
+  | Eat ->
+      my_home.active_anim <- Eating;
+      my_home.anim_counter <- default_anim_length
+      (* TODO: Update tamagotchi state -- make less hungry*)
+  | Sleep ->
+      my_home.active_anim <- Sleeping;
+      my_home.anim_counter <- default_anim_length
+      (* TODO: Update tamagotchi state -- make less sleepy*)
+  | Toilet ->
+      my_home.active_anim <- Cleaning;
+      my_home.anim_counter <- default_anim_length
+      (* TODO: Update tamagotchi state -- make more clean*)
+  | Play -> Dolphinview.draw ()
+  | Shop -> Drumview.draw ()
+  | Inventory -> failwith "NOT YET BUDDY"
 
 let my_game_flags = { dolphin = false; drum = false; elements = false }
 
@@ -14,31 +86,61 @@ let reset_game_flags () =
   my_game_flags.drum <- false;
   my_game_flags.elements <- false
 
+let get_avatar_animations (hs : homestate) : Animation.animation =
+  match hs.active_anim with
+  | Eating -> eat_anim
+  | Sleeping -> sleep_anim
+  | Cleaning -> clean_anim
+  | Idle -> avatar
+
+let reset_avatar_animations (hs : homestate) =
+  hs.active_anim <- Idle;
+  hs.anim_counter <- 0
+
+let get_toolbar_animations (hs : homestate) : Animation.animation list =
+  match button_of_int hs.active_icon with
+  | Eat ->
+      [
+        eat_icon_bobble; sleep_icon_static; toilet_icon_static;
+        play_icon_static; shop_icon_static; inventory_icon_static;
+      ]
+  | Sleep ->
+      [
+        eat_icon_static; sleep_icon_bobble; toilet_icon_static;
+        play_icon_static; shop_icon_static; inventory_icon_static;
+      ]
+  | Toilet ->
+      [
+        eat_icon_static; sleep_icon_static; toilet_icon_bobble;
+        play_icon_static; shop_icon_static; inventory_icon_static;
+      ]
+  | Play ->
+      [
+        eat_icon_static; sleep_icon_static; toilet_icon_static;
+        play_icon_bobble; shop_icon_static; inventory_icon_static;
+      ]
+  | Shop ->
+      [
+        eat_icon_static; sleep_icon_static; toilet_icon_static;
+        play_icon_static; shop_icon_bobble; inventory_icon_static;
+      ]
+  | Inventory ->
+      [
+        eat_icon_static; sleep_icon_static; toilet_icon_static;
+        play_icon_static; shop_icon_static; inventory_icon_bobble;
+      ]
+
+let get_animations (hs : homestate) : Animation.animation list =
+  let tool_bar_anims = get_toolbar_animations hs
+  and avatar_anim = get_avatar_animations hs in
+  avatar_anim :: tool_bar_anims
+
 (** Draw the tool bars, setup screen*)
 let setup_toolbars s =
   (* Draw top and bottom black bars *)
   draw_pixels_ll 0 0 120 10 Graphics.black;
   draw_pixels_ll 0 110 120 10 Graphics.black;
-  (* Top row *)
-  Graphics.draw_image
-    (Graphics.make_image eat_icon)
-    (0 * s.scale) (90 * s.scale);
-  Graphics.draw_image
-    (Graphics.make_image sleep_icon)
-    (45 * s.scale) (90 * s.scale);
-  Graphics.draw_image
-    (Graphics.make_image toilet_icon)
-    (90 * s.scale) (90 * s.scale);
-  (* Bottom row *)
-  Graphics.draw_image
-    (Graphics.make_image play_icon)
-    (0 * s.scale) (10 * s.scale);
-  Graphics.draw_image
-    (Graphics.make_image shop_icon)
-    (45 * s.scale) (10 * s.scale);
-  Graphics.draw_image
-    (Graphics.make_image inventory_icon)
-    (90 * s.scale) (10 * s.scale)
+  s.animations <- get_animations my_home
 
 (** Main init function for HomeMode*)
 let init s =
@@ -73,32 +175,47 @@ let key s c =
   | '1' -> Dolphinview.draw ()
   | '2' -> Drumview.draw ()
   | '3' -> failwith "unimplemented"
+  | 'a' ->
+      my_home.active_icon <-
+        (my_home.active_icon - 1 + my_home.total_icons)
+        mod my_home.total_icons
+  | 'd' ->
+      my_home.active_icon <-
+        (my_home.active_icon + 1 + my_home.total_icons)
+        mod my_home.total_icons;
+      print_endline (string_of_int my_home.active_icon)
+  | 's' -> my_home.active_icon |> button_of_int |> activate_button
   | 'x' -> raise End
   | _ -> ());
+  s.animations <- get_animations my_home;
   print_endline (Char.escaped c)
+
+let clear_center (state : viewstate) : unit =
+  Graphics.set_color state.bc;
+  Graphics.fill_rect 0 (10 * state.scale)
+    (state.scale * state.maxx)
+    (state.scale * (state.maxy - 20))
 
 (** [step] increments the tick in the state, used for conservatively
     animating *)
 let step (state : viewstate) : unit =
-  (* incr animations every 100 frames *)
-  if state.tick mod 10 = 0 then
+  (* Handle Avatar Animation (except idle) Transitions*)
+  if my_home.active_anim != Idle then
+    if my_home.anim_counter = 0 then (
+      reset_avatar_animations my_home;
+      state.animations <- get_animations my_home)
+    else my_home.anim_counter <- my_home.anim_counter - 1;
+  (* Update animations every [delta] frames *)
+  if state.tick mod delta = 0 then
     state.animations <- increment_anims state.animations;
-  state.tick <- (state.tick + 1) mod 10;
-  Graphics.set_color state.bc;
-  Graphics.fill_rect 0 0
-    (state.scale * state.maxx)
-    (state.scale * state.maxy);
-  setup_toolbars state
+  state.tick <- (state.tick + 1) mod delta
 
-let predraw (state : viewstate) : unit = ()
+let predraw (state : viewstate) : unit =
+  draw_pixels_ll 0 0 120 10 Graphics.black;
+  draw_pixels_ll 0 110 120 10 Graphics.black;
+  clear_center state
 
-let test_anims = [ test_anim; eat_anim ]
-
-(* This will be the model data *)
-let sample_state : viewstate =
-  { default_vs with animations = test_anims }
-
-let draw () = draw_loop sample_state init exit key except step predraw
+let draw () = draw_loop vs init exit key except step predraw
 
 (* For debugging. Uncomment the following line and run [make homemode] *)
 (* TODO: Load from json (if it exists), otherwise launch new Tamagotchi

@@ -156,7 +156,9 @@ let gameover_screen
     (fun s -> ())
     (fun s c ->
       match c with
-      | 's' -> raise End
+      | 's' ->
+          clear_graph ();
+          raise End
       | _ -> print_endline "Invalid Key_pressed")
     (fun s ex -> ())
     (fun s ->

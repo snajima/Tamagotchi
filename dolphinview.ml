@@ -7,7 +7,7 @@ exception Gameover of int
 
 type vs = Gui.viewstate
 
-type game_var = {
+type game_vars = {
   mutable game : Dolphin.gamestate;
   mutable speed : int;
   mutable rock_speed : int;
@@ -24,8 +24,8 @@ let g =
 
 let vs : viewstate = { default_vs with animations = [] }
 
-(* Lower the number, the faster the speed. Thus this value is a lower
-   bound on the speed *)
+(* The lower the number, the faster the speed. Thus this value is a
+   lower bound on the speed *)
 let max_speed = 1
 
 let lane_width = 25
@@ -119,7 +119,6 @@ let string_of_rocks (rocks : (int * int) list) : string =
        rocks)
 
 let dolphin_step s =
-  (* g.game |> get_rocks |> string_of_rocks |> print_endline; *)
   (* Add Rocks *)
   if s.tick mod g.rock_speed = 0 then g.game <- add_rock g.game;
   (* Step Game *)
@@ -127,8 +126,6 @@ let dolphin_step s =
   (* Update Animations *)
   if s.tick mod g.speed = 0 then s.animations <- get_animations g.game;
   if s.tick = 3999 then g.speed <- speed_up g.speed;
-  (* print_endline (string_of_int g.speed); *)
-  (* print_endline (string_of_int s.tick); *)
   s.tick <- (s.tick + 1) mod 4000
 
 let dolphin_predraw s =
