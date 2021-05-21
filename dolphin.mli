@@ -7,12 +7,23 @@ type gamestate
 
 exception Gameover of int
 
+(** [max_height] is an integer indicating the maximum height of a rock in the 
+    game. It takes [max_height] number of calls to the [next] function in order
+    for a rock to fall from the top to the bottom and then subsequently be 
+    removed *)
 val max_height : int
 
+(** [get_rocks gs] returns a list of coordinates that indicate the location of 
+    the rocks in [gs] following the format (lane, height). Lane is an integer 
+    in 1-3 inclusive. 1 is Left, 2 is Middle and 3 is Right. Height is a integer
+    between 1 - [max_height] *)
 val get_rocks : gamestate -> (int * int) list 
 
+(** [get_dolphin_lane gs] returns the [Lane] that the player is currently on in
+    the gamestate [gs]*)
 val get_dolphin_lane : gamestate -> lane 
 
+(** [num_rocks gs] returns the number of rocks in the gamestate [gs]*)
 val num_rocks : gamestate -> int
 
 (** [init_game ()] is the initial state of the game when playing
