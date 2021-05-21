@@ -4,6 +4,10 @@ open Main
 open Homemode
 open State
 
+(* -------------------------------------------------------------------- *)
+(* ------------------- Helper Functions for Testing ------------------- *)
+(* -------------------------------------------------------------------- *)
+
 (** [cmp_set_like_lists lst1 lst2] compares two lists to see whether
     they are equivalent set-like lists. That means checking two things.
     First, they must both be {i set-like}, meaning that they do not
@@ -37,6 +41,10 @@ let equal_sets_test init name a b =
   name >:: fun ctxt ->
   assert_equal ~cmp:cmp_set_like_lists ~printer:(pp_list pp_string) a b
 
+(* -------------------------------------------------------------------- *)
+(* -------------------------- State Testing --------------------------- *)
+(* -------------------------------------------------------------------- *)
+
 let sample_baby = "baby.json"
 
 let babe = from_json sample_baby
@@ -58,9 +66,9 @@ let death_exc name fxn = name >:: fun ctxt -> assert_raises Death fxn
 let negative_money_exc name fxn =
   name >:: fun ctxt -> assert_raises NegativeMoney fxn
 
-let piano = { name = "piano"; cost = 10 }
+let piano : item = { name = "piano"; cost = 10 }
 
-let violin = { name = "violin"; cost = 15 }
+let violin : item = { name = "violin"; cost = 15 }
 
 let main_tests =
   [
@@ -125,6 +133,18 @@ let main_tests =
        (fun () -> ()) "age of senior" 35 (get_age senior); death_exc
        "death of senior" (fun () -> increment_age senior); *)
   ]
+
+(* -------------------------------------------------------------------- *)
+(* -------------------------- Dolphin Testing ------------------------- *)
+(* -------------------------------------------------------------------- *)
+
+(* -------------------------------------------------------------------- *)
+(* --------------------------- Drum Testing --------------------------- *)
+(* -------------------------------------------------------------------- *)
+
+(* -------------------------------------------------------------------- *)
+(* ----------------------- Elementalist Testing ----------------------- *)
+(* -------------------------------------------------------------------- *)
 
 let suite =
   "test suite for Tamagotchi Final Project"
