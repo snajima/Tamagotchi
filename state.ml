@@ -123,7 +123,7 @@ let step tam =
     tam.age <- tam.age + 1;
     tam.hunger <- tam.hunger - 10;
     tam.cleanliness <- tam.cleanliness - 10;
-    tam.sleep <- tam.sleep - 10 )
+    tam.sleep <- tam.sleep - 10)
 
 (**Saving a game*)
 let save tam = Yojson.to_file "hi"

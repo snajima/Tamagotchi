@@ -1,8 +1,12 @@
+exception Death
+
+exception NegativeMoney
+
 type item
 
 type tamagotchi
 
-val from_json : Yojson.Basic.t -> tamagotchi
+val from_json : string -> tamagotchi
 
 val get_breed : tamagotchi -> string
 

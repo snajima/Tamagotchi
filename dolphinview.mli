@@ -1,6 +1,4 @@
 
-exception Gameover of int
-
 type vs = Gui.viewstate
 
 val dolphin_init : vs -> unit

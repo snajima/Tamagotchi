@@ -2,9 +2,6 @@ open Dolphin
 open Gui
 open Animation
 
-(* Stores score *)
-exception Gameover of int
-
 type vs = Gui.viewstate
 
 type game_vars = {
