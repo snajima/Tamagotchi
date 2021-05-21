@@ -14,3 +14,5 @@ val dolphin_key : vs -> char -> unit
 val dolphin_predraw : vs -> unit
 
 val dolphin_step : vs -> unit
+
+val draw : unit -> unit

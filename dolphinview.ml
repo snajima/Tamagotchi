@@ -7,7 +7,7 @@ exception Gameover of int
 
 type vs = Gui.viewstate
 
-type game_var = {
+type game_vars = {
   mutable game : Dolphin.gamestate;
   mutable speed : int;
   mutable rock_speed : int;
@@ -22,8 +22,10 @@ let g =
     row_scale = 120 / Dolphin.max_height;
   }
 
-(* Lower the number, the faster the speed. Thus this value is a lower
-   bound on the speed *)
+let vs : viewstate = { default_vs with animations = [] }
+
+(* The lower the number, the faster the speed. Thus this value is a
+   lower bound on the speed *)
 let max_speed = 1
 
 let lane_width = 25
@@ -54,12 +56,8 @@ let clear_lane (lane : int) =
     default_vs.maxy Graphics.white
 
 let dolphin_init s =
-  (* REMOVE LATER *)
-  Graphics.open_graph
-    (" "
-    ^ string_of_int (s.scale * s.maxx)
-    ^ "x"
-    ^ string_of_int (s.scale * s.maxy));
+  Graphics.clear_graph ();
+  g.game <- init_game ();
   s.animations <- [ { rock_static with cx = lane_cx 0; cy = 120 } ];
   draw_pixels_ll 0 0 5 120 Graphics.black;
   (* draw_pixels_ll 35 0 5 120 Graphics.black; *)
@@ -74,14 +72,10 @@ let dolphin_exit s =
 let dolphin_except s ex =
   match ex with
   | Dolphin.Gameover score ->
-      print_endline (string_of_int score);
-      s.animations <-
-        {
-          gg_static with
-          cx = default_vs.maxx / 2;
-          cy = default_vs.maxy / 2;
-        }
-        :: s.animations
+      gameover_screen 500 score "You're Trash"
+        { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
+        s
+      (* print_endline (string_of_int score) *)
   | _ -> raise ex
 
 let dolphin_key s c =
@@ -125,7 +119,6 @@ let string_of_rocks (rocks : (int * int) list) : string =
        rocks)
 
 let dolphin_step s =
-  (* g.game |> get_rocks |> string_of_rocks |> print_endline; *)
   (* Add Rocks *)
   if s.tick mod g.rock_speed = 0 then g.game <- add_rock g.game;
   (* Step Game *)
@@ -133,8 +126,6 @@ let dolphin_step s =
   (* Update Animations *)
   if s.tick mod g.speed = 0 then s.animations <- get_animations g.game;
   if s.tick = 3999 then g.speed <- speed_up g.speed;
-  (* print_endline (string_of_int g.speed); *)
-  (* print_endline (string_of_int s.tick); *)
   s.tick <- (s.tick + 1) mod 4000
 
 let dolphin_predraw s =
@@ -142,11 +133,9 @@ let dolphin_predraw s =
   clear_lane 1;
   clear_lane 2
 
-let vs : viewstate = { default_vs with animations = [] }
-
 let draw () =
   draw_loop vs dolphin_init dolphin_exit dolphin_key dolphin_except
     dolphin_step dolphin_predraw
 
 (* For debugging. Uncomment the following line and run [make homemode] *)
-let _ = draw ()
+(* let _ = draw () *)

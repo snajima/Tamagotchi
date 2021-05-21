@@ -95,6 +95,6 @@ let set_money amount tam =
 
 let get_inventory tam = tam.inventory
 
-(**Adding item to the list. The list is a set that can contain
-   duplicates*)
+(** Adding item to the list. The list is a set that can contain
+    duplicates*)
 let set_item item tam = tam.inventory <- item :: tam.inventory

@@ -59,237 +59,9 @@ let t = 0xFFFFFF
 
 let r = Graphics.red
 
-let neutral_f1 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; t; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; n; n; n; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; t; t; n; t; t; t; t; t; n; t; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; n; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; n; n; n; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
-    |]
-
-let neutral_f2 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; t; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; n; n; n; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; n; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; n; n; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; n; t; n; n; n; t; n; t; t; t |];
-      [| t; t; t; t; t; n; t; n; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
-    |]
-
-let wide_f1 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; t; t; n; t; t; t; t; t; n; t; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; n; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; n; n; n; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
-    |]
-
-let wide_f2 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; n; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; n; n; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; n; t; n; n; n; t; n; t; t; t |];
-      [| t; t; t; t; t; n; t; n; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
-    |]
-
-let idle =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; n; t; t; t; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; n; n; n; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; n; t; n; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; n; t; t; t; t; t |];
-    |]
-
-let eat_f1 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; n; n; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; n; n; n; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; t; t; n; t; t; n; t; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; t; t; n; n; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; n; t; t; t; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; n; n; n; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; n; t; n; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; n; t; t; t; t; t |];
-    |]
-
-let eat_f2 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; n; n; n; n; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; n; t; t; n; n; n; t; t; t; t; n; n; n; t |];
-      [| t; n; t; t; n; n; n; t; t; t; n; t; n; t; t |];
-      [| t; n; t; t; n; n; n; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; n; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; n; t; n; t; n; n; n; n; t; t; t; t |];
-      [| t; t; t; n; t; n; t; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; t; t; t; t; t; t; t |];
-    |]
-
-let eat_f3 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; n; n; n; n; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; n; t; t; n; n; n; t; t; t; t; n; n; n; t |];
-      [| t; n; t; t; n; n; n; t; t; t; n; t; n; t; t |];
-      [| t; n; t; t; n; n; n; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| n; n; n; t; t; t; t; t; t; t; t; t; n; n; t |];
-      [| n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; n; t; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; n; n; t; n; n; t; n; n; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
-
-let typing =
-  scale 10
-    [|
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| n; t; t; n; t; t; t; t; t; t; t; n; t; t; n |];
-      [| n; t; t; n; n; n; n; n; n; n; n; n; t; t; n |];
-      [| n; t; n; n; t; n; t; n; t; n; t; n; n; t; n |];
-      [| n; t; n; t; n; t; n; t; n; t; n; t; n; t; n |];
-      [| n; t; t; n; n; n; n; n; n; n; n; n; t; t; n |];
-      [| n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-    |]
-
-let poop =
-  scale 5
-    [|
-      [| t; t; t; n; t; t; t; n; t; t; t; t; t; t; t; t |];
-      [| t; t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; n; t; t; t; t; n; n; t |];
-      [| t; t; t; t; n; t; t; n; n; n; t; t; t; t; t; n |];
-      [| t; t; t; n; t; t; n; t; t; t; n; n; t; t; t; n |];
-      [| t; t; t; t; t; n; t; t; t; t; t; n; t; t; n; t |];
-      [| t; t; t; t; n; n; n; n; n; n; n; n; n; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; n; n; n; n; n; t; t; t; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; n; n; n; t; t; n; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; n; n; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; t; t; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-    |]
-
-let poop_shovel =
-  scale 5
-    [|
-      [| n; n; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| n; n; n; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; n; n; n; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; n; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; t; n; n; n; n; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; n; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; n |];
-      [| t; t; t; t; t; t; t; t; n; t; t; t; t; t; t; n |];
-      [| t; t; t; t; t; t; t; t; t; n; t; t; t; t; t; n |];
-      [| t; t; t; t; t; t; t; t; t; t; n; t; t; t; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; n; n; n; t; t |];
-    |]
-
+(* ---------------------------------------------------------------- *)
+(* ---------------------- Home Screen Frames ---------------------- *)
+(* ---------------------------------------------------------------- *)
 let eat_icon =
   scale 5
     [|
@@ -378,13 +150,13 @@ let shop_icon =
   scale 5
     [|
       [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
       [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
       [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
       [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
       [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
       [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
       [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
       [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
       [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
       [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
@@ -416,6 +188,362 @@ let inventory_icon =
       [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
     |]
 
+let eat_icon_f1 =
+  scale 5
+    [|
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; n; t; n; t; n; t; t; t; t; t; n; t; t; t |];
+      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
+      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
+      [| t; t; n; t; n; t; n; t; t; t; n; n; n; t; t; t |];
+      [| t; t; n; n; n; n; n; t; t; t; n; n; n; t; t; t |];
+      [| t; t; t; n; n; n; t; t; t; t; n; n; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; n; n; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+    |]
+
+let sleep_icon_f1 =
+  scale 5
+    [|
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; n; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; n; t; t; t; t; t; t; t; t; n; t; n; t; t |];
+      [| t; n; n; n; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; n; n; n; n; n; n; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; n; n; n; n; n; t |];
+      [| t; t; t; n; n; n; n; n; n; t; t; t; t; n; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; n; n; n; n; n; t |];
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+    |]
+
+let toilet_icon_f1 =
+  scale 5
+    [|
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; n; n; n; n; n; n; n; n; n; n; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; n; t |];
+      [| t; t; t; n; t; t; n; n; n; n; t; t; n; t; n; t |];
+      [| t; t; t; n; n; t; t; t; t; t; t; n; n; t; n; t |];
+      [| t; t; t; n; t; n; n; n; n; n; n; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; n; n; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; t; t; t; t; n; n; n; n; n; n; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+    |]
+
+let play_icon_f1 =
+  scale 5
+    [|
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
+      [| t; t; t; n; t; t; t; t; t; n; t; t; n; n; n; t |];
+      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
+      [| t; n; t; n; t; t; t; t; t; n; t; n; t; n; n; t |];
+      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
+      [| t; n; t; t; n; t; t; t; n; t; t; n; t; n; n; t |];
+      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
+      [| t; n; t; n; t; t; t; t; t; n; t; n; t; t; t; t |];
+      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
+      [| t; t; t; n; t; t; t; t; t; n; t; t; t; t; t; t |];
+      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+    |]
+
+let shop_icon_f1 =
+  scale 5
+    [|
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
+      [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+    |]
+
+let inventory_icon_f1 =
+  scale 5
+    [|
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; n; n; n; t; t; n; n; n; t; t; t; t; t |];
+      [| t; t; n; t; t; t; n; n; t; t; n; n; t; t; t; t |];
+      [| t; t; t; n; n; n; n; n; n; n; t; t; n; t; t; t |];
+      [| t; t; t; n; n; t; t; n; t; t; t; n; n; t; t; t |];
+      [| t; t; n; t; t; n; n; t; n; t; n; t; n; t; t; t |];
+      [| t; t; n; n; n; t; t; t; n; n; t; t; n; t; t; t |];
+      [| t; t; n; t; n; n; n; n; t; n; t; n; n; t; t; t |];
+      [| t; t; n; t; t; n; t; t; t; n; n; t; n; t; t; t |];
+      [| t; t; n; n; t; n; t; t; n; n; t; t; n; t; t; t |];
+      [| t; t; n; t; n; n; n; n; t; n; t; n; t; t; t; t |];
+      [| t; t; n; t; t; n; t; t; t; n; n; t; t; t; t; t |];
+      [| t; t; t; n; t; n; t; t; n; n; t; t; t; t; t; t |];
+      [| t; t; t; t; n; n; n; n; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+    |]
+
+let eat_icon_f2 =
+  scale 5
+    [|
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; n; t; n; t; n; t; t; t; t; t; n; t; t; t |];
+      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
+      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
+      [| t; t; n; t; n; t; n; t; t; t; n; n; n; t; t; t |];
+      [| t; t; n; n; n; n; n; t; t; t; n; n; n; t; t; t |];
+      [| t; t; t; n; n; n; t; t; t; t; n; n; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; n; n; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+    |]
+
+let sleep_icon_f2 =
+  scale 5
+    [|
+      [| t; n; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; n; t; t; t; t; t; t; t; t; n; t; n; t; t |];
+      [| t; n; n; n; n; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; n; n; n; n; n; n; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; n; n; n; n; n; t |];
+      [| t; t; t; n; n; n; n; n; n; t; t; t; t; n; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; n; n; n; n; n; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+    |]
+
+let toilet_icon_f2 =
+  scale 5
+    [|
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; n; n; n; n; n; n; n; n; n; n; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; n; t |];
+      [| t; t; t; n; t; t; n; n; n; n; t; t; n; t; n; t |];
+      [| t; t; t; n; n; t; t; t; t; t; t; n; n; t; n; t |];
+      [| t; t; t; n; t; n; n; n; n; n; n; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
+      [| t; t; t; n; t; t; t; t; t; t; t; t; n; n; n; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; t; t; t; t; n; n; n; n; n; n; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+    |]
+
+let play_icon_f2 =
+  scale 5
+    [|
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
+      [| t; t; t; n; t; t; t; t; t; n; t; t; n; n; n; t |];
+      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
+      [| t; n; t; n; t; t; t; t; t; n; t; n; t; n; n; t |];
+      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
+      [| t; n; t; t; n; t; t; t; n; t; t; n; t; n; n; t |];
+      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
+      [| t; n; t; n; t; t; t; t; t; n; t; n; t; t; t; t |];
+      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
+      [| t; t; t; n; t; t; t; t; t; n; t; t; t; t; t; t |];
+      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+    |]
+
+let shop_icon_f2 =
+  scale 5
+    [|
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+      [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
+      [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
+      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+    |]
+
+let inventory_icon_f2 =
+  scale 5
+    [|
+      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
+      [| t; t; t; n; n; n; t; t; n; n; n; t; t; t; t; t |];
+      [| t; t; n; t; t; t; n; n; t; t; n; n; t; t; t; t |];
+      [| t; t; t; n; n; n; n; n; n; n; t; t; n; t; t; t |];
+      [| t; t; t; n; n; t; t; n; t; t; t; n; n; t; t; t |];
+      [| t; t; n; t; t; n; n; t; n; t; n; t; n; t; t; t |];
+      [| t; t; n; n; n; t; t; t; n; n; t; t; n; t; t; t |];
+      [| t; t; n; t; n; n; n; n; t; n; t; n; n; t; t; t |];
+      [| t; t; n; t; t; n; t; t; t; n; n; t; n; t; t; t |];
+      [| t; t; n; n; t; n; t; t; n; n; t; t; n; t; t; t |];
+      [| t; t; n; t; n; n; n; n; t; n; t; n; t; t; t; t |];
+      [| t; t; n; t; t; n; t; t; t; n; n; t; t; t; t; t |];
+      [| t; t; t; n; t; n; t; t; n; n; t; t; t; t; t; t |];
+      [| t; t; t; t; n; n; n; n; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
+    |]
+
+(* ---------------------------------------------------------------- *)
+(* -------------------- Home Screen Animations -------------------- *)
+(* ---------------------------------------------------------------- *)
+
+let top_row_cy = 100
+
+let bot_row_cy = 20
+
+let eat_icon_static =
+  {
+    frames = [ eat_icon ];
+    total = 1;
+    current = 0;
+    cx = 15;
+    cy = top_row_cy;
+  }
+
+let sleep_icon_static =
+  {
+    frames = [ sleep_icon ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = top_row_cy;
+  }
+
+let toilet_icon_static =
+  {
+    frames = [ toilet_icon ];
+    total = 1;
+    current = 0;
+    cx = 105;
+    cy = top_row_cy;
+  }
+
+let play_icon_static =
+  {
+    frames = [ play_icon ];
+    total = 1;
+    current = 0;
+    cx = 15;
+    cy = bot_row_cy;
+  }
+
+let shop_icon_static =
+  {
+    frames = [ shop_icon ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = bot_row_cy;
+  }
+
+let inventory_icon_static =
+  {
+    frames = [ inventory_icon ];
+    total = 1;
+    current = 0;
+    cx = 105;
+    cy = bot_row_cy;
+  }
+
+let eat_icon_bobble =
+  {
+    eat_icon_static with
+    frames = [ eat_icon_f1; eat_icon_f2 ];
+    total = 2;
+  }
+
+let sleep_icon_bobble =
+  {
+    sleep_icon_static with
+    frames = [ sleep_icon_f1; sleep_icon_f2 ];
+    total = 2;
+  }
+
+let toilet_icon_bobble =
+  {
+    toilet_icon_static with
+    frames = [ toilet_icon_f1; toilet_icon_f2 ];
+    total = 2;
+  }
+
+let play_icon_bobble =
+  {
+    play_icon_static with
+    frames = [ play_icon_f1; play_icon_f2 ];
+    total = 2;
+  }
+
+let shop_icon_bobble =
+  {
+    shop_icon_static with
+    frames = [ shop_icon_f1; shop_icon_f2 ];
+    total = 2;
+  }
+
+let inventory_icon_bobble =
+  {
+    inventory_icon_static with
+    frames = [ inventory_icon_f1; inventory_icon_f2 ];
+    total = 2;
+  }
+
 let black_sq = scale 5 [| [| n; n; n |]; [| n; n; n |]; [| n; n; n |] |]
 
 let white_sq = scale 5 [| [| n; n; n |]; [| n; t; n |]; [| n; n; n |] |]
@@ -441,25 +569,6 @@ let gg =
       [| t; r; r; t; t; t; r; t; t; t; t; r; r; t; t; t; r; t; t; t |];
       [| t; t; r; r; r; r; r; t; t; t; t; t; r; r; r; r; r; t; t; t |];
     |]
-
-(** Temporary animation frame for MS1 *)
-let test_anim =
-  {
-    frames = [ neutral_f1; neutral_f2 ];
-    total = 2;
-    current = 0;
-    cx = 30;
-    cy = 60;
-  }
-
-let eat_anim =
-  {
-    frames = [ eat_f1; eat_f2; eat_f3 ];
-    total = 3;
-    current = 0;
-    cx = 90;
-    cy = 60;
-  }
 
 (* let don_anim = { frames = [ don_1; don_2 ]; total = 2; current = 0;
    cx = 0; cy = 0; } *)
@@ -610,6 +719,27 @@ let idle =
       [| t; t; t; t; t; n; t; t; t; n; t; t; t; t; t |];
     |]
 
+let typing =
+  scale 10
+    [|
+      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
+      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
+      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
+      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
+      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
+      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
+      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
+      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
+      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+      [| n; t; t; n; t; t; t; t; t; t; t; n; t; t; n |];
+      [| n; t; t; n; n; n; n; n; n; n; n; n; t; t; n |];
+      [| n; t; n; n; t; n; t; n; t; n; t; n; n; t; n |];
+      [| n; t; n; t; n; t; n; t; n; t; n; t; n; t; n |];
+      [| n; t; t; n; n; n; n; n; n; n; n; n; t; t; n |];
+      [| n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
+      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
+    |]
+
 let eat_f1 =
   scale 10
     [|
@@ -734,132 +864,6 @@ let poop_shovel =
       [| t; t; t; t; t; t; t; t; t; n; t; t; t; t; t; n |];
       [| t; t; t; t; t; t; t; t; t; t; n; t; t; t; n; t |];
       [| t; t; t; t; t; t; t; t; t; t; t; n; n; n; t; t |];
-    |]
-
-let eat_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; n; n; n; n; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; n; n; n; t; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
-
-let sleep_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; n; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; n; t; n; t; t |];
-      [| t; n; n; n; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; t; t; n; n; n; n; n; n; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
-
-let toilet_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; n; t |];
-      [| t; t; t; n; t; t; n; n; n; n; t; t; n; t; n; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; n; n; t; n; t |];
-      [| t; t; t; n; t; n; n; n; n; n; n; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; n; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; n; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
-
-let play_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; n; t; t; n; n; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-      [| t; n; t; n; t; t; t; t; t; n; t; n; t; n; n; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; n; n; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-      [| t; n; t; n; t; t; t; t; t; n; t; n; t; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; n; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
-
-let shop_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
-
-let inventory_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; t; t; n; n; n; t; t; t; t; t |];
-      [| t; t; n; t; t; t; n; n; t; t; n; n; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; n; t; t; n; t; t; t |];
-      [| t; t; t; n; n; t; t; n; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; t; n; n; t; n; t; n; t; n; t; t; t |];
-      [| t; t; n; n; n; t; t; t; n; n; t; t; n; t; t; t |];
-      [| t; t; n; t; n; n; n; n; t; n; t; n; n; t; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; n; t; n; t; t; t |];
-      [| t; t; n; n; t; n; t; t; n; n; t; t; n; t; t; t |];
-      [| t; t; n; t; n; n; n; n; t; n; t; n; t; t; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; n; t; t; t; t; t |];
-      [| t; t; t; n; t; n; t; t; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
     |]
 
 let z_icon =
@@ -1069,3 +1073,40 @@ let rock =
       [| t; t; t; t; n; n; t; t; n; n; n; n; t; t; t; t |];
       [| t; t; t; t; t; t; n; n; n; t; t; t; t; t; t; t |];
     |]
+
+(** Temporary animation frame for MS1 *)
+let eat_anim =
+  {
+    frames = [ eat_f1; eat_f2; eat_f3 ];
+    total = 3;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let sleep_anim =
+  {
+    frames = [ sleeping; sleeping; sleeping ];
+    total = 3;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let clean_anim =
+  {
+    frames = [ poop_shovel; poop_shovel; poop_shovel ];
+    total = 3;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let avatar =
+  {
+    frames = [ neutral_f1; neutral_f2 ];
+    total = 2;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
