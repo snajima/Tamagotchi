@@ -1,3 +1,7 @@
+exception Death
+
+exception NegativeMoney
+
 type item
 
 type tamagotchi

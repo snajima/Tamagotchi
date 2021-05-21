@@ -37,15 +37,15 @@ let equal_sets_test init name a b =
   name >:: fun ctxt ->
   assert_equal ~cmp:cmp_set_like_lists ~printer:(pp_list pp_string) a b
 
-let sample_baby = Yojson.Basic.from_file "baby.json"
+let sample_baby = "baby.json"
 
 let babe = from_json sample_baby
 
-let sample_teen = Yojson.Basic.from_file "teen.json"
+let sample_teen = "teen.json"
 
 let teen = from_json sample_teen
 
-let sample_senior = Yojson.Basic.from_file "senior.json"
+let sample_senior = "senior.json"
 
 let senior = from_json sample_senior
 
