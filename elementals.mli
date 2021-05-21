@@ -1,3 +1,5 @@
+exception Gameover of bool
+
 type element =
   | Fire
   | Water

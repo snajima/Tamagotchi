@@ -1,7 +1,8 @@
 open OUnit2
 open Graphics
 open Main
-open Home
+open Homemode
+open State
 
 (** [cmp_set_like_lists lst1 lst2] compares two lists to see whether
     they are equivalent set-like lists. That means checking two things.

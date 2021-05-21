@@ -2,7 +2,7 @@ open Elementals
 open Gui
 open Animation
 
-exception Gameover of bool
+exception Gameover of int
 
 type vs = Gui.viewstate
 
@@ -18,7 +18,7 @@ let elementals_exit s =
 let elementals_except s ex =
   match ex with
   | Elementals.Gameover w_l ->
-       if w_l = true then print_endline "Congrats, you won!"; else print_endline "Boo, you lost!";
+       if w_l then (print_endline "Congrats, you won!";) else (print_endline "Boo, you lost!";);
       s.animations <-
         {
           gg_static with
