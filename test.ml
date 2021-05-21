@@ -138,6 +138,10 @@ let main_tests =
 (* -------------------------- Dolphin Testing ------------------------- *)
 (* -------------------------------------------------------------------- *)
 
+let dolphin_test =
+  let open Dolphin in
+  [ (* Test Cases Here *) ]
+
 (* -------------------------------------------------------------------- *)
 (* --------------------------- Drum Testing --------------------------- *)
 (* -------------------------------------------------------------------- *)
@@ -148,6 +152,6 @@ let main_tests =
 
 let suite =
   "test suite for Tamagotchi Final Project"
-  >::: List.flatten [ main_tests ]
+  >::: List.flatten [ main_tests; dolphin_test ]
 
 let _ = run_test_tt_main suite
