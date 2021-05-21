@@ -14,11 +14,15 @@ type tamagotchi = {
   mutable age : int;
   mutable money : int;
   mutable inventory : item list;
+  mutable step : int;
 }
 
 exception Death
 
 exception NegativeMoney
+
+(**Setting increment amounts for eating, sleeping, and cleanliness*)
+let increment = 5
 
 let item_of_json json =
   {
@@ -26,7 +30,8 @@ let item_of_json json =
     cost = json |> member "cost" |> to_int;
   }
 
-let from_json json =
+let from_json file_name =
+  let json = Yojson.Basic.from_file file_name in
   {
     breed = json |> member "breed" |> to_string;
     lifeStage = json |> member "lifeStage" |> to_string;
@@ -37,6 +42,7 @@ let from_json json =
     money = json |> member "money" |> to_int;
     inventory =
       json |> member "inventory" |> to_list |> List.map item_of_json;
+    step = json |> member "step" |> to_int;
   }
 
 let get_breed tam = tam.breed
@@ -98,3 +104,26 @@ let get_inventory tam = tam.inventory
 (** Adding item to the list. The list is a set that can contain
     duplicates*)
 let set_item item tam = tam.inventory <- item :: tam.inventory
+
+(**External increment functions to be used in other
+   modules___________________________________________________________________*)
+let increment_eat tam = set_hunger increment tam
+
+let increment_sleep tam = set_sleep increment tam
+
+let increment_cleanliness tam = set_cleanliness increment tam
+
+(**Step is updated every second, and each step is equivilent to one day
+   in real life. Hence, after 365 steps, the Tamogatchi will have its
+   birthday and increase its age by 1 years. For each "year" that has
+   passed, the cleanliness, sleep, and eat states will decrease by 10.*)
+let step tam =
+  tam.step <- tam.step + 1;
+  if tam.step mod 365 = 0 then (
+    tam.age <- tam.age + 1;
+    tam.hunger <- tam.hunger - 10;
+    tam.cleanliness <- tam.cleanliness - 10;
+    tam.sleep <- tam.sleep - 10 )
+
+(**Saving a game*)
+let save tam = Yojson.to_file "hi"
