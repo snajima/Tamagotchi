@@ -1,5 +1,4 @@
 open OUnit2
-open Graphics
 open Homemode
 open State
 
@@ -7,97 +6,92 @@ open State
 (* ------------------- Helper Functions for Testing ------------------- *)
 (* -------------------------------------------------------------------- *)
 
-(** [cmp_set_like_lists lst1 lst2] compares two lists to see whether
-    they are equivalent set-like lists. That means checking two things.
-    First, they must both be {i set-like}, meaning that they do not
-    contain any duplicates. Second, they must contain the same elements,
-    though not necessarily in the same order. *)
-let cmp_set_like_lists lst1 lst2 =
-  let sort_list_1 = List.sort compare lst1 in
-  let sort_list_2 = List.sort compare lst2 in
-  sort_list_1 = sort_list_2
-
-(** [pp_string s] pretty-prints string [s]. *)
-let pp_string s = "\"" ^ s ^ "\""
-
-(** [pp_list pp_elt lst] pretty-prints list [lst], using [pp_elt] to
-    pretty-print each element of [lst]. *)
-let pp_list pp_elt lst =
-  let pp_elts lst =
-    let rec loop n acc = function
-      | [] -> acc
-      | [ h ] -> acc ^ pp_elt h
-      | h1 :: (h2 :: t as t') ->
-          if n = 100 then acc ^ "..." (* stop printing long list *)
-          else loop (n + 1) (acc ^ pp_elt h1 ^ "; ") t'
-    in
-    loop 0 "" lst
-  in
-  "[" ^ pp_elts lst ^ "]"
-
-let equal_sets_test init name a b =
-  init ();
-  name >:: fun ctxt ->
-  assert_equal ~cmp:cmp_set_like_lists ~printer:(pp_list pp_string) a b
-
 (* -------------------------------------------------------------------- *)
 (* -------------------------- State Testing --------------------------- *)
 (* -------------------------------------------------------------------- *)
 
-let sample_baby = "./json/baby.json"
+(*Printer functions*)
+let num_printer num : string = string_of_int num
 
-let babe = from_json sample_baby
+let string_printer str : string = str
 
-let sample_teen = "./json/teen.json"
+let str_feature_test name a b =
+  name >:: fun ctxt -> assert_equal a b ~printer:string_printer
 
-let teen = from_json sample_teen
-
-let sample_senior = "./json/senior.json"
-
-let senior = from_json sample_senior
-
-let equal_value_test init name a b =
-  init ();
-  name >:: fun ctxt -> assert_equal a b
+(*Helper functions for testing*)
+let num_feature_test name a b =
+  name >:: fun ctxt -> assert_equal a b ~printer:num_printer
 
 let death_exc name fxn = name >:: fun ctxt -> assert_raises Death fxn
 
 let negative_money_exc name fxn =
   name >:: fun ctxt -> assert_raises NegativeMoney fxn
 
-let piano : item = { name = "piano"; cost = 10 }
-
-let violin : item = { name = "violin"; cost = 15 }
-
-let main_tests =
+let state_tests =
   [
-    equal_value_test
-      (fun () -> ())
-      "breed of baby" "crazy" (get_breed babe);
-    equal_value_test
-      (fun () -> ())
-      "breed of teen" "fluffy" (get_breed teen);
-    equal_value_test
-      (fun () -> ())
-      "LifeStage of baby" "Baby" (get_lifeStage babe);
-    equal_value_test
-      (fun () -> ())
-      "LifeStage of teen" "Teenager" (get_lifeStage teen);
-    equal_value_test (fun () -> ()) "sleep of baby" 100 (get_sleep babe);
-    (* equal_value_test (fun () -> ()) "sleep of teen" 45 (get_sleep
-       teen); *)
-    (* equal_value_test (fun () -> ()) "sleep of teen, incr 10" 55
-       (get_sleep teen); *)
+    (* ----------------- Observer: get_breed ------------------- *)
+    str_feature_test "breed of baby" "crazy"
+      (init_tam "./json/baby.json" |> get_breed);
+    str_feature_test "breed of teen" "fluffy"
+      (init_tam "./json/teen.json" |> get_breed);
+    str_feature_test "breed of senior" "bald"
+      (init_tam "./json/senior.json" |> get_breed);
+    (* ---------------- Observer: get_lifeStage ------------------ *)
+    (* ----------------------- No Change ------------------------ *)
+    str_feature_test "LifeStage of baby" "Baby"
+      (init_tam "./json/baby.json" |> get_lifeStage);
+    str_feature_test "LifeStage of teen" "Teenager"
+      (init_tam "./json/teen.json" |> get_lifeStage);
+    str_feature_test "LifeStage of senior" "Senior"
+      (init_tam "./json/senior.json" |> get_lifeStage);
+    (* --------------------- One Age Change ---------------------- *)
+    str_feature_test "LifeStage of baby incr" "Baby"
+      (init_tam "./json/baby.json" |> increment_age |> get_lifeStage);
+    str_feature_test "LifeStage of teen incr" "Adult"
+      (init_tam "./json/teen.json" |> increment_age |> get_lifeStage);
+    str_feature_test "LifeStage of senior incr" "Senior"
+      (init_tam "./json/senior.json" |> increment_age |> get_lifeStage);
+    (* --------------------- Two Age Change ---------------------- *)
+    str_feature_test "LifeStage of baby incr 2" "Teenager"
+      ( init_tam "./json/baby.json"
+      |> increment_age |> increment_age |> get_lifeStage );
+    str_feature_test "LifeStage of teen incr 2" "Adult"
+      ( init_tam "./json/teen.json"
+      |> increment_age |> increment_age |> get_lifeStage );
+    death_exc "Lifestage of senior incr 2" (fun () ->
+        init_tam "./json/senior.json" |> increment_age |> increment_age);
+    (* ---------------- Observer: get_sleep ------------------ *)
+    (* ----------------------- No Change ------------------------ *)
+    num_feature_test "sleep of baby" 100
+      (init_tam "./json/baby.json" |> get_sleep);
+    num_feature_test "sleep of teen" 45
+      (init_tam "./json/teen.json" |> get_sleep);
+    num_feature_test "sleep of senior" 90
+      (init_tam "./json/senior.json" |> get_sleep);
+    (* ----------------------- Step one age above
+       ------------------------ *)
+    num_feature_test "sleep of baby" 90
+      (init_tam "./json/baby.json" |> set_sleep (-10) |> get_sleep);
+    num_feature_test "sleep of teen" 35
+      (init_tam "./json/teen.json" |> set_sleep (-10) |> get_sleep);
+    num_feature_test "sleep of senior" 80
+      (init_tam "./json/senior.json" |> set_sleep (-10) |> get_sleep);
+    (* ----------------------- Increment ------------------------ *)
+
+    (* num_feature_test "sleep of baby" 100 (init_tam "./json/baby.json"
+       |> step |> get_sleep); *)
+    (* num_feature_test (fun () -> ()) "sleep of teen" 45 (get_sleep
+       teen); num_feature_test (fun () -> increment_sleep teen) "sleep
+       of teen, incr" 50 (get_sleep teen); *)
     (* Why are these commented out? *)
     (* equal_value_test (fun () -> set_sleep (-20) teen) "sleep of teen,
        incr -20" 35 (get_sleep teen); *)
     (* equal_value_test (fun () -> set_sleep 1000 teen) "sleep of teen,
        incr 1000" 100 (get_sleep teen); *)
-    death_exc "sleep below 0 for teen" (fun () ->
-        set_sleep (-1000) teen);
-    equal_value_test
-      (fun () -> ())
-      "cleanliness of baby" 100 (get_cleanliness babe);
+    (* death_exc "sleep below 0 for teen" (fun () -> set_sleep (-1000)
+       teen); *)
+    (* num_feature_test (fun () -> ()) "cleanliness of baby" 100
+       (get_cleanliness babe); *)
     (* equal_value_test (fun () -> ()) "cleanliness of teen" 87
        (get_cleanliness teen); *)
     (* equal_value_test (fun () -> set_cleanliness 10 teen) "cleanliness
@@ -106,11 +100,10 @@ let main_tests =
        "cleanliness of teen, incr -20" 77 (get_cleanliness teen); *)
     (* equal_value_test (fun () -> set_cleanliness 34 teen) "cleanliness
        of teen, incr 34" 100 (get_cleanliness teen); *)
-    death_exc "cleanliness below 0 for teen" (fun () ->
-        set_cleanliness (-298) teen);
-    equal_value_test
-      (fun () -> ())
-      "hunger of baby" 100 (get_hunger babe);
+    (* death_exc "cleanliness below 0 for teen" (fun () ->
+       set_cleanliness (-298) teen); *)
+    (* num_feature_test (fun () -> ()) "hunger of baby" 100 (get_hunger
+       babe); *)
     (* equal_value_test (fun () -> ()) "hunger of teen" 83 (get_hunger
        teen); *)
     (* equal_value_test (fun () -> set_hunger 17 teen) "hunger of teen,
@@ -119,11 +112,12 @@ let main_tests =
        teen, incr -20" 80 (get_hunger teen); *)
     (* equal_value_test (fun () -> set_hunger 34 teen) "hunger of teen,
        incr 34" 100 (get_hunger teen); *)
-    death_exc "hunger below 0 for teen" (fun () ->
-        set_hunger (-298) teen);
+    (* death_exc "hunger below 0 for teen" (fun () -> set_hunger (-298)
+       teen); *)
     (* equal_value_test (fun () -> ()) "money of baby" 0 (get_money
        babe); *)
-    equal_value_test (fun () -> ()) "money of teen" 10 (get_money teen);
+    (* num_feature_test (fun () -> ()) "money of teen" 10 (get_money
+       teen); *)
     (* equal_value_test (fun () -> set_money 10 babe) "money of baby,
        incr 10" 10 (get_money babe); *)
     (* equal_value_test (fun () -> set_money 1 babe) "money of baby,
@@ -142,13 +136,11 @@ let main_tests =
        teen incr" "Adult" (get_lifeStage teen); *)
     (* equal_value_test (fun () -> ()) "age of teen incr" 11 (get_age
        teen); *)
-    equal_value_test
-      (fun () -> increment_age babe)
-      "lifeStage of baby incr" "Baby" (get_lifeStage babe);
     (* equal_value_test (fun () -> ()) "age of baby incr" 1 (get_age
        babe); *)
-    equal_value_test (fun () -> ()) "age of senior" 35 (get_age senior);
-    death_exc "death of senior" (fun () -> increment_age senior);
+    (* num_feature_test (fun () -> ()) "age of senior" 35 (get_age
+       senior); *)
+    (* death_exc "death of senior" (fun () -> increment_age senior); *)
   ]
 
 (* -------------------------------------------------------------------- *)
@@ -231,8 +223,8 @@ let dolphin_test =
       Left;
     (* -------------------------- Two --------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right"
-      (init_game () |> process_right |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_right
+      |> get_dolphin_lane )
       Right;
     dolphin_lane_test "Middle |> Left |> Left"
       (init_game () |> process_left |> process_left |> get_dolphin_lane)
@@ -245,36 +237,36 @@ let dolphin_test =
       Middle;
     (* ------------------------- Three -------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right |> Right"
-      (init_game () |> process_right |> process_right |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_right |> process_right
+      |> get_dolphin_lane )
       Right;
     dolphin_lane_test "Middle |> Right |> Right |> Left"
-      (init_game () |> process_right |> process_right |> process_left
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_right |> process_left
+      |> get_dolphin_lane )
       Middle;
     dolphin_lane_test "Middle |> Right |> Left |> Right"
-      (init_game () |> process_right |> process_left |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_left |> process_right
+      |> get_dolphin_lane )
       Right;
     dolphin_lane_test "Middle |> Left |> Right |> Right"
-      (init_game () |> process_left |> process_right |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_left |> process_right |> process_right
+      |> get_dolphin_lane )
       Right;
     dolphin_lane_test "Middle |> Left |> Left |> Right"
-      (init_game () |> process_left |> process_left |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_left |> process_left |> process_right
+      |> get_dolphin_lane )
       Middle;
     dolphin_lane_test "Middle |> Left |> Right |> Left"
-      (init_game () |> process_left |> process_right |> process_left
-     |> get_dolphin_lane)
+      ( init_game () |> process_left |> process_right |> process_left
+      |> get_dolphin_lane )
       Left;
     dolphin_lane_test "Middle |> Right |> Left |> Left"
-      (init_game () |> process_right |> process_left |> process_left
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_left |> process_left
+      |> get_dolphin_lane )
       Left;
     dolphin_lane_test "Middle |> Left |> Left |> Left"
-      (init_game () |> process_left |> process_left |> process_left
-     |> get_dolphin_lane)
+      ( init_game () |> process_left |> process_left |> process_left
+      |> get_dolphin_lane )
       Left;
     (* --------------------- Observer: get_rocks ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
@@ -330,6 +322,6 @@ let dolphin_test =
 
 let suite =
   "test suite for Tamagotchi Final Project"
-  >::: List.flatten [ main_tests; dolphin_test ]
+  >::: List.flatten [ state_tests; dolphin_test ]
 
 let _ = run_test_tt_main suite
