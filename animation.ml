@@ -59,6 +59,12 @@ let t = 0xFFFFFF
 
 let r = Graphics.red
 
+let pixel_array_from_bit_array (bit_array : int list list) =
+  bit_array |> Array.of_list
+  |> Array.map (fun lst ->
+         lst |> Array.of_list
+         |> Array.map (fun bin -> if bin = 1 then n else t))
+
 (* ---------------------------------------------------------------- *)
 (* ---------------------- Home Screen Frames ---------------------- *)
 (* ---------------------------------------------------------------- *)
