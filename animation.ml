@@ -268,7 +268,7 @@ let gg = pixel_array_from_json "gg" dolphin_json
 
 (* let don_anim = { frames = [ don_1; don_2 ]; total = 2; current = 0;
    cx = 0; cy = 0; } *)
-let tombstone = pixel_array_from_json "tombstone" homescreen_anim_json
+let tombstone = pixel_array_from_json "grave" homescreen_anim_json
 
 let don_anim =
   { frames = [ black_sq ]; total = 1; current = 0; cx = 0; cy = 0 }
