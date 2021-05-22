@@ -68,18 +68,27 @@ let activate_button (active_button : button) =
   | Eat ->
       my_home.active_anim <- Eating;
       my_home.anim_counter <- default_anim_length;
-      ignore (State.increment_eat my_home.tam_state)
+      ignore (State.increment_eat my_home.tam_state);
+      ignore (State.decrement_happy my_home.tam_state)
   | Sleep ->
       my_home.active_anim <- Sleeping;
       my_home.anim_counter <- default_anim_length;
-      ignore (State.increment_sleep my_home.tam_state)
+      ignore (State.increment_sleep my_home.tam_state);
+      ignore (State.decrement_happy my_home.tam_state)
   | Toilet ->
       my_home.active_anim <- Cleaning;
       my_home.anim_counter <- default_anim_length;
-      ignore (State.increment_cleanliness my_home.tam_state)
-  | Play -> Dolphinview.draw ()
-  | Shop -> Drumview.draw ()
-  | Inventory -> Elementalsview.draw ()
+      ignore (State.increment_cleanliness my_home.tam_state);
+      ignore (State.decrement_happy my_home.tam_state)
+  | Play ->
+      Dolphinview.draw ();
+      ignore (State.set_happy 15 my_home.tam_state)
+  | Shop ->
+      Drumview.draw ();
+      ignore (State.set_happy 15 my_home.tam_state)
+  | Inventory ->
+      Elementalsview.draw ();
+      ignore (State.set_happy 15 my_home.tam_state)
 
 let my_game_flags = { dolphin = false; drum = false; elements = false }
 
@@ -136,18 +145,36 @@ let get_status_animations (hs : homestate) : unit =
   let sleep = hs.tam_state |> get_sleep
   and cleanliness = hs.tam_state |> get_cleanliness
   and hunger = hs.tam_state |> get_hunger
-  and age = hs.tam_state |> get_age in
+  and age = hs.tam_state |> get_age
+  and happy = hs.tam_state |> get_happy in
   (* Status Name *)
-  draw_message 50 (80 * 4) 25 Graphics.black "Sleep:";
-  draw_message 50 (70 * 4) 25 Graphics.black "Clean:";
-  draw_message 50 (60 * 4) 25 Graphics.black "Hunger:";
-  draw_message 50 (50 * 4) 25 Graphics.black "Age:";
+  draw_message 50 (80 * 4) 25 Graphics.black "Happy:";
+  draw_message 50 (70 * 4) 25 Graphics.black "Sleep:";
+  draw_message 50 (60 * 4) 25 Graphics.black "Clean:";
+  draw_message 50 (50 * 4) 25 Graphics.black "Hunger:";
+  draw_message 50 (40 * 4) 25 Graphics.black "Age:";
   (* Status Value *)
-  draw_message 120 (80 * 4) 30 Graphics.black (string_of_int sleep);
-  draw_message 120 (70 * 4) 30 Graphics.black
+  draw_message 120 (80 * 4) 30 Graphics.black (string_of_int happy);
+  draw_message 120 (70 * 4) 30 Graphics.black (string_of_int sleep);
+  draw_message 120 (60 * 4) 30 Graphics.black
     (string_of_int cleanliness);
-  draw_message 120 (60 * 4) 30 Graphics.black (string_of_int hunger);
-  draw_message 120 (50 * 4) 30 Graphics.black (string_of_int age)
+  draw_message 120 (50 * 4) 30 Graphics.black (string_of_int hunger);
+  draw_message 120 (40 * 4) 30 Graphics.black (string_of_int age)
+
+let get_poop_animations (hs : homestate) : unit =
+  let scaled_cleanliness = (hs.tam_state |> get_cleanliness) / 10 in
+  let poop_count = 10 - scaled_cleanliness in
+  if poop_count <= 5 then
+    for i = 1 to poop_count do
+      draw_img 100 (30 + (i * 10)) poop
+    done
+  else (
+    for i = 1 to poop_count - 5 do
+      draw_img 100 (30 + (i * 10)) poop
+    done;
+    for i = 1 to poop_count do
+      draw_img 110 (30 + (i * 10)) poop
+    done)
 
 let get_animations (hs : homestate) : Animation.animation list =
   let tool_bar_anims = get_toolbar_animations hs
@@ -242,7 +269,8 @@ let predraw (state : viewstate) : unit =
   draw_pixels_ll 0 0 120 10 Graphics.black;
   draw_pixels_ll 0 110 120 10 Graphics.black;
   clear_center state;
-  get_status_animations my_home
+  get_status_animations my_home;
+  get_poop_animations my_home
 
 let draw () = draw_loop vs init exit key except step predraw
 

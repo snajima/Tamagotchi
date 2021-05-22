@@ -105,45 +105,45 @@ let state_tests =
       (init_tam "./json/senior.json" |> get_cleanliness);
     (* ---------------------- Set Cleanliness ----------------------- *)
     num_feature_test "clean of baby -20" 80
-      ( init_tam "./json/baby.json"
-      |> set_cleanliness (-20) |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> set_cleanliness (-20) |> get_cleanliness);
     num_feature_test "clean of teen -20" 67
-      ( init_tam "./json/teen.json"
-      |> set_cleanliness (-20) |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> set_cleanliness (-20) |> get_cleanliness);
     num_feature_test "clean of senior -20" 50
-      ( init_tam "./json/senior.json"
-      |> set_cleanliness (-20) |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> set_cleanliness (-20) |> get_cleanliness);
     death_exc "death clean of teen" (fun () ->
         init_tam "./json/teen.json" |> set_cleanliness (-87));
     num_feature_test "negative edge case clean of baby" 1
-      ( init_tam "./json/baby.json"
-      |> set_cleanliness (-99) |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> set_cleanliness (-99) |> get_cleanliness);
     num_feature_test "positive edge case clean of teen" 100
-      ( init_tam "./json/teen.json"
-      |> set_cleanliness 13 |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> set_cleanliness 13 |> get_cleanliness);
     num_feature_test "over 100 clean of senior" 100
-      ( init_tam "./json/senior.json"
-      |> set_cleanliness 300 |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> set_cleanliness 300 |> get_cleanliness);
     (* -------------------- Increment Cleanliness --------------------- *)
     num_feature_test "increment clean of baby" 100
-      ( init_tam "./json/baby.json"
-      |> increment_cleanliness |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> increment_cleanliness |> get_cleanliness);
     num_feature_test "increment clean of teen" 92
-      ( init_tam "./json/teen.json"
-      |> increment_cleanliness |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> increment_cleanliness |> get_cleanliness);
     num_feature_test "increment clean of senior" 75
-      ( init_tam "./json/senior.json"
-      |> increment_cleanliness |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> increment_cleanliness |> get_cleanliness);
     (* ---------------------------- Step ----------------------------- *)
     num_feature_test "step clean of baby" 90
-      ( init_tam "./json/baby.json"
-      |> repeated_step 460 |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> repeated_step 460 |> get_cleanliness);
     num_feature_test "step clean of teen" 77
-      ( init_tam "./json/teen.json"
-      |> repeated_step 460 |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> repeated_step 460 |> get_cleanliness);
     num_feature_test "step clean of senior" 60
-      ( init_tam "./json/senior.json"
-      |> repeated_step 460 |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> repeated_step 460 |> get_cleanliness);
     (* ------------------ Observer: get_hunger -------------------- *)
     (* ------------------------ No Change ------------------------- *)
     num_feature_test "hunger of baby" 100
@@ -361,8 +361,8 @@ let dolphin_test =
       Left;
     (* -------------------------- Two --------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right"
-      ( init_game () |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Left"
       (init_game () |> process_left |> process_left |> get_dolphin_lane)
@@ -375,36 +375,36 @@ let dolphin_test =
       Middle;
     (* ------------------------- Three -------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right |> Right"
-      ( init_game () |> process_right |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Right |> Right |> Left"
-      ( init_game () |> process_right |> process_right |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right |> process_left
+     |> get_dolphin_lane)
       Middle;
     dolphin_lane_test "Middle |> Right |> Left |> Right"
-      ( init_game () |> process_right |> process_left |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_left |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Right |> Right"
-      ( init_game () |> process_left |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Left |> Right"
-      ( init_game () |> process_left |> process_left |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_left |> process_right
+     |> get_dolphin_lane)
       Middle;
     dolphin_lane_test "Middle |> Left |> Right |> Left"
-      ( init_game () |> process_left |> process_right |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_right |> process_left
+     |> get_dolphin_lane)
       Left;
     dolphin_lane_test "Middle |> Right |> Left |> Left"
-      ( init_game () |> process_right |> process_left |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_left |> process_left
+     |> get_dolphin_lane)
       Left;
     dolphin_lane_test "Middle |> Left |> Left |> Left"
-      ( init_game () |> process_left |> process_left |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_left |> process_left
+     |> get_dolphin_lane)
       Left;
     (* --------------------- Observer: get_rocks ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
