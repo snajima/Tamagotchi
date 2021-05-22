@@ -3,8 +3,17 @@ type lane =
   | Middle
   | Right
 
+(** The type [gamestate] represents state of the Dolphin game simulation
+    which stores:
+    - The lane the player is currently in
+    - The number of steps that have occured in the game simulation
+    - The positions of all the rocks in the current game simulation
+
+    Note that since adding rocks involves randomness, calling [next] on two
+    identical gamestates may not result in the same result *)
 type gamestate
 
+(** Raised when a player and rock collision is encountered  *)
 exception Gameover of int
 
 (** [max_height] is an integer indicating the maximum height of a rock in the 
