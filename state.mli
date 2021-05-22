@@ -12,8 +12,8 @@ type item = {
     includes:
 
     - breed: a string representing what type of breed it is
-    - lifeStage: a string representing the LifeStage of it (there are
-      four LifeStages: Baby, Teenager, Adult, and Senior)
+    - lifestage: a string representing the lifestage of it (there are
+      four lifestages: Baby, Teenager, Adult, and Senior)
     - sleep: an integer between 1 and 100 representing the amount of
       sleep of the Tamagotchi (1 being sleep deprived, 100 being well
       rested)
@@ -99,9 +99,9 @@ val init_tam : string -> tamagotchi
     breed.*)
 val get_breed : tamagotchi -> string
 
-(** [get_lifeStage tam] returns a string representing the Tamagotchi's
+(** [get_lifestage tam] returns a string representing the Tamagotchi's
     [tam] current life stage.*)
-val get_lifeStage : tamagotchi -> string
+val get_lifestage : tamagotchi -> string
 
 (** [get_sleep tam] returns an integer representing the Tamagotchi's
     [tam] current state of sleep.*)
@@ -127,15 +127,15 @@ val get_age : tamagotchi -> int
     [tam] current money amount.*)
 val get_money : tamagotchi -> int
 
-(** [get_money tam] returns an item list representing the Tamagotchi's
-    [tam] current inventory.*)
+(** [get_inventory tam] returns an item list representing the
+    Tamagotchi's [tam] current inventory.*)
 val get_inventory : tamagotchi -> item list
 
 (** [increment_age tam] increases the Tamagotchi's [tam] by 1. The age
     ranges for life stage is as follows: 0-5 for Baby, 6-10 for
     Teenager, 11-25 for Adult, 26-35 for Senior. If [increment_age tam]
     makes the Tamagotchi [tam] reach a new life stage, then this
-    function automatically updates their lifestage [tam.lifeStage] as
+    function automatically updates their lifestage [tam.lifestage] as
     well. The function returns the mutated Tamgotchi type.
 
     Raises [Death] if [increment_age tam] is called on a Tamagotchi age
@@ -168,8 +168,8 @@ val increment_happy : tamagotchi -> tamagotchi
 val decrement_happy : tamagotchi -> tamagotchi
 
 (** [step tam] increases the Tamagotchi's [tam] step state [tam.step] by
-    1 and is called every second. Each step is equivilent to one day in
-    real life, so everytime [tam.step] is a multiple of 365, the
+    1 and is called every millisecond. Each step is equivilent to one
+    day in real life, so everytime [tam.step] is a multiple of 365, the
     Tamogatchi will celebrate its birthday. For each birthday, [tam.age]
     will increase by 1, [tam.cleanliness] will decrease by 10,
     [tam.hunger] will decrease by 10, [tam.happy] will decrease by 10,

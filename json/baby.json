@@ -1,6 +1,6 @@
 {
     "breed": "crazy",
-    "lifeStage": "Baby",
+    "lifestage": "Baby",
     "sleep": 100,
     "cleanliness": 100,
     "hunger": 100,
