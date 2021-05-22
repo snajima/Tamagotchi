@@ -67,19 +67,28 @@ let activate_button (active_button : button) =
   match active_button with
   | Eat ->
       my_home.active_anim <- Eating;
-      my_home.anim_counter <- default_anim_length
-      (* TODO: Update tamagotchi state -- make less hungry*)
+      my_home.anim_counter <- default_anim_length;
+      ignore (State.increment_eat my_home.tam_state);
+      ignore (State.decrement_happy my_home.tam_state)
   | Sleep ->
       my_home.active_anim <- Sleeping;
-      my_home.anim_counter <- default_anim_length
-      (* TODO: Update tamagotchi state -- make less sleepy*)
+      my_home.anim_counter <- default_anim_length;
+      ignore (State.increment_sleep my_home.tam_state);
+      ignore (State.decrement_happy my_home.tam_state)
   | Toilet ->
       my_home.active_anim <- Cleaning;
-      my_home.anim_counter <- default_anim_length
-      (* TODO: Update tamagotchi state -- make more clean*)
-  | Play -> Dolphinview.draw ()
-  | Shop -> Drumview.draw ()
-  | Inventory -> Elementalsview.draw ()
+      my_home.anim_counter <- default_anim_length;
+      ignore (State.increment_cleanliness my_home.tam_state);
+      ignore (State.decrement_happy my_home.tam_state)
+  | Play ->
+      Dolphinview.draw ();
+      ignore (State.set_happy 15 my_home.tam_state)
+  | Shop ->
+      Drumview.draw ();
+      ignore (State.set_happy 15 my_home.tam_state)
+  | Inventory ->
+      Elementalsview.draw ();
+      ignore (State.set_happy 15 my_home.tam_state)
 
 let my_game_flags = { dolphin = false; drum = false; elements = false }
 
@@ -136,18 +145,21 @@ let get_status_animations (hs : homestate) : unit =
   let sleep = hs.tam_state |> get_sleep
   and cleanliness = hs.tam_state |> get_cleanliness
   and hunger = hs.tam_state |> get_hunger
-  and age = hs.tam_state |> get_age in
+  and age = hs.tam_state |> get_age
+  and happy = hs.tam_state |> get_happy in
   (* Status Name *)
-  draw_message 50 (80 * 4) 25 Graphics.black "Sleep:";
-  draw_message 50 (70 * 4) 25 Graphics.black "Clean:";
-  draw_message 50 (60 * 4) 25 Graphics.black "Hunger:";
-  draw_message 50 (50 * 4) 25 Graphics.black "Age:";
+  draw_message 50 (80 * 4) 25 Graphics.black "Happy:";
+  draw_message 50 (70 * 4) 25 Graphics.black "Sleep:";
+  draw_message 50 (60 * 4) 25 Graphics.black "Clean:";
+  draw_message 50 (50 * 4) 25 Graphics.black "Hunger:";
+  draw_message 50 (40 * 4) 25 Graphics.black "Age:";
   (* Status Value *)
-  draw_message 120 (80 * 4) 30 Graphics.black (string_of_int sleep);
-  draw_message 120 (70 * 4) 30 Graphics.black
+  draw_message 120 (80 * 4) 30 Graphics.black (string_of_int happy);
+  draw_message 120 (70 * 4) 30 Graphics.black (string_of_int sleep);
+  draw_message 120 (60 * 4) 30 Graphics.black
     (string_of_int cleanliness);
-  draw_message 120 (60 * 4) 30 Graphics.black (string_of_int hunger);
-  draw_message 120 (50 * 4) 30 Graphics.black (string_of_int age)
+  draw_message 120 (50 * 4) 30 Graphics.black (string_of_int hunger);
+  draw_message 120 (40 * 4) 30 Graphics.black (string_of_int age)
 
 let get_animations (hs : homestate) : Animation.animation list =
   let tool_bar_anims = get_toolbar_animations hs
@@ -176,7 +188,6 @@ let init s =
 (** Main exit function for HomeMode *)
 let exit s =
   Graphics.close_graph ();
-  (* TODO: save the current state of Tamagotchi to json *)
   print_endline "";
   print_endline
     "Thanks for playing! Your Tamagotchi will be waiting for your \
@@ -184,7 +195,15 @@ let exit s =
   print_endline ""
 
 (** Main exception function for HomeMode *)
-let except s ex = ()
+let except s ex =
+  match ex with
+  | State.Death ->
+      Graphics.clear_graph ();
+      s.animations <- [];
+      gameover_screen_no_score 500 "Oh no :("
+        { tam_death with cx = vs.maxx / 2; cy = vs.maxy / 2 }
+        s
+  | _ -> ()
 
 (** [key] processes the [c] character pressed and updates the state [s]
     accordingly *)
@@ -227,15 +246,8 @@ let step (state : viewstate) : unit =
   (* Update animations every [delta] frames *)
   if state.tick mod delta = 0 then
     state.animations <- increment_anims state.animations;
-  if true then (
-    try ignore (State.step my_home.tam_state)
-    with Death ->
-      Graphics.clear_graph ();
-      Graphics.synchronize ();
-      gameover_screen_no_score 500 "Oh no :("
-        { tam_death with cx = vs.maxx / 2; cy = vs.maxy / 2 }
-        vs;
-      raise End);
+  (* if state.tick mod delta = 0 then *)
+  if true then ignore (State.step my_home.tam_state);
   state.tick <- (state.tick + 1) mod delta
 
 let predraw (state : viewstate) : unit =

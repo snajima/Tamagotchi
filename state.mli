@@ -14,14 +14,16 @@ type item = {
     - breed: a string representing what type of breed it is
     - lifeStage: a string representing the LifeStage of it (there are
       four LifeStages: Baby, Teenager, Adult, and Senior)
-    - sleep: an integer between 0 and 100 representing the amount of
-      sleep of the Tamagotchi (0 being sleep deprived, 100 being well
+    - sleep: an integer between 1 and 100 representing the amount of
+      sleep of the Tamagotchi (1 being sleep deprived, 100 being well
       rested)
-    - cleanliness: an integer between 0 and 100 representing the
-      cleanliness of the Tamagotchi (0 being super dirty, 100 being
+    - cleanliness: an integer between 1 and 100 representing the
+      cleanliness of the Tamagotchi (1 being super dirty, 100 being
       super clean)
-    - hunger: an integer between 0 and 100 representing the hunger of
-      the Tamagotchi (0 being starving, 100 being full)
+    - hunger: an integer between 1 and 100 representing the hunger of
+      the Tamagotchi (1 being starving, 100 being full)
+    - happiness: an integer between 1 and 100 representing the happiness
+      of the Tamagotchi (1 being depressed and 100 representing estatic)
     - age: an integer representing the Tamagotchi's age
     - money: an integer representing the amount of money the Tamagotchi
       has
@@ -42,7 +44,8 @@ exception NegativeMoney
     If [set_sleep] causes [tam.sleep] to go above 100, then [tam.sleep]
     is just set to 100. The function returns the mutated Tamgotchi type.
 
-    Raises: [Death] if [set_sleep] causes [tam.sleep] to go negative.*)
+    Raises: [Death] if [set_sleep] causes [tam.sleep] to go less than or
+    equal to 0.*)
 val set_sleep : int -> tamagotchi -> tamagotchi
 
 (** [set_hunger num tam] takes in an integer [num] (can be positive or
@@ -51,8 +54,19 @@ val set_sleep : int -> tamagotchi -> tamagotchi
     [tam.hunger] is just set to 100. The function returns the mutated
     Tamgotchi type.
 
-    Raises: [Death] if [set_hunger] causes [tam.hunger] to go negative.*)
+    Raises: [Death] if [set_hunger] causes [tam.hunger] to go less than
+    or equal to 0.*)
 val set_hunger : int -> tamagotchi -> tamagotchi
+
+(** [set_happy num tam] takes in an integer [num] (can be positive or
+    negative) and changes the Tamagotchi's [tam] happiness by that
+    amount. If [set_happy] causes [tam.happy] to go above 100, then
+    [tam.happy] is just set to 100. The function returns the mutated
+    Tamgotchi type.
+
+    Raises: [Death] if [set_happy] causes [tam.happy] to go less than or
+    equal to 0.*)
+val set_happy : int -> tamagotchi -> tamagotchi
 
 (** [set_cleanliness num tam] takes in an integer [num] (can be positive
     or negative) and changes the Tamagotchi's [tam] cleanliness by that
@@ -61,7 +75,7 @@ val set_hunger : int -> tamagotchi -> tamagotchi
     the mutated Tamgotchi type.
 
     Raises: [Death] if [set_cleanliness] causes [tam.cleanliness] to go
-    negative.*)
+    less than or equal to 0.*)
 val set_cleanliness : int -> tamagotchi -> tamagotchi
 
 (** [set_money num tam] takes in an integer [num] (can be positive or
@@ -101,6 +115,10 @@ val get_cleanliness : tamagotchi -> int
     [tam] current state of hunger.*)
 val get_hunger : tamagotchi -> int
 
+(** [get_happy tam] returns an integer representing the Tamagotchi's
+    [tam] current state of happiness.*)
+val get_happy : tamagotchi -> int
+
 (** [get_age tam] returns an integer representing the Tamagotchi's [tam]
     current age.*)
 val get_age : tamagotchi -> int
@@ -139,11 +157,21 @@ val increment_sleep : tamagotchi -> tamagotchi
     increment defined internally in the module.*)
 val increment_cleanliness : tamagotchi -> tamagotchi
 
+(** [increment_happy tam] increases the Tamagotchi's happiness state
+    [tam.happy], using [set_happy num tam], by a set increment defined
+    internally in the module.*)
+val increment_happy : tamagotchi -> tamagotchi
+
+(** [decrement_happy tam] decreases the Tamagotchi's happiness state
+    [tam.happy], using [set_happy num tam], by a set increment defined
+    internally in the module.*)
+val decrement_happy : tamagotchi -> tamagotchi
+
 (** [step tam] increases the Tamagotchi's [tam] step state [tam.step] by
     1 and is called every second. Each step is equivilent to one day in
     real life, so everytime [tam.step] is a multiple of 365, the
     Tamogatchi will celebrate its birthday. For each birthday, [tam.age]
     will increase by 1, [tam.cleanliness] will decrease by 10,
-    [tam.hunger] will decrease by 10, and [tam.sleep] will decrease by
-    10.*)
+    [tam.hunger] will decrease by 10, [tam.happy] will decrease by 10,
+    and [tam.sleep] will decrease by 10.*)
 val step : tamagotchi -> tamagotchi
