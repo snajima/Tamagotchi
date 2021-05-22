@@ -1,3 +1,4 @@
+(** The type [lane] represents the three possible positions for the Dolphin *)
 type lane =
   | Left
   | Middle
