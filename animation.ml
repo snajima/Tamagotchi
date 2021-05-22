@@ -306,6 +306,30 @@ let animation_json = Yojson.Basic.from_file "./json/animation.json"
 let baby_animation_json =
   Yojson.Basic.from_file "./json/baby_animation.json"
 
+let elder_animation_json =
+  Yojson.Basic.from_file "./json/elder_animation.json"
+
+let neutral_f1_elder =
+  pixel_array_from_json "neutral_f1" baby_animation_json
+
+let neutral_f2_elder =
+  pixel_array_from_json "neutral_f2" baby_animation_json
+
+let wide_f1_elder = pixel_array_from_json "wide_f1" elder_animation_json
+
+let wide_f2_elder = pixel_array_from_json "wide_f2" elder_animation_json
+
+let idle_elder = pixel_array_from_json "idle" elder_animation_json
+
+let eat_f1_elder = pixel_array_from_json "eat_f1" elder_animation_json
+
+let eat_f2_elder = pixel_array_from_json "eat_f2" elder_animation_json
+
+let eat_f3_elder = pixel_array_from_json "eat_f3" elder_animation_json
+
+let sleeping_elder =
+  pixel_array_from_json "sleeping" elder_animation_json
+
 let neutral_f1_baby =
   pixel_array_from_json "neutral_f1" baby_animation_json
 
@@ -396,6 +420,15 @@ let eat_anim_baby =
     cy = 60;
   }
 
+let eat_anim_elder =
+  {
+    frames = [ eat_f1_elder; eat_f2_elder; eat_f3_elder ];
+    total = 3;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
 let sleep_anim_adult =
   {
     frames = [ sleeping_adult ];
@@ -408,6 +441,15 @@ let sleep_anim_adult =
 let sleep_anim_baby =
   {
     frames = [ sleeping_baby ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let sleep_anim_elder =
+  {
+    frames = [ sleeping_elder ];
     total = 1;
     current = 0;
     cx = 60;
@@ -435,6 +477,15 @@ let avatar_adult =
 let avatar_baby =
   {
     frames = [ neutral_f1_baby; neutral_f2_baby ];
+    total = 2;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let avatar_elder =
+  {
+    frames = [ neutral_f1_elder; neutral_f2_elder ];
     total = 2;
     current = 0;
     cx = 60;
