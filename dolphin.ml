@@ -5,10 +5,7 @@ type lane =
   | Middle
   | Right
 
-(* Stores score *)
 exception Gameover of int
-
-exception Offscreen
 
 (* ------------------------------------------------------- *)
 (* --------------------- Data Vars ----------------------- *)
@@ -25,9 +22,15 @@ type gamestate = {
   rocks : (int * int) list;
   current_lane : lane;
 }
+
 (* -------------------------------------------------------- *)
 (* ----------------- Internal functions ------------------- *)
 (* -------------------------------------------------------- *)
+
+(** Raised when the height of a rock falls below zero. Note that this
+    exception is only raised by internal functions, it is not included
+    in the out-facing mli *)
+exception Offscreen
 
 (** [fall_rock] reduces the height of a single rock. It is a helper
     function that is to be used as a subprocess of [fall_rocks] *)
