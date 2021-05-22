@@ -252,34 +252,23 @@ let inventory_icon_bobble =
     total = 2;
   }
 
-let black_sq = scale 5 [| [| n; n; n |]; [| n; n; n |]; [| n; n; n |] |]
+let drum_json = Yojson.Basic.from_file "./json/drum.json"
 
-let white_sq = scale 5 [| [| n; n; n |]; [| n; t; n |]; [| n; n; n |] |]
+let dolphin_json = Yojson.Basic.from_file "./json/dolphin.json"
 
-let black_triangle =
-  scale 5
-    [|
-      [| t; t; n; t; t |]; [| t; n; n; n; t |]; [| t; n; n; n; t |];
-      [| n; n; n; n; n |];
-    |]
+let dolphin = pixel_array_from_json "dolphin" dolphin_json
 
-let gg =
-  scale 5
-    [|
-      [| t; t; r; r; r; r; r; t; t; t; t; t; r; r; r; r; r; t; t; t |];
-      [| t; r; r; r; t; t; t; t; t; t; t; r; r; r; t; t; t; t; t; t |];
-      [| r; r; t; t; t; t; t; t; t; t; r; r; t; t; t; t; t; t; t; t |];
-      [| r; t; t; t; t; t; t; t; t; t; r; t; t; t; t; t; t; t; t; t |];
-      [| r; t; t; t; t; t; t; t; t; t; r; t; t; t; t; t; t; t; t; t |];
-      [| r; t; t; r; r; r; r; t; t; t; r; t; t; r; r; r; r; t; t; t |];
-      [| r; t; t; t; t; t; r; t; t; t; r; t; t; t; t; t; r; t; t; t |];
-      [| t; r; t; t; t; t; r; t; t; t; t; r; t; t; t; t; r; t; t; t |];
-      [| t; r; r; t; t; t; r; t; t; t; t; r; r; t; t; t; r; t; t; t |];
-      [| t; t; r; r; r; r; r; t; t; t; t; t; r; r; r; r; r; t; t; t |];
-    |]
+let rock = pixel_array_from_json "rock" dolphin_json
+
+let black_sq = pixel_array_from_json "black_icon" drum_json
+
+let white_sq = pixel_array_from_json "white_icon" drum_json
+
+let gg = pixel_array_from_json "gg" dolphin_json
 
 (* let don_anim = { frames = [ don_1; don_2 ]; total = 2; current = 0;
    cx = 0; cy = 0; } *)
+let tombstone = pixel_array_from_json "tombstone" homescreen_anim_json
 
 let don_anim =
   { frames = [ black_sq ]; total = 1; current = 0; cx = 0; cy = 0 }
@@ -303,7 +292,7 @@ let gg_static =
 let tam_death =
   {
     (* TODO: Stephen replease the poop with the gravestone plz *)
-    frames = [ poop ];
+    frames = [ tombstone ];
     total = 1;
     current = 0;
     cx = 0;
@@ -312,432 +301,114 @@ let tam_death =
 
 and t = 0xFFFFFF
 
-let neutral_f1 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; t; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; n; n; n; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; t; t; n; t; t; t; t; t; n; t; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; n; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; n; n; n; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
-    |]
+let animation_json = Yojson.Basic.from_file "./json/animation.json"
 
-let neutral_f2 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; t; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; n; n; n; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; n; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; n; n; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; n; t; n; n; n; t; n; t; t; t |];
-      [| t; t; t; t; t; n; t; n; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
-    |]
+let baby_animation_json =
+  Yojson.Basic.from_file "./json/baby_animation.json"
 
-let wide_f1 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; t; t; n; t; t; t; t; t; n; t; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; n; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; n; n; n; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
-    |]
+let neutral_f1_baby =
+  pixel_array_from_json "neutral_f1" baby_animation_json
 
-let wide_f2 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; n; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; n; n; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; n; t; n; n; n; t; n; t; t; t |];
-      [| t; t; t; t; t; n; t; n; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
-    |]
+let neutral_f2_baby =
+  pixel_array_from_json "neutral_f2" baby_animation_json
 
-let idle =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; n; t; t; t; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; n; n; n; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; n; t; n; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; n; t; t; t; t; t |];
-    |]
+let wide_f1_baby = pixel_array_from_json "wide_f1" baby_animation_json
 
-let typing =
-  scale 10
-    [|
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| n; t; t; n; t; t; t; t; t; t; t; n; t; t; n |];
-      [| n; t; t; n; n; n; n; n; n; n; n; n; t; t; n |];
-      [| n; t; n; n; t; n; t; n; t; n; t; n; n; t; n |];
-      [| n; t; n; t; n; t; n; t; n; t; n; t; n; t; n |];
-      [| n; t; t; n; n; n; n; n; n; n; n; n; t; t; n |];
-      [| n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-    |]
+let wide_f2_baby = pixel_array_from_json "wide_f2" baby_animation_json
 
-let eat_f1 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; n; n; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; n; n; n; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; t; t; n; t; t; n; t; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; t; t; n; n; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; n; t; t; t; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; n; n; n; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; n; t; n; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; n; t; t; t; t; t |];
-    |]
+let idle_baby = pixel_array_from_json "idle" baby_animation_json
 
-let eat_f2 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; n; n; n; n; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; n; t; t; n; n; n; t; t; t; t; n; n; n; t |];
-      [| t; n; t; t; n; n; n; t; t; t; n; t; n; t; t |];
-      [| t; n; t; t; n; n; n; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; n; t; n; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; n; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; n; t; n; t; n; n; n; n; t; t; t; t |];
-      [| t; t; t; n; t; n; t; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; n; t; t; t; t; t; t; t; t |];
-    |]
+let eat_f1_baby = pixel_array_from_json "eat_f1" baby_animation_json
 
-let eat_f3 =
-  scale 10
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; n; n; t; t; n; n; n; n; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; n; t; t; n; n; n; t; t; t; t; n; n; n; t |];
-      [| t; n; t; t; n; n; n; t; t; t; n; t; n; t; t |];
-      [| t; n; t; t; n; n; n; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| n; n; n; t; t; t; t; t; t; t; t; t; n; n; t |];
-      [| n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; n; t; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; n; n; t; n; n; t; n; n; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+let eat_f2_baby = pixel_array_from_json "eat_f2" baby_animation_json
 
-let sleeping =
-  scale 10
-    [|
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; n; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; n; t; n; n; t; t; t; n; n; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| n; t; t; n; t; t; t; t; t; t; t; n; t; t; n |];
-      [| n; t; t; n; n; n; n; n; n; n; n; n; t; t; n |];
-      [| n; t; n; n; t; n; t; n; t; n; t; n; n; t; n |];
-      [| n; t; n; t; n; t; n; t; n; t; n; t; n; t; n |];
-      [| n; t; t; n; n; n; n; n; n; n; n; n; t; t; n |];
-      [| n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-    |]
+let eat_f3_baby = pixel_array_from_json "eat_f3" baby_animation_json
 
-let blank_template =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+let sleeping_baby = pixel_array_from_json "sleeping" baby_animation_json
 
-let fireball =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; n; t |];
-      [| t; t; t; t; n; n; t; t; t; t; n; t; t; t; n; t |];
-      [| t; t; t; t; t; n; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; t; t; t; n; n; t; t; n; t; t; t; n; t; t |];
-      [| t; t; t; n; t; t; n; t; n; n; t; n; t; t; n; t |];
-      [| t; t; t; t; t; n; n; n; n; n; n; t; t; n; t; t |];
-      [| t; t; t; t; n; n; t; n; t; n; n; n; n; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; t; n; t; t; n; t; t; n; n; t; t; t |];
-      [| t; t; n; n; t; n; t; t; n; t; t; n; n; t; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; n; n; t; t; t; t; t; n; n; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; n; n; n; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+let neutral_f1_adult = pixel_array_from_json "neutral_f1" animation_json
+
+let neutral_f2_adult = pixel_array_from_json "neutral_f2" animation_json
+
+let wide_f1_adult = pixel_array_from_json "wide_f1" animation_json
+
+let wide_f2_adult = pixel_array_from_json "wide_f2" animation_json
+
+let idle_adult = pixel_array_from_json "idle" animation_json
+
+let eat_f1_adult = pixel_array_from_json "eat_f1" animation_json
+
+let eat_f2_adult = pixel_array_from_json "eat_f2" animation_json
+
+let eat_f3_adult = pixel_array_from_json "eat_f3" animation_json
+
+let sleeping_adult = pixel_array_from_json "sleeping" animation_json
+
+let elementals_json = Yojson.Basic.from_file "./json/elementals.json"
+
+let fireball = pixel_array_from_json "fireball" elementals_json
 
 let fireball_anim =
   { frames = [ fireball ]; total = 1; current = 0; cx = 0; cy = 0 }
 
-let leaf =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; n; t; n |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; n; t; n |];
-      [| t; t; t; t; t; t; t; t; t; n; n; n; n; t; n; t |];
-      [| t; t; t; t; t; t; t; n; n; t; t; t; n; n; n; t |];
-      [| t; t; t; t; t; n; n; t; t; t; n; n; t; t; t; n |];
-      [| t; t; t; t; n; t; t; t; n; n; n; t; t; t; t; n |];
-      [| t; t; t; n; t; n; n; n; t; t; n; t; t; t; t; n |];
-      [| t; t; n; n; n; t; n; t; t; t; n; t; t; t; n; t |];
-      [| n; n; n; t; t; t; n; t; t; n; t; t; t; t; n; t |];
-      [| n; t; t; t; t; n; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; n; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; n; n; t; t; t; t; t; n; n; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+let leaf = pixel_array_from_json "leaf" elementals_json
 
 let leaf_anim =
   { frames = [ leaf ]; total = 1; current = 0; cx = 0; cy = 0 }
 
-let water =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; n; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| n; t; t; t; n; n; t; t; t; n; n; t; t; t; n; t |];
-      [| n; t; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; n; t; t; t; n; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; n; n; n; t; t; t; n; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; n; n; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; t; t; t; t; t; t |];
-    |]
+let water = pixel_array_from_json "water" elementals_json
 
 let water_anim =
   { frames = [ water ]; total = 1; current = 0; cx = 0; cy = 0 }
 
-let shoot =
-  scale 10
-    [|
-      [| t; t; n; n; t; t; t; t; t; n; n; t; t |];
-      [| t; n; n; n; n; t; t; t; n; n; n; n; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; n; n; t; t; t; t; t; t; t; n; n; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t |];
-      [| n; t; t; t; t; n; n; t; t; t; t; t; n |];
-      [| n; t; t; t; t; n; n; t; t; t; t; t; n |];
-      [| t; n; t; t; t; t; t; t; n; t; t; n; t |];
-      [| n; t; t; n; t; t; t; n; t; t; t; n; t |];
-      [| t; n; n; t; t; t; t; t; n; n; n; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; n; t; n; n; n; t; n; t; t; t |];
-      [| t; t; t; n; t; n; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; n; t; t; t; t; t |];
-    |]
+let shoot = pixel_array_from_json "shoot" elementals_json
 
 let shoot_anim =
-  { frames = [ shoot ]; total = 1; current = 0; cx = 0; cy = 0 }
+  {
+    frames = [ idle_adult; shoot ];
+    total = 2;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
 
-let robot =
-  scale 10
-    [|
-      [| t; t; t; t; n; n; n; n; n; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; n; t; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; n; t; n; t; t; t; n; t; n; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; n; n; n; n; n; n; n; n; t; t |];
-      [| t; t; t; t; t; n; n; n; t; t; t; t; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; n; t; n; n; n; n; n; n; n; t; n; t |];
-      [| t; n; t; n; n; n; n; n; n; n; t; n; t |];
-      [| t; n; n; t; n; n; n; n; n; t; n; n; t |];
-      [| t; t; t; n; t; n; n; n; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; n; t; t; t; t |];
-      [| t; t; t; n; n; t; t; t; n; n; t; t; t |];
-    |]
+let robot = pixel_array_from_json "robot" elementals_json
 
 let robot_anim =
   { frames = [ robot ]; total = 1; current = 0; cx = 0; cy = 0 }
 
-let dolphin =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; n; n; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; n; t; n; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; t; t; n; n; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; n; t; n; t; t; t; t; t; t; t; t; n; t |];
-      [| n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; n; n; n; n; n; t; t; n; t; t; t; t; n |];
-      [| t; t; t; t; n; t; n; n; t; n; n; t; t; t; n |];
-      [| t; t; t; t; t; n; t; t; n; n; t; n; t; t; n |];
-      [| t; t; t; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; n; n; t; n; t |];
-      [| t; t; t; t; t; t; t; t; t; n; t; t; n; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; n; t; n; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-    |]
-
-let rice_ball =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; n; n; n; n; n; n; n; n; n; n; t; n; t |];
-      [| n; t; t; n; n; t; t; n; t; t; n; t; n; t; t; n |];
-      [| n; t; t; n; t; t; n; t; t; n; t; t; n; t; t; n |];
-      [| n; t; t; n; t; n; t; t; n; t; t; n; n; t; t; n |];
-      [| n; t; t; n; n; t; t; n; t; t; n; t; n; t; t; n |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
-
-let rock =
-  scale 4
-    [|
-      [| t; t; t; t; t; t; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; t; n; n; n; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; n; t; t; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; n; n; n; n; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; t; n; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; n; t; t; t; t; t; t; t; t; t; t; t; n; n |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; n |];
-      [| t; n; n; n; t; t; t; t; t; t; t; t; t; n; n; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; n; n; n; t; t |];
-      [| t; t; t; t; n; n; t; t; n; n; n; n; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; n; t; t; t; t; t; t; t |];
-    |]
-
 (** Temporary animation frame for MS1 *)
-let eat_anim =
+let eat_anim_adult =
   {
-    frames = [ eat_f1; eat_f2; eat_f3 ];
+    frames = [ eat_f1_adult; eat_f2_adult; eat_f3_adult ];
     total = 3;
     current = 0;
     cx = 60;
     cy = 60;
   }
 
-let sleep_anim =
+let eat_anim_baby =
   {
-    frames = [ sleeping; sleeping; sleeping ];
+    frames = [ eat_f1_baby; eat_f2_baby; eat_f3_baby ];
     total = 3;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let sleep_anim_adult =
+  {
+    frames = [ sleeping_adult ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let sleep_anim_baby =
+  {
+    frames = [ sleeping_baby ];
+    total = 1;
     current = 0;
     cx = 60;
     cy = 60;
@@ -752,9 +423,18 @@ let clean_anim =
     cy = 60;
   }
 
-let avatar =
+let avatar_adult =
   {
-    frames = [ neutral_f1; neutral_f2 ];
+    frames = [ neutral_f1_adult; neutral_f2_adult ];
+    total = 2;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let avatar_baby =
+  {
+    frames = [ neutral_f1_baby; neutral_f2_baby ];
     total = 2;
     current = 0;
     cx = 60;
