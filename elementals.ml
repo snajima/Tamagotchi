@@ -92,10 +92,3 @@ let next (gs : gamestate) : gamestate =
     (try next_helper gs with
       | WinnerDetermined -> (win_loss gs))
   else gs
-
-(*else
-  match Random.int 3 with
-  | 0 -> { gs with opponent = Fire; ours = Nothing }
-  | 1 -> { gs with opponent = Water; ours = Nothing }
-  | 2 -> { gs with opponent = Leaf; ours = Nothing }
-  | _ -> failwith "impossible" *)
