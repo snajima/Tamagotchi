@@ -67,16 +67,16 @@ let activate_button (active_button : button) =
   match active_button with
   | Eat ->
       my_home.active_anim <- Eating;
-      my_home.anim_counter <- default_anim_length
-      (* TODO: Update tamagotchi state -- make less hungry*)
+      my_home.anim_counter <- default_anim_length;
+      ignore (State.increment_eat my_home.tam_state)
   | Sleep ->
       my_home.active_anim <- Sleeping;
-      my_home.anim_counter <- default_anim_length
-      (* TODO: Update tamagotchi state -- make less sleepy*)
+      my_home.anim_counter <- default_anim_length;
+      ignore (State.increment_sleep my_home.tam_state)
   | Toilet ->
       my_home.active_anim <- Cleaning;
-      my_home.anim_counter <- default_anim_length
-      (* TODO: Update tamagotchi state -- make more clean*)
+      my_home.anim_counter <- default_anim_length;
+      ignore (State.increment_cleanliness my_home.tam_state)
   | Play -> Dolphinview.draw ()
   | Shop -> Drumview.draw ()
   | Inventory -> Elementalsview.draw ()
@@ -176,7 +176,6 @@ let init s =
 (** Main exit function for HomeMode *)
 let exit s =
   Graphics.close_graph ();
-  (* TODO: save the current state of Tamagotchi to json *)
   print_endline "";
   print_endline
     "Thanks for playing! Your Tamagotchi will be waiting for your \
@@ -184,7 +183,15 @@ let exit s =
   print_endline ""
 
 (** Main exception function for HomeMode *)
-let except s ex = ()
+let except s ex =
+  match ex with
+  | State.Death ->
+      Graphics.clear_graph ();
+      s.animations <- [];
+      gameover_screen_no_score 500 "Oh no :("
+        { tam_death with cx = vs.maxx / 2; cy = vs.maxy / 2 }
+        s
+  | _ -> ()
 
 (** [key] processes the [c] character pressed and updates the state [s]
     accordingly *)
@@ -227,15 +234,8 @@ let step (state : viewstate) : unit =
   (* Update animations every [delta] frames *)
   if state.tick mod delta = 0 then
     state.animations <- increment_anims state.animations;
-  if true then (
-    try ignore (State.step my_home.tam_state)
-    with Death ->
-      Graphics.clear_graph ();
-      Graphics.synchronize ();
-      gameover_screen_no_score 500 "Oh no :("
-        { tam_death with cx = vs.maxx / 2; cy = vs.maxy / 2 }
-        vs;
-      raise End);
+  (* if state.tick mod delta = 0 then *)
+  if true then ignore (State.step my_home.tam_state);
   state.tick <- (state.tick + 1) mod delta
 
 let predraw (state : viewstate) : unit =
