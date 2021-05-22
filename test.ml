@@ -240,11 +240,11 @@ let state_tests =
       (init_tam "./json/senior.json" |> get_age);
     (* ------------------------ Increment Age ------------------------- *)
     num_feature_test "increment age of baby 3" 7
-      ( init_tam "./json/baby.json"
-      |> increment_age |> increment_age |> increment_age |> get_age );
+      (init_tam "./json/baby.json"
+      |> increment_age |> increment_age |> increment_age |> get_age);
     num_feature_test "increment age of teen 2" 12
-      ( init_tam "./json/teen.json"
-      |> increment_age |> increment_age |> get_age );
+      (init_tam "./json/teen.json"
+      |> increment_age |> increment_age |> get_age);
     num_feature_test "increment age of senior 1" 35
       (init_tam "./json/senior.json" |> increment_age |> get_age);
     (* ---------------------------- Step ----------------------------- *)

@@ -97,12 +97,32 @@ let reset_game_flags () =
   my_game_flags.drum <- false;
   my_game_flags.elements <- false
 
+let lifestage_to_anim
+    (lifestage : string)
+    baby_anim
+    adult_anim
+    elder_anim : Animation.animation =
+  match lifestage with
+  | "Baby" | "Teenager" -> baby_anim
+  | "Adult" -> adult_anim
+  | "Senior" -> elder_anim
+  | _ -> adult_anim
+
 let get_avatar_animations (hs : homestate) : Animation.animation =
   match hs.active_anim with
-  | Eating -> eat_anim
-  | Sleeping -> sleep_anim
+  | Eating ->
+      lifestage_to_anim
+        (State.get_lifestage hs.tam_state)
+        eat_anim_baby eat_anim_adult eat_anim_elder
+  | Sleeping ->
+      lifestage_to_anim
+        (State.get_lifestage hs.tam_state)
+        sleep_anim_baby sleep_anim_adult sleep_anim_elder
   | Cleaning -> clean_anim
-  | Idle -> avatar
+  | Idle ->
+      lifestage_to_anim
+        (State.get_lifestage hs.tam_state)
+        avatar_baby avatar_adult avatar_elder
 
 let reset_avatar_animations (hs : homestate) =
   hs.active_anim <- Idle;
@@ -225,9 +245,7 @@ let except s ex =
 let key s c =
   (* draw_pixel s.x s.y s.scale s.fc; *)
   (match c with
-  | '1' -> Dolphinview.draw ()
-  | '2' -> Drumview.draw ()
-  | '3' -> Elementalsview.draw ()
+  | '1' -> ignore (State.increment_age my_home.tam_state)
   | 'a' ->
       my_home.active_icon <-
         (my_home.active_icon - 1 + my_home.total_icons)

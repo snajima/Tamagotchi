@@ -48,11 +48,11 @@ let hor_scale (num : int) (p_array : pixel_array) : pixel_array =
 let scale (num : int) (p_array : pixel_array) : pixel_array =
   p_array |> vert_scale num |> hor_scale num
 
-let mirror (img : image) : image =
+let mirror (pixel_array : pixel_array) : pixel_array =
   let array_rev array =
     Array.to_list array |> List.rev |> Array.of_list
   in
-  Array.map array_rev (dump_image img) |> make_image
+  Array.map array_rev pixel_array
 
 let n = 0x000000
 
@@ -268,7 +268,7 @@ let gg = pixel_array_from_json "gg" dolphin_json
 
 (* let don_anim = { frames = [ don_1; don_2 ]; total = 2; current = 0;
    cx = 0; cy = 0; } *)
-let tombstone = pixel_array_from_json "tombstone" homescreen_anim_json
+let tombstone = pixel_array_from_json "grave" homescreen_anim_json
 
 let don_anim =
   { frames = [ black_sq ]; total = 1; current = 0; cx = 0; cy = 0 }
@@ -305,6 +305,30 @@ let animation_json = Yojson.Basic.from_file "./json/animation.json"
 
 let baby_animation_json =
   Yojson.Basic.from_file "./json/baby_animation.json"
+
+let elder_animation_json =
+  Yojson.Basic.from_file "./json/elder_animation.json"
+
+let neutral_f1_elder =
+  pixel_array_from_json "neutral_f1" elder_animation_json
+
+let neutral_f2_elder =
+  pixel_array_from_json "neutral_f2" elder_animation_json
+
+let wide_f1_elder = pixel_array_from_json "wide_f1" elder_animation_json
+
+let wide_f2_elder = pixel_array_from_json "wide_f2" elder_animation_json
+
+let idle_elder = pixel_array_from_json "idle" elder_animation_json
+
+let eat_f1_elder = pixel_array_from_json "eat_f1" elder_animation_json
+
+let eat_f2_elder = pixel_array_from_json "eat_f2" elder_animation_json
+
+let eat_f3_elder = pixel_array_from_json "eat_f3" elder_animation_json
+
+let sleeping_elder =
+  pixel_array_from_json "sleeping" elder_animation_json
 
 let neutral_f1_baby =
   pixel_array_from_json "neutral_f1" baby_animation_json
@@ -364,13 +388,7 @@ let water_anim =
 let shoot = pixel_array_from_json "shoot" elementals_json
 
 let shoot_anim =
-  {
-    frames = [ idle_adult; shoot ];
-    total = 2;
-    current = 0;
-    cx = 0;
-    cy = 0;
-  }
+  { frames = [ mirror shoot ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 let robot = pixel_array_from_json "robot" elementals_json
 
@@ -396,6 +414,15 @@ let eat_anim_baby =
     cy = 60;
   }
 
+let eat_anim_elder =
+  {
+    frames = [ eat_f1_elder; eat_f2_elder; eat_f3_elder ];
+    total = 3;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
 let sleep_anim_adult =
   {
     frames = [ sleeping_adult ];
@@ -408,6 +435,15 @@ let sleep_anim_adult =
 let sleep_anim_baby =
   {
     frames = [ sleeping_baby ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let sleep_anim_elder =
+  {
+    frames = [ sleeping_elder ];
     total = 1;
     current = 0;
     cx = 60;
@@ -435,6 +471,15 @@ let avatar_adult =
 let avatar_baby =
   {
     frames = [ neutral_f1_baby; neutral_f2_baby ];
+    total = 2;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let avatar_elder =
+  {
+    frames = [ neutral_f1_elder; neutral_f2_elder ];
     total = 2;
     current = 0;
     cx = 60;
