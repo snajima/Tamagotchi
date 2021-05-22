@@ -96,25 +96,7 @@ let eat_icon = pixel_array_from_json "eat_icon" homescreen_anim_json
 let sleep_icon = pixel_array_from_json "sleep_icon" homescreen_anim_json
 
 let toilet_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; n; t |];
-      [| t; t; t; n; t; t; n; n; n; n; t; t; n; t; n; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; n; n; t; n; t |];
-      [| t; t; t; n; t; n; n; n; n; n; n; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; n; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; n; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+  pixel_array_from_json "toilet_icon" homescreen_anim_json
 
 let play_icon = pixel_array_from_json "play_icon" homescreen_anim_json
 
@@ -312,6 +294,16 @@ let gg_static =
   {
     (* Temporary art for GG animation *)
     frames = [ gg ];
+    total = 1;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
+
+let tam_death =
+  {
+    (* TODO: Stephen replease the poop with the gravestone plz *)
+    frames = [ poop ];
     total = 1;
     current = 0;
     cx = 0;

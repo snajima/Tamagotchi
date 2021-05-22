@@ -37,7 +37,7 @@ let state_tests =
     str_feature_test "breed of senior" "bald"
       (init_tam "./json/senior.json" |> get_breed);
     (* ---------------- Observer: get_lifeStage ------------------ *)
-    (* ----------------------- No Change ------------------------ *)
+    (* ----------------------- No Change ------------------------- *)
     str_feature_test "LifeStage of baby" "Baby"
       (init_tam "./json/baby.json" |> get_lifeStage);
     str_feature_test "LifeStage of teen" "Teenager"
