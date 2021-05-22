@@ -3,7 +3,8 @@
   "lifeStage": "Senior",
   "sleep": 90,
   "cleanliness": 70,
-  "hunger": 28,
+  "hunger": 83,
+  "happy": 96,
   "age": 34,
   "money": 10,
   "inventory": [
@@ -12,5 +13,5 @@
       "cost": 10
     }
   ],
-  "step": 600
+  "step": 1
 }
