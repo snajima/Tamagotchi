@@ -300,6 +300,16 @@ let gg_static =
     cy = 0;
   }
 
+let tam_death =
+  {
+    (* TODO: Stephen replease the poop with the gravestone plz *)
+    frames = [ poop ];
+    total = 1;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
+
 and t = 0xFFFFFF
 
 let neutral_f1 =

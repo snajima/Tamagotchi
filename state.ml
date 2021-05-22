@@ -116,7 +116,7 @@ let step tam =
     ignore (increment_age tam);
     ignore (set_hunger (-10) tam);
     ignore (set_cleanliness (-10) tam);
-    ignore (set_sleep (-10) tam) );
+    ignore (set_sleep (-10) tam));
   tam
 
 (**Saving a game idk i might work on this later*)

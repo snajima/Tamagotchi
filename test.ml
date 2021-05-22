@@ -37,7 +37,7 @@ let state_tests =
     str_feature_test "breed of senior" "bald"
       (init_tam "./json/senior.json" |> get_breed);
     (* ---------------- Observer: get_lifeStage ------------------ *)
-    (* ----------------------- No Change ------------------------ *)
+    (* ----------------------- No Change ------------------------- *)
     str_feature_test "LifeStage of baby" "Baby"
       (init_tam "./json/baby.json" |> get_lifeStage);
     str_feature_test "LifeStage of teen" "Teenager"
@@ -53,11 +53,11 @@ let state_tests =
       (init_tam "./json/senior.json" |> increment_age |> get_lifeStage);
     (* --------------------- Two Age Change ---------------------- *)
     str_feature_test "LifeStage of baby incr 2" "Teenager"
-      ( init_tam "./json/baby.json"
-      |> increment_age |> increment_age |> get_lifeStage );
+      (init_tam "./json/baby.json"
+      |> increment_age |> increment_age |> get_lifeStage);
     str_feature_test "LifeStage of teen incr 2" "Adult"
-      ( init_tam "./json/teen.json"
-      |> increment_age |> increment_age |> get_lifeStage );
+      (init_tam "./json/teen.json"
+      |> increment_age |> increment_age |> get_lifeStage);
     death_exc "Lifestage of senior incr 2" (fun () ->
         init_tam "./json/senior.json" |> increment_age |> increment_age);
     (* ---------------- Observer: get_sleep ------------------ *)
@@ -68,8 +68,7 @@ let state_tests =
       (init_tam "./json/teen.json" |> get_sleep);
     num_feature_test "sleep of senior" 90
       (init_tam "./json/senior.json" |> get_sleep);
-    (* ----------------------- Step one age above
-       ------------------------ *)
+    (* ---------------------- Step one age above ----------------------- *)
     num_feature_test "sleep of baby" 90
       (init_tam "./json/baby.json" |> set_sleep (-10) |> get_sleep);
     num_feature_test "sleep of teen" 35
@@ -223,8 +222,8 @@ let dolphin_test =
       Left;
     (* -------------------------- Two --------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right"
-      ( init_game () |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Left"
       (init_game () |> process_left |> process_left |> get_dolphin_lane)
@@ -237,36 +236,36 @@ let dolphin_test =
       Middle;
     (* ------------------------- Three -------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right |> Right"
-      ( init_game () |> process_right |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Right |> Right |> Left"
-      ( init_game () |> process_right |> process_right |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right |> process_left
+     |> get_dolphin_lane)
       Middle;
     dolphin_lane_test "Middle |> Right |> Left |> Right"
-      ( init_game () |> process_right |> process_left |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_left |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Right |> Right"
-      ( init_game () |> process_left |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Left |> Right"
-      ( init_game () |> process_left |> process_left |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_left |> process_right
+     |> get_dolphin_lane)
       Middle;
     dolphin_lane_test "Middle |> Left |> Right |> Left"
-      ( init_game () |> process_left |> process_right |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_right |> process_left
+     |> get_dolphin_lane)
       Left;
     dolphin_lane_test "Middle |> Right |> Left |> Left"
-      ( init_game () |> process_right |> process_left |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_left |> process_left
+     |> get_dolphin_lane)
       Left;
     dolphin_lane_test "Middle |> Left |> Left |> Left"
-      ( init_game () |> process_left |> process_left |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_left |> process_left
+     |> get_dolphin_lane)
       Left;
     (* --------------------- Observer: get_rocks ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,

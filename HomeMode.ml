@@ -24,7 +24,7 @@ type avatar_anim =
 
 type homestate = {
   (* 0 = Eat, 1 = Sleep, 2 = Toilet, 3 = Play, 4 = Shop, 5 = Inventory *)
-  (* mutable tam_state : tamagotchi; *)
+  mutable tam_state : tamagotchi;
   total_icons : int;
   mutable active_icon : int;
   mutable active_anim : avatar_anim;
@@ -39,12 +39,14 @@ type game_flags = {
 
 let my_home =
   {
-    (* tam_state = from_json "./json/baby.json"; *)
+    tam_state = init_tam "./json/baby.json";
     total_icons = 6;
     active_icon = 0;
     anim_counter = 0;
     active_anim = Idle;
   }
+
+let _ = ignore (State.set_cleanliness 10 my_home.tam_state)
 
 (** [button_of_int] returns the corresponding button for the int *
     representation of [active_icon_num]
@@ -77,7 +79,7 @@ let activate_button (active_button : button) =
       (* TODO: Update tamagotchi state -- make more clean*)
   | Play -> Dolphinview.draw ()
   | Shop -> Drumview.draw ()
-  | Inventory -> failwith "NOT YET BUDDY"
+  | Inventory -> Elementalsview.draw ()
 
 let my_game_flags = { dolphin = false; drum = false; elements = false }
 
@@ -129,6 +131,23 @@ let get_toolbar_animations (hs : homestate) : Animation.animation list =
         eat_icon_static; sleep_icon_static; toilet_icon_static;
         play_icon_static; shop_icon_static; inventory_icon_bobble;
       ]
+
+let get_status_animations (hs : homestate) : unit =
+  let sleep = hs.tam_state |> get_sleep
+  and cleanliness = hs.tam_state |> get_cleanliness
+  and hunger = hs.tam_state |> get_hunger
+  and age = hs.tam_state |> get_age in
+  (* Status Name *)
+  draw_message 50 (80 * 4) 25 Graphics.black "Sleep:";
+  draw_message 50 (70 * 4) 25 Graphics.black "Clean:";
+  draw_message 50 (60 * 4) 25 Graphics.black "Hunger:";
+  draw_message 50 (50 * 4) 25 Graphics.black "Age:";
+  (* Status Value *)
+  draw_message 120 (80 * 4) 30 Graphics.black (string_of_int sleep);
+  draw_message 120 (70 * 4) 30 Graphics.black
+    (string_of_int cleanliness);
+  draw_message 120 (60 * 4) 30 Graphics.black (string_of_int hunger);
+  draw_message 120 (50 * 4) 30 Graphics.black (string_of_int age)
 
 let get_animations (hs : homestate) : Animation.animation list =
   let tool_bar_anims = get_toolbar_animations hs
@@ -208,12 +227,22 @@ let step (state : viewstate) : unit =
   (* Update animations every [delta] frames *)
   if state.tick mod delta = 0 then
     state.animations <- increment_anims state.animations;
+  if true then (
+    try ignore (State.step my_home.tam_state)
+    with Death ->
+      Graphics.clear_graph ();
+      Graphics.synchronize ();
+      gameover_screen_no_score 500 "Oh no :("
+        { tam_death with cx = vs.maxx / 2; cy = vs.maxy / 2 }
+        vs;
+      raise End);
   state.tick <- (state.tick + 1) mod delta
 
 let predraw (state : viewstate) : unit =
   draw_pixels_ll 0 0 120 10 Graphics.black;
   draw_pixels_ll 0 110 120 10 Graphics.black;
-  clear_center state
+  clear_center state;
+  get_status_animations my_home
 
 let draw () = draw_loop vs init exit key except step predraw
 
