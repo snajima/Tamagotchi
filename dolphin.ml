@@ -5,12 +5,11 @@ type lane =
   | Middle
   | Right
 
-(* Stores score *)
 exception Gameover of int
 
-exception Offscreen
-
+(* ------------------------------------------------------- *)
 (* --------------------- Data Vars ----------------------- *)
+(* ------------------------------------------------------- *)
 let max_height = 60
 
 type gamestate = {
@@ -24,14 +23,22 @@ type gamestate = {
   current_lane : lane;
 }
 
+(* -------------------------------------------------------- *)
 (* ----------------- Internal functions ------------------- *)
+(* -------------------------------------------------------- *)
 
-(** Reduce the height of a single rock *)
+(** Raised when the height of a rock falls below zero. Note that this
+    exception is only raised by internal functions, it is not included
+    in the out-facing mli *)
+exception Offscreen
+
+(** [fall_rock] reduces the height of a single rock. It is a helper
+    function that is to be used as a subprocess of [fall_rocks] *)
 let fall_rock (level, height) : int * int =
   if height <= 1 then raise Offscreen else (level, height - 1)
 
-(** Reduce the height of a list of rock, removing rocks that fall
-    offscreen *)
+(** [fall_rocks] reduces the height of a list of rock, removing rocks
+    that fall offscreen, and returns the resulting list of rocks *)
 let rec fall_rocks (rock_lst : (int * int) list) : (int * int) list =
   match rock_lst with
   | [] -> []
@@ -39,7 +46,8 @@ let rec fall_rocks (rock_lst : (int * int) list) : (int * int) list =
       (* If rocks fall offscreen, exclude from list of rocks *)
       try fall_rock h :: fall_rocks t with Offscreen -> fall_rocks t)
 
-(** Checks if the player is in contact with any of the rocks*)
+(** [game_over] returns a boolean indicating if the player is in contact
+    with any of the rocks *)
 let game_over (gs : gamestate) : bool =
   let lane_num =
     match gs.current_lane with Left -> 0 | Middle -> 1 | Right -> 2
@@ -49,7 +57,9 @@ let game_over (gs : gamestate) : bool =
   in
   List.exists lose_condition gs.rocks
 
+(* -------------------------------------------------------- *)
 (* ----------------- External functions ------------------- *)
+(* -------------------------------------------------------- *)
 
 let init_game () : gamestate =
   { step = 0; rocks = []; current_lane = Middle }
