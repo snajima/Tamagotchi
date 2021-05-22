@@ -1,4 +1,5 @@
 open Graphics
+open Yojson.Basic.Util
 
 type pixel_array = int array array
 
@@ -67,6 +68,9 @@ let pixel_array_from_bit_array (bit_array : int list list) : pixel_array
   |> Array.map (fun lst ->
          lst |> Array.of_list
          |> Array.map (fun bin -> if bin = 1 then n else t))
+
+let bit_array_from_json (animation_name : string) json : int list list =
+  failwith ""
 
 (* ---------------------------------------------------------------- *)
 (* ---------------------- Home Screen Frames ---------------------- *)
