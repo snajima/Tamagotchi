@@ -1,8 +1,6 @@
 open Graphics
 open Animation
 
-exception End
-
 type viewstate = {
   mutable tick : int;
   mutable animations : animation list;
@@ -12,6 +10,8 @@ type viewstate = {
   bc : Graphics.color;
   fc : Graphics.color;
 }
+
+exception End
 
 let default_vs : viewstate =
   {
@@ -26,8 +26,6 @@ let default_vs : viewstate =
 
 let scale = 4
 
-(** [draw_pixels] draws a rectangle of pixels centered at [cx] and [cy]
-    with width [sx] and height [sy] and color [c] *)
 let draw_pixels cx cy sx sy c =
   Graphics.set_color c;
   Graphics.fill_rect
@@ -35,15 +33,11 @@ let draw_pixels cx cy sx sy c =
     ((cy - (sy / 2)) * default_vs.scale)
     (sx * default_vs.scale) (sy * default_vs.scale)
 
-(** [draw_pixels] draws a rectangle of pixels with lower left corner at
-    [x] and [y] with width [sx] and height [sy] and color [c] *)
 let draw_pixels_ll x y sx sy c =
   Graphics.set_color c;
   Graphics.fill_rect (x * default_vs.scale) (y * default_vs.scale)
     (sx * default_vs.scale) (sy * default_vs.scale)
 
-(** [draw_img] converts [pixel_array] to an image and draws it with
-    center at [x] and [y] in screen coordinates *)
 let draw_img (x : int) (y : int) (p_array : pixel_array) : unit =
   let w = Array.length (Array.get p_array 0)
   and h = Array.length p_array in
@@ -51,8 +45,6 @@ let draw_img (x : int) (y : int) (p_array : pixel_array) : unit =
     ((x * scale) - (w / 2))
     ((y * scale) - (h / 2))
 
-(** [draw_img] converts [pixel_array] to an image and draws it with
-    lower left corner at [x] and [y] in screen coordinates *)
 let draw_img_ll (x : int) (y : int) (p_array : pixel_array) : unit =
   Graphics.set_color Graphics.white;
   Graphics.draw_image (p_array |> make_image) (x * scale) (y * scale)
@@ -75,8 +67,6 @@ let draw_message
   (* Draw *)
   draw_string message
 
-(** [process_anims] process a list of animations and render the current
-    frame on the graphics context *)
 let rec process_anims (anims : animation list) : unit =
   match anims with
   | [] -> () (* Done: no more animations *)
@@ -84,24 +74,9 @@ let rec process_anims (anims : animation list) : unit =
       curr_frame anim |> draw_img anim.cx anim.cy;
       process_anims t
 
-(** [increment_anims] returns a list of animations with all animations
-    in [anims] incremented to the next frame *)
 let rec increment_anims (anims : animation list) : animation list =
   List.map next_frame anims
 
-(** [draw_loop] repeatedly updates the GUI.
-
-    - It first initiates the screen with [f_init] called on the sample
-      function.
-    - It then calls [f_step] function to update the [vs].
-    - Then, it calls the [f_predraw] function and updates [vs]
-      accordingly.
-    - Then, it processes the user key input (if available) with the
-      [f_key] function and updates [vs] accordingly.
-    - Finally, it draws all the stationary animations based on [vs], and
-      repeats the loop.
-
-    This loop repeats indefinitely until the user issues a quit command. *)
 let draw_loop
     (vs : viewstate)
     f_init
@@ -166,9 +141,8 @@ let gameover_screen
     (fun s -> ());
   raise End
 
-let gameover_screen
+let gameover_screen_no_score
     (length : int)
-    (score : int)
     (message : string)
     (anim : animation)
     (vs : viewstate) =
@@ -180,10 +154,7 @@ let gameover_screen
       let cx = vs.maxx * scale / 2
       and cy = vs.maxy * scale / 2
       and dy = vs.maxy * scale / 10
-      and score_string = "Score: " ^ string_of_int score
       and quit_string = "Press 'S' to Quit" in
-      (* Draw Score *)
-      draw_message cx (cy - dy) 50 red score_string;
       (* Draw Custom Message *)
       draw_message cx (cy - (2 * dy)) 40 red message;
       (* Draw Quit message *)
@@ -201,35 +172,3 @@ let gameover_screen
       if s.tick = length then raise End else s.tick <- s.tick + 1)
     (fun s -> ());
   raise End
-
-let gameover_screen_no_score
-  (length : int)
-  (message : string)
-  (anim : animation)
-  (vs : viewstate) =
-draw_loop vs
-  (* Init *)
-    (fun s ->
-    s.tick <- 0;
-    s.animations <- anim :: s.animations;
-    let cx = vs.maxx * scale / 2
-    and cy = vs.maxy * scale / 2
-    and dy = vs.maxy * scale / 10
-    and quit_string = "Press 'S' to Quit" in
-    (* Draw Custom Message *)
-    draw_message cx (cy - (2 * dy)) 40 red message;
-    (* Draw Quit message *)
-    draw_message cx (cy - (3 * dy)) 30 green quit_string;
-    set_color white)
-  (fun s -> ())
-  (fun s c ->
-    match c with
-    | 's' ->
-        clear_graph ();
-        raise End
-    | _ -> print_endline "Invalid Key_pressed")
-  (fun s ex -> ())
-  (fun s ->
-    if s.tick = length then raise End else s.tick <- s.tick + 1)
-  (fun s -> ());
-raise End

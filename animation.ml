@@ -1,4 +1,5 @@
 open Graphics
+open Yojson.Basic.Util
 
 type pixel_array = int array array
 
@@ -59,50 +60,40 @@ let t = 0xFFFFFF
 
 let r = Graphics.red
 
+(** [pixel_array_from_bit_array bit_array] returns a [pixel_array] with
+    all 1's replaced with n and 0's replaced with t *)
+let pixel_array_from_bit_array (bit_array : int list list) : pixel_array
+    =
+  bit_array |> Array.of_list
+  |> Array.map (fun lst ->
+         lst |> Array.of_list
+         |> Array.map (fun bin -> if bin = 1 then n else t))
+
+(** [bit_array_from_json] extracts a bit_array that represents the
+    frames of the animations from the json *)
+let bit_array_from_json (animation_name : string) json : int list list =
+  json |> member animation_name |> member "data" |> to_list
+  |> List.map (fun data_row ->
+         data_row |> to_list |> List.map (fun i -> to_int i))
+
+(** [pixel_array_from_json] extracts the scaled pixel_array for the
+    [animation_name] from the [json], using [bit_array_from_json] and
+    [pixel_array_from_bit_array] as helper functions*)
+let pixel_array_from_json (animation_name : string) json : pixel_array =
+  let scale_num =
+    json |> member animation_name |> member "scale" |> to_int
+  in
+  bit_array_from_json animation_name json
+  |> pixel_array_from_bit_array |> scale scale_num
+
 (* ---------------------------------------------------------------- *)
 (* ---------------------- Home Screen Frames ---------------------- *)
 (* ---------------------------------------------------------------- *)
-let eat_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; n; n; n; n; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; n; n; n; t; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+let homescreen_anim_json = Yojson.Basic.from_file "./json/homemode.json"
 
-let sleep_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; n; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; n; t; n; t; t |];
-      [| t; n; n; n; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; t; t; n; n; n; n; n; n; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+let eat_icon = pixel_array_from_json "eat_icon" homescreen_anim_json
+
+let sleep_icon = pixel_array_from_json "sleep_icon" homescreen_anim_json
 
 let toilet_icon =
   scale 5
@@ -125,320 +116,55 @@ let toilet_icon =
       [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
     |]
 
-let play_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; n; t; t; n; n; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-      [| t; n; t; n; t; t; t; t; t; n; t; n; t; n; n; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; n; n; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-      [| t; n; t; n; t; t; t; t; t; n; t; n; t; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; n; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+let play_icon = pixel_array_from_json "play_icon" homescreen_anim_json
 
-let shop_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+let shop_icon = pixel_array_from_json "shop_icon" homescreen_anim_json
 
 let inventory_icon =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; t; t; n; n; n; t; t; t; t; t |];
-      [| t; t; n; t; t; t; n; n; t; t; n; n; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; n; t; t; n; t; t; t |];
-      [| t; t; t; n; n; t; t; n; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; t; n; n; t; n; t; n; t; n; t; t; t |];
-      [| t; t; n; n; n; t; t; t; n; n; t; t; n; t; t; t |];
-      [| t; t; n; t; n; n; n; n; t; n; t; n; n; t; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; n; t; n; t; t; t |];
-      [| t; t; n; n; t; n; t; t; n; n; t; t; n; t; t; t |];
-      [| t; t; n; t; n; n; n; n; t; n; t; n; t; t; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; n; t; t; t; t; t |];
-      [| t; t; t; n; t; n; t; t; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+  pixel_array_from_json "inventory_icon" homescreen_anim_json
 
 let eat_icon_f1 =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; n; n; n; n; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; n; n; n; t; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-    |]
+  pixel_array_from_json "eat_icon_f1" homescreen_anim_json
 
 let sleep_icon_f1 =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; n; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; n; t; n; t; t |];
-      [| t; n; n; n; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; t; t; n; n; n; n; n; n; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; n; n; n; n; n; t |];
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-    |]
+  pixel_array_from_json "sleep_icon_f1" homescreen_anim_json
 
 let toilet_icon_f1 =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; n; t |];
-      [| t; t; t; n; t; t; n; n; n; n; t; t; n; t; n; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; n; n; t; n; t |];
-      [| t; t; t; n; t; n; n; n; n; n; n; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; n; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; n; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-    |]
+  pixel_array_from_json "toilet_icon_f1" homescreen_anim_json
 
 let play_icon_f1 =
-  scale 5
-    [|
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; n; t; t; n; n; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-      [| t; n; t; n; t; t; t; t; t; n; t; n; t; n; n; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; n; n; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-      [| t; n; t; n; t; t; t; t; t; n; t; n; t; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; n; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+  pixel_array_from_json "play_icon_f1" homescreen_anim_json
 
 let shop_icon_f1 =
-  scale 5
-    [|
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+  pixel_array_from_json "shop_icon_f1" homescreen_anim_json
 
 let inventory_icon_f1 =
-  scale 5
-    [|
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; t; t; n; n; n; t; t; t; t; t |];
-      [| t; t; n; t; t; t; n; n; t; t; n; n; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; n; t; t; n; t; t; t |];
-      [| t; t; t; n; n; t; t; n; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; t; n; n; t; n; t; n; t; n; t; t; t |];
-      [| t; t; n; n; n; t; t; t; n; n; t; t; n; t; t; t |];
-      [| t; t; n; t; n; n; n; n; t; n; t; n; n; t; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; n; t; n; t; t; t |];
-      [| t; t; n; n; t; n; t; t; n; n; t; t; n; t; t; t |];
-      [| t; t; n; t; n; n; n; n; t; n; t; n; t; t; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; n; t; t; t; t; t |];
-      [| t; t; t; n; t; n; t; t; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+  pixel_array_from_json "inventory_icon_f1" homescreen_anim_json
 
 let eat_icon_f2 =
-  scale 5
-    [|
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; n; t; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; n; n; n; n; n; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; n; n; n; t; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-    |]
+  pixel_array_from_json "eat_icon_f2" homescreen_anim_json
 
 let sleep_icon_f2 =
-  scale 5
-    [|
-      [| t; n; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; t; n; t; n; t; t |];
-      [| t; n; n; n; n; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; t; t; n; n; n; n; n; n; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; n; n; n; n; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-    |]
+  pixel_array_from_json "sleep_icon_f2" homescreen_anim_json
 
 let toilet_icon_f2 =
-  scale 5
-    [|
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; n; t |];
-      [| t; t; t; n; t; t; n; n; n; n; t; t; n; t; n; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; n; n; t; n; t |];
-      [| t; t; t; n; t; n; n; n; n; n; n; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; t; n; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; n; n; n; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; n; n; n; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-    |]
+  pixel_array_from_json "toilet_icon_f2" homescreen_anim_json
 
 let play_icon_f2 =
-  scale 5
-    [|
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; n; t; t; n; n; n; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-      [| t; n; t; n; t; t; t; t; t; n; t; n; t; n; n; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; n; n; t |];
-      [| t; n; t; t; n; t; t; t; n; t; t; n; t; t; t; t |];
-      [| t; n; t; n; t; t; t; t; t; n; t; n; t; t; t; t |];
-      [| t; t; n; t; t; t; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; n; t; t; t; t; t; n; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+  pixel_array_from_json "play_icon_f2" homescreen_anim_json
 
 let shop_icon_f2 =
-  scale 5
-    [|
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-      [| t; t; t; t; t; t; n; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; t; t; t; t; n; t; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; t; t; t; n; t; t; t; t; t; t; n; t; t; t; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; n; t |];
-      [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+  pixel_array_from_json "shop_icon_f2" homescreen_anim_json
 
 let inventory_icon_f2 =
-  scale 5
-    [|
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-      [| t; t; t; n; n; n; t; t; n; n; n; t; t; t; t; t |];
-      [| t; t; n; t; t; t; n; n; t; t; n; n; t; t; t; t |];
-      [| t; t; t; n; n; n; n; n; n; n; t; t; n; t; t; t |];
-      [| t; t; t; n; n; t; t; n; t; t; t; n; n; t; t; t |];
-      [| t; t; n; t; t; n; n; t; n; t; n; t; n; t; t; t |];
-      [| t; t; n; n; n; t; t; t; n; n; t; t; n; t; t; t |];
-      [| t; t; n; t; n; n; n; n; t; n; t; n; n; t; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; n; t; n; t; t; t |];
-      [| t; t; n; n; t; n; t; t; n; n; t; t; n; t; t; t |];
-      [| t; t; n; t; n; n; n; n; t; n; t; n; t; t; t; t |];
-      [| t; t; n; t; t; n; t; t; t; n; n; t; t; t; t; t |];
-      [| t; t; t; n; t; n; t; t; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-    |]
+  pixel_array_from_json "inventory_icon_f2" homescreen_anim_json
+
+let poop = pixel_array_from_json "poop" homescreen_anim_json
+
+let poop_shovel =
+  pixel_array_from_json "poop_shovel" homescreen_anim_json
+
+let z_icon = pixel_array_from_json "z_icon" homescreen_anim_json
 
 (* ---------------------------------------------------------------- *)
 (* -------------------- Home Screen Animations -------------------- *)
@@ -802,69 +528,6 @@ let sleeping =
       [| n; t; t; n; n; n; n; n; n; n; n; n; t; t; n |];
       [| n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
       [| t; n; n; n; n; n; n; n; n; n; n; n; n; n; t |];
-    |]
-
-let poop =
-  scale 5
-    [|
-      [| t; t; t; n; t; t; t; n; t; t; t; t; t; t; t; t |];
-      [| t; t; n; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; n; t; t; t; t; t; n; t; t; t; t; t; n; t; t |];
-      [| t; t; n; n; t; t; t; t; t; t; t; t; n; t; t; t |];
-      [| t; t; t; t; n; t; t; t; n; t; t; t; t; n; n; t |];
-      [| t; t; t; t; n; t; t; n; n; n; t; t; t; t; t; n |];
-      [| t; t; t; n; t; t; n; t; t; t; n; n; t; t; t; n |];
-      [| t; t; t; t; t; n; t; t; t; t; t; n; t; t; n; t |];
-      [| t; t; t; t; n; n; n; n; n; n; n; n; n; t; t; t |];
-      [| t; t; t; n; n; t; t; t; t; t; t; t; n; n; t; t |];
-      [| t; t; t; n; t; t; t; t; t; t; t; t; t; n; t; t |];
-      [| t; t; t; n; n; n; n; n; t; t; t; n; n; n; t; t |];
-      [| t; t; n; n; t; t; t; t; n; n; n; t; t; n; n; t |];
-      [| t; n; t; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; n; n; t; t; t; t; t; t; t; t; t; t; t; t; n |];
-      [| t; t; t; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-    |]
-
-let poop_shovel =
-  scale 5
-    [|
-      [| n; n; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| n; n; n; t; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; n; n; n; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; n; t; t; n; t; t; t; t |];
-      [| t; t; t; t; t; t; t; n; n; n; n; t; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; n; t; t; t; t; n; t; t |];
-      [| t; t; t; t; t; t; t; t; n; t; t; t; t; t; n; t |];
-      [| t; t; t; t; t; t; t; n; t; t; t; t; t; t; t; n |];
-      [| t; t; t; t; t; t; t; t; n; t; t; t; t; t; t; n |];
-      [| t; t; t; t; t; t; t; t; t; n; t; t; t; t; t; n |];
-      [| t; t; t; t; t; t; t; t; t; t; n; t; t; t; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; n; n; n; t; t |];
-    |]
-
-let z_icon =
-  scale 5
-    [|
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-      [| t; t; t; t; t; t; t; t; t; t; t; t; n; n; n; t |];
-      [| t; t; t; t; t; t; t; t; t; t; t; n; n; n; t; t |];
-      [| t; t; t; t; t; t; t; t; t; t; n; n; n; t; t; t |];
-      [| t; t; t; t; t; t; t; t; t; n; n; n; t; t; t; t |];
-      [| t; t; t; t; t; t; t; t; n; n; n; t; t; t; t; t |];
-      [| t; t; t; t; t; t; t; n; n; n; t; t; t; t; t; t |];
-      [| t; t; t; t; t; t; n; n; n; t; t; t; t; t; t; t |];
-      [| t; t; t; t; t; n; n; n; t; t; t; t; t; t; t; t |];
-      [| t; t; t; t; n; n; n; t; t; t; t; t; t; t; t; t |];
-      [| t; t; t; n; n; n; t; t; t; t; t; t; t; t; t; t |];
-      [| t; t; n; n; n; t; t; t; t; t; t; t; t; t; t; t |];
-      [| t; n; n; n; t; t; t; t; t; t; t; t; t; t; t; t |];
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
-      [| n; n; n; n; n; n; n; n; n; n; n; n; n; n; n; n |];
     |]
 
 let blank_template =
