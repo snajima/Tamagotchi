@@ -1,4 +1,5 @@
-(** TODO: WRITE HERE *)
+(** Functional game engine that simulates the execution of the dolphin
+    game *)
 
 (** The type [lane] represents the three possible positions for the
     Dolphin *)

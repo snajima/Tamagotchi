@@ -1,13 +1,18 @@
+(** Custom wrapper module to provide external functionality over the
+    OCaml graphics module. It provides abstractions for the common GUI
+    functions such as drawing images, drawing text and drawing shapes.
+    It also supports rendering of animations. *)
+
 (** The type [viewstate] represents state of the visual elements in the
     GUI which stores:
 
-    - tick : number of frames that passed
-    - animations: a list of [animations] currently active
-    - maxx : width of the screen in game coordinates
-    - maxy : height of the screen in game coordinates
-    - scale : conversion factor from game coordinates to pixels
-    - bc : background color
-    - fc : foreground color *)
+    - [tick] : number of frames that passed
+    - [animations]: a list of [animations] currently active
+    - [maxx] : width of the screen in game coordinates
+    - [maxy] : height of the screen in game coordinates
+    - [scale] : conversion factor from game coordinates to pixels
+    - [bc] : background color
+    - [fc] : foreground color *)
 type viewstate = {
   mutable tick : int;
   mutable animations : Animation.animation list;
