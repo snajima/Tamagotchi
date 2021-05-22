@@ -245,9 +245,7 @@ let except s ex =
 let key s c =
   (* draw_pixel s.x s.y s.scale s.fc; *)
   (match c with
-  | '1' -> Dolphinview.draw ()
-  | '2' -> Drumview.draw ()
-  | '3' -> Elementalsview.draw ()
+  | '1' -> ignore (State.increment_age my_home.tam_state)
   | 'a' ->
       my_home.active_icon <-
         (my_home.active_icon - 1 + my_home.total_icons)

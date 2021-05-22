@@ -48,11 +48,11 @@ let hor_scale (num : int) (p_array : pixel_array) : pixel_array =
 let scale (num : int) (p_array : pixel_array) : pixel_array =
   p_array |> vert_scale num |> hor_scale num
 
-let mirror (img : image) : image =
+let mirror (pixel_array : pixel_array) : pixel_array =
   let array_rev array =
     Array.to_list array |> List.rev |> Array.of_list
   in
-  Array.map array_rev (dump_image img) |> make_image
+  Array.map array_rev pixel_array
 
 let n = 0x000000
 
@@ -310,10 +310,10 @@ let elder_animation_json =
   Yojson.Basic.from_file "./json/elder_animation.json"
 
 let neutral_f1_elder =
-  pixel_array_from_json "neutral_f1" baby_animation_json
+  pixel_array_from_json "neutral_f1" elder_animation_json
 
 let neutral_f2_elder =
-  pixel_array_from_json "neutral_f2" baby_animation_json
+  pixel_array_from_json "neutral_f2" elder_animation_json
 
 let wide_f1_elder = pixel_array_from_json "wide_f1" elder_animation_json
 
@@ -388,13 +388,7 @@ let water_anim =
 let shoot = pixel_array_from_json "shoot" elementals_json
 
 let shoot_anim =
-  {
-    frames = [ idle_adult; shoot ];
-    total = 2;
-    current = 0;
-    cx = 0;
-    cy = 0;
-  }
+  { frames = [ mirror shoot ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 let robot = pixel_array_from_json "robot" elementals_json
 
