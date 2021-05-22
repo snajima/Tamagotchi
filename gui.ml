@@ -165,3 +165,71 @@ let gameover_screen
       if s.tick = length then raise End else s.tick <- s.tick + 1)
     (fun s -> ());
   raise End
+
+let gameover_screen
+    (length : int)
+    (score : int)
+    (message : string)
+    (anim : animation)
+    (vs : viewstate) =
+  draw_loop vs
+    (* Init *)
+      (fun s ->
+      s.tick <- 0;
+      s.animations <- anim :: s.animations;
+      let cx = vs.maxx * scale / 2
+      and cy = vs.maxy * scale / 2
+      and dy = vs.maxy * scale / 10
+      and score_string = "Score: " ^ string_of_int score
+      and quit_string = "Press 'S' to Quit" in
+      (* Draw Score *)
+      draw_message cx (cy - dy) 50 red score_string;
+      (* Draw Custom Message *)
+      draw_message cx (cy - (2 * dy)) 40 red message;
+      (* Draw Quit message *)
+      draw_message cx (cy - (3 * dy)) 30 green quit_string;
+      set_color white)
+    (fun s -> ())
+    (fun s c ->
+      match c with
+      | 's' ->
+          clear_graph ();
+          raise End
+      | _ -> print_endline "Invalid Key_pressed")
+    (fun s ex -> ())
+    (fun s ->
+      if s.tick = length then raise End else s.tick <- s.tick + 1)
+    (fun s -> ());
+  raise End
+
+let gameover_screen_no_score
+  (length : int)
+  (message : string)
+  (anim : animation)
+  (vs : viewstate) =
+draw_loop vs
+  (* Init *)
+    (fun s ->
+    s.tick <- 0;
+    s.animations <- anim :: s.animations;
+    let cx = vs.maxx * scale / 2
+    and cy = vs.maxy * scale / 2
+    and dy = vs.maxy * scale / 10
+    and quit_string = "Press 'S' to Quit" in
+    (* Draw Custom Message *)
+    draw_message cx (cy - (2 * dy)) 40 red message;
+    (* Draw Quit message *)
+    draw_message cx (cy - (3 * dy)) 30 green quit_string;
+    set_color white)
+  (fun s -> ())
+  (fun s c ->
+    match c with
+    | 's' ->
+        clear_graph ();
+        raise End
+    | _ -> print_endline "Invalid Key_pressed")
+  (fun s ex -> ())
+  (fun s ->
+    if s.tick = length then raise End else s.tick <- s.tick + 1)
+  (fun s -> ());
+raise End

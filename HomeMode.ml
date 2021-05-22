@@ -174,7 +174,7 @@ let key s c =
   (match c with
   | '1' -> Dolphinview.draw ()
   | '2' -> Drumview.draw ()
-  | '3' -> failwith "unimplemented"
+  | '3' -> Elementalsview.draw ()
   | 'a' ->
       my_home.active_icon <-
         (my_home.active_icon - 1 + my_home.total_icons)

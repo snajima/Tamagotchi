@@ -9,67 +9,93 @@ type element =
 (* Stores score *)
 exception Gameover of bool
 
-exception Offscreen
+exception WinnerDetermined
 
 (* --------------------- Data Vars ----------------------- *)
 let max_height = 60
 
 type gamestate = {
-  (* --------------------- Time ------------------------ *)
-  (* Steps since the game started *)
   (* --------------------- Data ------------------------ *)
-  ours : element;
-  opponent : element;
+  ours : (element * int); (* snd of tuple is position of element for animating *)
+  opponent : (element * int);
   wins : int;
   losses : int;
+  currently_animated : bool;
 }
 
 (* ----------------- Internal functions ------------------- *)
 
 (**who is 1 if it is checking ours else it is 0*)
 let check_nothing (gs : gamestate) (who : int) : bool =
-  if who = 0 then match gs.opponent with Nothing -> true | _ -> false
-  else match gs.ours with Nothing -> true | _ -> false
+  if who = 0 then match (fst gs.opponent) with Nothing -> true | _ -> false
+  else match (fst gs.ours) with Nothing -> true | _ -> false
 
 let end_game (gs : gamestate) : bool =
-  if gs.wins = 2 || gs.losses = 2 then true else false
+  gs.wins = 2 || gs.losses = 2
 
 let after_update (gs : gamestate) : gamestate =
   if end_game gs then raise (Gameover (gs.wins = 2))
   else
+    Random.self_init ();
     match Random.int 3 with
-    | 0 -> { gs with opponent = Fire; ours = Nothing }
-    | 1 -> { gs with opponent = Water; ours = Nothing }
-    | 2 -> { gs with opponent = Leaf; ours = Nothing }
+    | 0 -> { gs with opponent = (Fire, 100); ours = (Nothing, 0); currently_animated = false; }
+    | 1 -> { gs with opponent = (Water, 100); ours = (Nothing, 0); currently_animated = false; }
+    | 2 -> { gs with opponent = (Leaf, 100); ours = (Nothing, 0); currently_animated = false; }
     | _ -> failwith "impossible"
 
 let win_loss (gs : gamestate) : gamestate =
   if
-    (gs.ours = Water && gs.opponent = Leaf)
-    || (gs.ours = Fire && gs.opponent = Water)
-    || (gs.ours = Leaf && gs.opponent = Fire)
-  then after_update { gs with losses = gs.losses + 1 }
-  else if gs.ours = gs.opponent then after_update gs
-  else after_update { gs with wins = gs.wins + 1 }
+    ((fst gs.ours) = Water && (fst gs.opponent) = Leaf)
+    || ((fst gs.ours) = Fire && (fst gs.opponent) = Water)
+    || ((fst gs.ours) = Leaf && (fst gs.opponent) = Fire)
+  then (print_endline("You lost");after_update { gs with losses = gs.losses + 1 })
+  else if (fst gs.ours) = (fst gs.opponent) then (print_endline("You drew");after_update gs)
+  else (print_endline("You won");after_update { gs with wins = gs.wins + 1 })
 
 (* ----------------- External functions ------------------- *)
 
 let init_game () : gamestate =
-  { ours = Nothing; opponent = Nothing; wins = 0; losses = 0 }
+  Random.self_init ();
+  match Random.int 3 with
+  | 0 -> { ours = (Nothing, 0); opponent = (Fire, 100); wins = 0; losses = 0; currently_animated = false; }
+  | 1 -> { ours = (Nothing, 0); opponent = (Water, 100); wins = 0; losses = 0; currently_animated = false; }
+  | 2 -> { ours = (Nothing, 0); opponent = (Leaf, 100); wins = 0; losses = 0; currently_animated = false; }
+  | _ -> failwith "impossible"
+  
 
-let get_ours (gs : gamestate) : element = gs.ours
+let get_ours (gs : gamestate) : (element * int) = gs.ours
 
-let get_opponent (gs : gamestate) : element = gs.opponent
+let get_opponent (gs : gamestate) : (element * int) = gs.opponent
 
 let get_wins (gs : gamestate) : int = gs.wins
 
 let get_losses (gs : gamestate) : int = gs.losses
 
+let get_currently_animated (gs : gamestate) : bool = gs.currently_animated
+
 let play_water (gs : gamestate) : gamestate =
-  win_loss { gs with ours = Water }
+  if gs.currently_animated then gs else { gs with ours = (Water, 20); currently_animated = true; }
 
 let play_fire (gs : gamestate) : gamestate =
-  win_loss { gs with ours = Fire }
+  if gs.currently_animated then gs else { gs with ours = (Fire, 20); currently_animated = true; }
 
 let play_leaf (gs : gamestate) : gamestate =
-  win_loss { gs with ours = Leaf }
+  if gs.currently_animated then gs else { gs with ours = (Leaf, 20); currently_animated = true; }
+
+let rec next_helper (gs : gamestate) : gamestate = 
+  if (snd gs.ours) > 50 then (raise WinnerDetermined)
+  else { gs with ours = (fst gs.ours, (snd gs.ours) + 1);
+                 opponent = (fst gs.opponent, (snd gs.opponent) - 1);}
+
+let next (gs : gamestate) : gamestate =
+  if (gs.currently_animated) then
+    (try next_helper gs with
+      | WinnerDetermined -> (win_loss gs))
+  else gs
+
+(*else
+  match Random.int 3 with
+  | 0 -> { gs with opponent = Fire; ours = Nothing }
+  | 1 -> { gs with opponent = Water; ours = Nothing }
+  | 2 -> { gs with opponent = Leaf; ours = Nothing }
+  | _ -> failwith "impossible" *)

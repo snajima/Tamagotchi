@@ -930,6 +930,9 @@ let fireball =
       [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
     |]
 
+let fireball_anim =
+  { frames = [ fireball ]; total = 1; current = 0; cx = 0; cy = 0 }
+
 let leaf =
   scale 5
     [|
@@ -950,6 +953,9 @@ let leaf =
       [| t; t; t; t; t; n; n; n; n; n; t; t; t; t; t; t |];
       [| t; t; t; t; t; t; t; t; t; t; t; t; t; t; t; t |];
     |]
+
+let leaf_anim =
+  { frames = [ leaf ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 let water =
   scale 5
@@ -972,6 +978,9 @@ let water =
       [| t; t; t; t; t; n; n; n; n; n; t; t; t; t; t; t |];
     |]
 
+let water_anim =
+  { frames = [ water ]; total = 1; current = 0; cx = 0; cy = 0 }
+
 let shoot =
   scale 10
     [|
@@ -992,6 +1001,9 @@ let shoot =
       [| t; t; t; t; n; t; t; n; t; t; t; t; t |];
     |]
 
+let shoot_anim =
+  { frames = [ shoot ]; total = 1; current = 0; cx = 0; cy = 0 }
+
 let robot =
   scale 10
     [|
@@ -1011,6 +1023,9 @@ let robot =
       [| t; t; t; t; n; t; t; t; n; t; t; t; t |];
       [| t; t; t; n; n; t; t; t; n; n; t; t; t |];
     |]
+
+let robot_anim =
+  { frames = [ robot ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 let dolphin =
   scale 10

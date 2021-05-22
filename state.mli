@@ -2,7 +2,10 @@ exception Death
 
 exception NegativeMoney
 
-type item
+type item = {
+  name : string;
+  cost : int;
+}
 
 type tamagotchi
 
