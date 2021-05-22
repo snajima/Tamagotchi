@@ -161,6 +161,21 @@ let get_status_animations (hs : homestate) : unit =
   draw_message 120 (50 * 4) 30 Graphics.black (string_of_int hunger);
   draw_message 120 (40 * 4) 30 Graphics.black (string_of_int age)
 
+let get_poop_animations (hs : homestate) : unit =
+  let scaled_cleanliness = (hs.tam_state |> get_cleanliness) / 10 in
+  let poop_count = 10 - scaled_cleanliness in
+  if poop_count <= 5 then
+    for i = 1 to poop_count do
+      draw_img 100 (30 + (i * 10)) poop
+    done
+  else (
+    for i = 1 to poop_count - 5 do
+      draw_img 100 (30 + (i * 10)) poop
+    done;
+    for i = 1 to poop_count do
+      draw_img 110 (30 + (i * 10)) poop
+    done)
+
 let get_animations (hs : homestate) : Animation.animation list =
   let tool_bar_anims = get_toolbar_animations hs
   and avatar_anim = get_avatar_animations hs in
@@ -254,7 +269,8 @@ let predraw (state : viewstate) : unit =
   draw_pixels_ll 0 0 120 10 Graphics.black;
   draw_pixels_ll 0 110 120 10 Graphics.black;
   clear_center state;
-  get_status_animations my_home
+  get_status_animations my_home;
+  get_poop_animations my_home
 
 let draw () = draw_loop vs init exit key except step predraw
 

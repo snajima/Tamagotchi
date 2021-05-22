@@ -7,7 +7,7 @@ type item = {
 
 type tamagotchi = {
   breed : string;
-  mutable lifeStage : string;
+  mutable lifestage : string;
   mutable sleep : int;
   mutable cleanliness : int;
   mutable hunger : int;
@@ -38,7 +38,7 @@ let init_tam file_name =
   let json = Yojson.Basic.from_file file_name in
   {
     breed = json |> member "breed" |> to_string;
-    lifeStage = json |> member "lifeStage" |> to_string;
+    lifestage = json |> member "lifestage" |> to_string;
     sleep = json |> member "sleep" |> to_int;
     cleanliness = json |> member "cleanliness" |> to_int;
     hunger = json |> member "hunger" |> to_int;
@@ -52,7 +52,7 @@ let init_tam file_name =
 
 let get_breed tam = tam.breed
 
-let get_lifeStage tam = tam.lifeStage
+let get_lifestage tam = tam.lifestage
 
 let get_sleep tam = tam.sleep
 
@@ -94,9 +94,9 @@ let get_age tam = tam.age
 
 let increment_age tam =
   let new_age = tam.age + 1 in
-  if new_age = 6 then tam.lifeStage <- "Teenager"
-  else if new_age = 11 then tam.lifeStage <- "Adult"
-  else if new_age = 26 then tam.lifeStage <- "Senior"
+  if new_age = 6 then tam.lifestage <- "Teenager"
+  else if new_age = 11 then tam.lifestage <- "Adult"
+  else if new_age = 26 then tam.lifestage <- "Senior"
   else if new_age > 35 then raise Death;
   tam.age <- new_age;
   tam
@@ -132,7 +132,7 @@ let step tam =
     ignore (set_hunger (-10) tam);
     ignore (set_cleanliness (-10) tam);
     ignore (set_sleep (-10) tam);
-    ignore (set_happy (-10) tam) );
+    ignore (set_happy (-10) tam));
   tam
 
 (**Saving a game idk i might work on this later*)

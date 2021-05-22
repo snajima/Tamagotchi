@@ -36,26 +36,26 @@ let state_tests =
       (init_tam "./json/teen.json" |> get_breed);
     str_feature_test "breed of senior" "bald"
       (init_tam "./json/senior.json" |> get_breed);
-    (* ---------------- Observer: get_lifeStage ------------------ *)
+    (* ---------------- Observer: get_lifestage ------------------ *)
     (* ----------------------- No Change ------------------------- *)
-    str_feature_test "LifeStage of baby" "Baby"
-      (init_tam "./json/baby.json" |> get_lifeStage);
-    str_feature_test "LifeStage of teen" "Teenager"
-      (init_tam "./json/teen.json" |> get_lifeStage);
-    str_feature_test "LifeStage of senior" "Senior"
-      (init_tam "./json/senior.json" |> get_lifeStage);
+    str_feature_test "Lifestage of baby" "Baby"
+      (init_tam "./json/baby.json" |> get_lifestage);
+    str_feature_test "Lifestage of teen" "Teenager"
+      (init_tam "./json/teen.json" |> get_lifestage);
+    str_feature_test "Lifestage of senior" "Senior"
+      (init_tam "./json/senior.json" |> get_lifestage);
     (* --------------------- Increment Age ---------------------- *)
-    str_feature_test "LifeStage of baby incr 1" "Baby"
-      (init_tam "./json/baby.json" |> increment_age |> get_lifeStage);
-    str_feature_test "LifeStage of teen incr 1" "Adult"
-      (init_tam "./json/teen.json" |> increment_age |> get_lifeStage);
-    str_feature_test "LifeStage of senior incr 1" "Senior"
-      (init_tam "./json/senior.json" |> increment_age |> get_lifeStage);
+    str_feature_test "Lifestage of baby incr 1" "Baby"
+      (init_tam "./json/baby.json" |> increment_age |> get_lifestage);
+    str_feature_test "Lifestage of teen incr 1" "Adult"
+      (init_tam "./json/teen.json" |> increment_age |> get_lifestage);
+    str_feature_test "Lifestage of senior incr 1" "Senior"
+      (init_tam "./json/senior.json" |> increment_age |> get_lifestage);
     (* --------------------------- Step ---------------------------- *)
-    str_feature_test "LifeStage of baby incr 2" "Teenager"
-      (init_tam "./json/baby.json" |> repeated_step 729 |> get_lifeStage);
-    str_feature_test "LifeStage of teen incr 2" "Adult"
-      (init_tam "./json/teen.json" |> repeated_step 729 |> get_lifeStage);
+    str_feature_test "Lifestage of baby incr 2" "Teenager"
+      (init_tam "./json/baby.json" |> repeated_step 729 |> get_lifestage);
+    str_feature_test "Lifestage of teen incr 2" "Adult"
+      (init_tam "./json/teen.json" |> repeated_step 729 |> get_lifestage);
     death_exc "Lifestage of senior incr 2" (fun () ->
         init_tam "./json/senior.json" |> repeated_step 729);
     (* -------------------- Observer: get_sleep ---------------------- *)
@@ -66,7 +66,7 @@ let state_tests =
       (init_tam "./json/teen.json" |> get_sleep);
     num_feature_test "sleep of senior" 90
       (init_tam "./json/senior.json" |> get_sleep);
-    (* ---------------------- Set sleep ----------------------- *)
+    (* ---------------------- Set Sleep ----------------------- *)
     num_feature_test "sleep of baby -20" 80
       (init_tam "./json/baby.json" |> set_sleep (-20) |> get_sleep);
     num_feature_test "sleep of teen -20" 25
@@ -103,47 +103,47 @@ let state_tests =
       (init_tam "./json/teen.json" |> get_cleanliness);
     num_feature_test "clean of senior" 70
       (init_tam "./json/senior.json" |> get_cleanliness);
-    (* ---------------------- Set cleanliness ----------------------- *)
+    (* ---------------------- Set Cleanliness ----------------------- *)
     num_feature_test "clean of baby -20" 80
-      ( init_tam "./json/baby.json"
-      |> set_cleanliness (-20) |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> set_cleanliness (-20) |> get_cleanliness);
     num_feature_test "clean of teen -20" 67
-      ( init_tam "./json/teen.json"
-      |> set_cleanliness (-20) |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> set_cleanliness (-20) |> get_cleanliness);
     num_feature_test "clean of senior -20" 50
-      ( init_tam "./json/senior.json"
-      |> set_cleanliness (-20) |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> set_cleanliness (-20) |> get_cleanliness);
     death_exc "death clean of teen" (fun () ->
         init_tam "./json/teen.json" |> set_cleanliness (-87));
     num_feature_test "negative edge case clean of baby" 1
-      ( init_tam "./json/baby.json"
-      |> set_cleanliness (-99) |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> set_cleanliness (-99) |> get_cleanliness);
     num_feature_test "positive edge case clean of teen" 100
-      ( init_tam "./json/teen.json"
-      |> set_cleanliness 13 |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> set_cleanliness 13 |> get_cleanliness);
     num_feature_test "over 100 clean of senior" 100
-      ( init_tam "./json/senior.json"
-      |> set_cleanliness 300 |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> set_cleanliness 300 |> get_cleanliness);
     (* -------------------- Increment Cleanliness --------------------- *)
     num_feature_test "increment clean of baby" 100
-      ( init_tam "./json/baby.json"
-      |> increment_cleanliness |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> increment_cleanliness |> get_cleanliness);
     num_feature_test "increment clean of teen" 92
-      ( init_tam "./json/teen.json"
-      |> increment_cleanliness |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> increment_cleanliness |> get_cleanliness);
     num_feature_test "increment clean of senior" 75
-      ( init_tam "./json/senior.json"
-      |> increment_cleanliness |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> increment_cleanliness |> get_cleanliness);
     (* ---------------------------- Step ----------------------------- *)
     num_feature_test "step clean of baby" 90
-      ( init_tam "./json/baby.json"
-      |> repeated_step 460 |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> repeated_step 460 |> get_cleanliness);
     num_feature_test "step clean of teen" 77
-      ( init_tam "./json/teen.json"
-      |> repeated_step 460 |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> repeated_step 460 |> get_cleanliness);
     num_feature_test "step clean of senior" 60
-      ( init_tam "./json/senior.json"
-      |> repeated_step 460 |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> repeated_step 460 |> get_cleanliness);
     (* ------------------ Observer: get_hunger -------------------- *)
     (* ------------------------ No Change ------------------------- *)
     num_feature_test "hunger of baby" 100
@@ -152,7 +152,7 @@ let state_tests =
       (init_tam "./json/teen.json" |> get_hunger);
     num_feature_test "hunger of senior" 83
       (init_tam "./json/senior.json" |> get_hunger);
-    (* ---------------------- Set hunger ----------------------- *)
+    (* ---------------------- Set Hunger ----------------------- *)
     num_feature_test "hunger of baby -20" 80
       (init_tam "./json/baby.json" |> set_hunger (-20) |> get_hunger);
     num_feature_test "hunger of teen -20" 8
@@ -181,6 +181,104 @@ let state_tests =
       (init_tam "./json/teen.json" |> repeated_step 740 |> get_hunger);
     num_feature_test "step hunger of senior" 73
       (init_tam "./json/senior.json" |> repeated_step 365 |> get_hunger);
+    (* ------------------ Observer: get_happy -------------------- *)
+    (* ------------------------ No Change ------------------------- *)
+    num_feature_test "happy of baby" 100
+      (init_tam "./json/baby.json" |> get_happy);
+    num_feature_test "happy of teen" 42
+      (init_tam "./json/teen.json" |> get_happy);
+    num_feature_test "happy of senior" 93
+      (init_tam "./json/senior.json" |> get_happy);
+    (* ---------------------- Set Happy ----------------------- *)
+    num_feature_test "happy of baby -20" 80
+      (init_tam "./json/baby.json" |> set_happy (-20) |> get_happy);
+    num_feature_test "happy of teen -20" 22
+      (init_tam "./json/teen.json" |> set_happy (-20) |> get_happy);
+    num_feature_test "happy of senior -20" 73
+      (init_tam "./json/senior.json" |> set_happy (-20) |> get_happy);
+    death_exc "death happy of baby" (fun () ->
+        init_tam "./json/baby.json" |> set_happy (-100));
+    num_feature_test "negative edge case happy of senior" 1
+      (init_tam "./json/senior.json" |> set_happy (-92) |> get_happy);
+    num_feature_test "positive edge case happy of teen" 100
+      (init_tam "./json/teen.json" |> set_happy 58 |> get_happy);
+    num_feature_test "over 100 happy of senior" 100
+      (init_tam "./json/senior.json" |> set_happy 100 |> get_happy);
+    (* ---------------------- Increment Happy ----------------------- *)
+    num_feature_test "increment happy of baby" 100
+      (init_tam "./json/baby.json" |> increment_happy |> get_happy);
+    num_feature_test "increment happy of teen" 47
+      (init_tam "./json/teen.json" |> increment_happy |> get_happy);
+    num_feature_test "increment happy of senior" 98
+      (init_tam "./json/senior.json" |> increment_happy |> get_happy);
+    (* ---------------------- Decrement Happy ----------------------- *)
+    num_feature_test "increment happy of baby" 95
+      (init_tam "./json/baby.json" |> decrement_happy |> get_happy);
+    num_feature_test "increment happy of teen" 37
+      (init_tam "./json/teen.json" |> decrement_happy |> get_happy);
+    num_feature_test "increment happy of senior" 88
+      (init_tam "./json/senior.json" |> decrement_happy |> get_happy);
+    (* ---------------------------- Step ----------------------------- *)
+    num_feature_test "step happy of baby" 90
+      (init_tam "./json/baby.json" |> repeated_step 364 |> get_happy);
+    num_feature_test "step happy of teen" 32
+      (init_tam "./json/teen.json" |> repeated_step 364 |> get_happy);
+    num_feature_test "step happy of senior" 83
+      (init_tam "./json/senior.json" |> repeated_step 364 |> get_happy);
+    (* ------------------ Observer: get_age -------------------- *)
+    (* ------------------------ No Change ------------------------- *)
+    num_feature_test "age of baby" 4
+      (init_tam "./json/baby.json" |> get_age);
+    num_feature_test "age of teen" 10
+      (init_tam "./json/teen.json" |> get_age);
+    num_feature_test "age of senior" 34
+      (init_tam "./json/senior.json" |> get_age);
+    (* ------------------------ Increment Age ------------------------- *)
+    num_feature_test "increment age of baby 3" 7
+      ( init_tam "./json/baby.json"
+      |> increment_age |> increment_age |> increment_age |> get_age );
+    num_feature_test "increment age of teen 2" 12
+      ( init_tam "./json/teen.json"
+      |> increment_age |> increment_age |> get_age );
+    num_feature_test "increment age of senior 1" 35
+      (init_tam "./json/senior.json" |> increment_age |> get_age);
+    (* ---------------------------- Step ----------------------------- *)
+    num_feature_test "step age of baby" 6
+      (init_tam "./json/baby.json" |> repeated_step 740 |> get_age);
+    num_feature_test "step age of teen" 11
+      (init_tam "./json/teen.json" |> repeated_step 364 |> get_age);
+    num_feature_test "step age of senior" 34
+      (init_tam "./json/senior.json" |> repeated_step 363 |> get_age);
+    (* ------------------ Observer: get_money -------------------- *)
+    (* ------------------------ No Change ------------------------- *)
+    num_feature_test "money of baby" 0
+      (init_tam "./json/baby.json" |> get_money);
+    num_feature_test "money of teen" 10
+      (init_tam "./json/teen.json" |> get_money);
+    num_feature_test "money of senior" 10
+      (init_tam "./json/senior.json" |> get_money);
+    (* ------------------------ Set Money ------------------------- *)
+    num_feature_test "set money of baby 10" 10
+      (init_tam "./json/baby.json" |> set_money 10 |> get_money);
+    num_feature_test "set money of teen -10" 0
+      (init_tam "./json/teen.json" |> set_money (-10) |> get_money);
+    negative_money_exc "senior in debt" (fun () ->
+        init_tam "./json/senior.json" |> set_money (-11));
+    (* ------------------ Observer: get_inventory -------------------- *)
+    (* ------------------------ No Change ------------------------- *)
+    num_feature_test "money of baby" 0
+      (init_tam "./json/baby.json" |> get_money);
+    num_feature_test "money of teen" 10
+      (init_tam "./json/teen.json" |> get_money);
+    num_feature_test "money of senior" 10
+      (init_tam "./json/senior.json" |> get_money);
+    (* ------------------------ Set Item ------------------------- *)
+    num_feature_test "set money of baby 10" 10
+      (init_tam "./json/baby.json" |> set_money 10 |> get_money);
+    num_feature_test "set money of teen -10" 0
+      (init_tam "./json/teen.json" |> set_money (-10) |> get_money);
+    negative_money_exc "senior in debt" (fun () ->
+        init_tam "./json/senior.json" |> set_money (-11));
   ]
 
 (* -------------------------------------------------------------------- *)
@@ -263,8 +361,8 @@ let dolphin_test =
       Left;
     (* -------------------------- Two --------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right"
-      ( init_game () |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Left"
       (init_game () |> process_left |> process_left |> get_dolphin_lane)
@@ -277,36 +375,36 @@ let dolphin_test =
       Middle;
     (* ------------------------- Three -------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right |> Right"
-      ( init_game () |> process_right |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Right |> Right |> Left"
-      ( init_game () |> process_right |> process_right |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right |> process_left
+     |> get_dolphin_lane)
       Middle;
     dolphin_lane_test "Middle |> Right |> Left |> Right"
-      ( init_game () |> process_right |> process_left |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_left |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Right |> Right"
-      ( init_game () |> process_left |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Left |> Right"
-      ( init_game () |> process_left |> process_left |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_left |> process_right
+     |> get_dolphin_lane)
       Middle;
     dolphin_lane_test "Middle |> Left |> Right |> Left"
-      ( init_game () |> process_left |> process_right |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_right |> process_left
+     |> get_dolphin_lane)
       Left;
     dolphin_lane_test "Middle |> Right |> Left |> Left"
-      ( init_game () |> process_right |> process_left |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_left |> process_left
+     |> get_dolphin_lane)
       Left;
     dolphin_lane_test "Middle |> Left |> Left |> Left"
-      ( init_game () |> process_left |> process_left |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_left |> process_left
+     |> get_dolphin_lane)
       Left;
     (* --------------------- Observer: get_rocks ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
