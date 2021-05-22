@@ -59,7 +59,10 @@ let t = 0xFFFFFF
 
 let r = Graphics.red
 
-let pixel_array_from_bit_array (bit_array : int list list) =
+(** [pixel_array_from_bit_array bit_array] returns a [pixel_array] with
+    all 1's replaced with n and 0's replaced with t *)
+let pixel_array_from_bit_array (bit_array : int list list) : pixel_array
+    =
   bit_array |> Array.of_list
   |> Array.map (fun lst ->
          lst |> Array.of_list
