@@ -50,7 +50,7 @@ let my_home =
     representation of [active_icon_num]
 
     Precondition: [active_icon_num] must be an integer between 0 and 5
-    inclusive*)
+    inclusive *)
 let button_of_int (active_icon_num : int) =
   match active_icon_num with
   | 0 -> Eat
@@ -220,4 +220,4 @@ let draw () = draw_loop vs init exit key except step predraw
 (* For debugging. Uncomment the following line and run [make homemode] *)
 (* TODO: Load from json (if it exists), otherwise launch new Tamagotchi
    session *)
-let _ = draw ()
+(* let _ = draw () *)
