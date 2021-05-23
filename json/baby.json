@@ -1,11 +1,12 @@
 {
     "breed": "crazy",
-    "lifeStage": "Baby",
+    "lifestage": "Baby",
     "sleep": 100,
     "cleanliness": 100,
     "hunger": 100,
-    "age": 0,
+    "happy": 100,
+    "age": 4,
     "money": 0,
     "inventory": [],
-    "step": 0
+    "step": 1
 }

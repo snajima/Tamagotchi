@@ -6,7 +6,6 @@ type element =
   | Leaf
   | Nothing
 
-(* Stores score *)
 exception Gameover of bool
 
 exception WinnerDetermined
@@ -61,20 +60,14 @@ let after_update (gs : gamestate) : gamestate =
       }
   | _ -> failwith "impossible"
 
-let win_loss (gs : gamestate) : gamestate =
-  if
-    (fst gs.ours = Water && fst gs.opponent = Leaf)
-    || (fst gs.ours = Fire && fst gs.opponent = Water)
-    || (fst gs.ours = Leaf && fst gs.opponent = Fire)
-  then (
-    print_endline "You lost";
-    after_update { gs with losses = gs.losses + 1 })
-  else if fst gs.ours = fst gs.opponent then (
-    print_endline "You drew";
-    after_update gs)
-  else (
-    print_endline "You won";
-    after_update { gs with wins = gs.wins + 1 })
+let rec next_helper (gs : gamestate) : gamestate =
+  if snd gs.ours > 50 then raise WinnerDetermined
+  else
+    {
+      gs with
+      ours = (fst gs.ours, snd gs.ours + 1);
+      opponent = (fst gs.opponent, snd gs.opponent - 1);
+    }
 
 (* ----------------- External functions ------------------- *)
 
@@ -107,6 +100,21 @@ let init_game () : gamestate =
       }
   | _ -> failwith "impossible"
 
+let win_loss (gs : gamestate) : gamestate =
+  if
+    (fst gs.ours = Water && fst gs.opponent = Leaf)
+    || (fst gs.ours = Fire && fst gs.opponent = Water)
+    || (fst gs.ours = Leaf && fst gs.opponent = Fire)
+  then (
+    print_endline "You lost";
+    after_update { gs with losses = gs.losses + 1 } )
+  else if fst gs.ours = fst gs.opponent then (
+    print_endline "You drew";
+    after_update gs )
+  else (
+    print_endline "You won";
+    after_update { gs with wins = gs.wins + 1 } )
+
 let get_ours (gs : gamestate) : element * int = gs.ours
 
 let get_opponent (gs : gamestate) : element * int = gs.opponent
@@ -129,15 +137,6 @@ let play_fire (gs : gamestate) : gamestate =
 let play_leaf (gs : gamestate) : gamestate =
   if gs.currently_animated then gs
   else { gs with ours = (Leaf, 20); currently_animated = true }
-
-let rec next_helper (gs : gamestate) : gamestate =
-  if snd gs.ours > 50 then raise WinnerDetermined
-  else
-    {
-      gs with
-      ours = (fst gs.ours, snd gs.ours + 1);
-      opponent = (fst gs.opponent, snd gs.opponent - 1);
-    }
 
 let next (gs : gamestate) : gamestate =
   if gs.currently_animated then

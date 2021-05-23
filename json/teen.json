@@ -1,9 +1,10 @@
 {
   "breed": "fluffy",
-  "lifeStage": "Teenager",
+  "lifestage": "Teenager",
   "sleep": 45,
   "cleanliness": 87,
-  "hunger": 83,
+  "hunger": 28,
+  "happy": 42,
   "age": 10,
   "money": 10,
   "inventory": [
@@ -12,5 +13,5 @@
       "cost": 10
     }
   ],
-  "step": 5000
+  "step": 1
 }

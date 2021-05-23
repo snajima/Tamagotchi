@@ -1,10 +1,11 @@
 {
   "breed": "bald",
-  "lifeStage": "Senior",
+  "lifestage": "Senior",
   "sleep": 90,
   "cleanliness": 70,
-  "hunger": 28,
-  "age": 35,
+  "hunger": 83,
+  "happy": 93,
+  "age": 34,
   "money": 10,
   "inventory": [
     {
@@ -12,5 +13,5 @@
       "cost": 10
     }
   ],
-  "step": 600
+  "step": 1
 }
