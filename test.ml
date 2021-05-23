@@ -6,7 +6,9 @@ open State
 (* -------------------------- State Testing --------------------------- *)
 (* -------------------------------------------------------------------- *)
 (*Objects and inventory lists used for testing*)
-let senior_teen_inventory = [ { name = "piano"; cost = 10 } ]
+let piano = { name = "piano"; cost = 10 }
+
+let violin = { name = "violin"; cost = 5 }
 
 (*Printer functions*)
 let num_printer num : string = string_of_int num
@@ -240,11 +242,11 @@ let state_tests =
       (init_tam "./json/senior.json" |> get_age);
     (* ------------------------ Increment Age ------------------------- *)
     num_feature_test "increment age of baby 3" 7
-      (init_tam "./json/baby.json"
-      |> increment_age |> increment_age |> increment_age |> get_age);
+      ( init_tam "./json/baby.json"
+      |> increment_age |> increment_age |> increment_age |> get_age );
     num_feature_test "increment age of teen 2" 12
-      (init_tam "./json/teen.json"
-      |> increment_age |> increment_age |> get_age);
+      ( init_tam "./json/teen.json"
+      |> increment_age |> increment_age |> get_age );
     num_feature_test "increment age of senior 1" 35
       (init_tam "./json/senior.json" |> increment_age |> get_age);
     (* ---------------------------- Step ----------------------------- *)
@@ -273,11 +275,17 @@ let state_tests =
     (* ------------------------ No Change ------------------------- *)
     equal_sets_test "inventory of baby" []
       (init_tam "./json/baby.json" |> get_inventory);
-    equal_sets_test "inventory of teen" senior_teen_inventory
+    equal_sets_test "inventory of teen" [ piano ]
       (init_tam "./json/teen.json" |> get_inventory);
-    equal_sets_test "inventory of senior" senior_teen_inventory
+    equal_sets_test "inventory of senior" [ piano ]
       (init_tam "./json/senior.json" |> get_inventory);
     (* ------------------------ Set Item ------------------------- *)
+    equal_sets_test "add piano to baby" [ piano ]
+      (init_tam "./json/baby.json" |> set_item piano |> get_inventory);
+    equal_sets_test "add piano to teen" [ piano; piano ]
+      (init_tam "./json/teen.json" |> set_item piano |> get_inventory);
+    equal_sets_test "add violin to senior" [ violin; piano ]
+      (init_tam "./json/senior.json" |> set_item violin |> get_inventory);
   ]
 
 (* -------------------------------------------------------------------- *)
