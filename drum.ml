@@ -98,17 +98,17 @@ let range (beat_x : int) (gs : gamestate) (right_beat : bool) : hit =
       Good)
     else if diff < gs.ok_range then (
       draw_pixels 10 90 25 10 Graphics.white;
-      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black [Ok];
+      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Ok";
       Ok)
     else if diff < gs.bad_range then (
       draw_pixels 10 90 25 10 Graphics.white;
-      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black [Bad];
+      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Bad";
       Bad)
     else OutOfRange
   ) else (
     if diff < gs.bad_range then (
       draw_pixels 10 90 25 10 Graphics.white;
-      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black [Bad];
+      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Bad";
     Bad)
     else OutOfRange
   )

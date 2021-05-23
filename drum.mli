@@ -61,7 +61,7 @@ type hit = Good | Ok | Bad | OutOfRange
   for being hard-coded is to ensure some kind of pattern in the beats
   to closer simulate the actual game (rather than randomly spawning beats
   with no pattern). *)
-val beats : (int * color) list
+val beats : (int * color) list list
 
 (** [init_game ()] is the initial state of the game when playing the
     Drum game. In this state, there are no beats and the drummer is in an
