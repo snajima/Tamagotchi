@@ -1,3 +1,9 @@
+(**The state module is used to keep track and update the Tamagotchi's
+   state. A Tamagotchi's state consists of its breed, lifestage, sleep
+   level, cleanliness level , hunger level, happiness level, age, money,
+   and inventory. Different actions that the player takes, like playing
+   games or making the Tamagotchi sleep, will change these states.*)
+
 (** Type [item] represents an item that is possible for the Tamagotchi
     to have. Each item has the following:
 
