@@ -421,13 +421,13 @@ let cloud_f3 = pixel_array_from_json "cloud_f3" elementals_json
 
 let cloud_f4 = pixel_array_from_json "cloud_f4" elementals_json
 
-let eat_anim_baby =
+let cloud_anim =
   {
     frames = [ cloud_f1; cloud_f2; cloud_f3; cloud_f4 ];
     total = 4;
     current = 0;
-    cx = 60;
-    cy = 60;
+    cx = 0;
+    cy = 0;
   }
 
 (** Temporary animation frame for MS1 *)
@@ -440,8 +440,14 @@ let eat_anim_adult =
     cy = 60;
   }
 
-(* let eat_anim_baby = { frames = [ eat_f1_baby; eat_f2_baby;
-   eat_f3_baby ]; total = 3; current = 0; cx = 60; cy = 60; } *)
+let eat_anim_baby =
+  {
+    frames = [ eat_f1_baby; eat_f2_baby; eat_f3_baby ];
+    total = 3;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
 
 let eat_anim_elder =
   {
