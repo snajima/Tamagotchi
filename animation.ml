@@ -254,6 +254,48 @@ let inventory_icon_bobble =
 
 let drum_json = Yojson.Basic.from_file "./json/drum.json"
 
+let idle_drummer = pixel_array_from_json "idle_drummer" drum_json
+
+let right_drum = pixel_array_from_json "right_drum" drum_json
+
+let left_drum = pixel_array_from_json "left_drum" drum_json
+
+let drum_anim =
+  {
+    frames = [ idle_drummer; right_drum; left_drum ];
+    total = 3;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let idle_drummer_anim =
+  {
+    frames = [ idle_drummer ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let right_drum_anim =
+  {
+    frames = [ right_drum ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let left_drum_anim =
+  {
+    frames = [ left_drum ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
 let dolphin_json = Yojson.Basic.from_file "./json/dolphin.json"
 
 let dolphin = pixel_array_from_json "dolphin" dolphin_json

@@ -5,6 +5,11 @@ type color =
   | Don
   | Ka
 
+type beat = 
+  | Right of int
+  | Idle
+  | Left of int
+
 (* Stores score *)
 exception Gameover of int
 
@@ -22,6 +27,7 @@ type gamestate = {
   (* Coordinates of the beats following (height * color)  *)
   (* Max height is 50 *)
   beats : (int * color) list;
+  beat_type : beat;
   good_multiplier : float;
   combo_multiplier: int;
   player_x : int;
@@ -62,16 +68,20 @@ let rec fall_beats (beat_lst : (int * color) list) : (int * color) list =
 
 (** Checks if the player is in contact with any of the rocks*)
 let game_over (gs : gamestate) : bool =
-  gs.score > 10000
+  gs.num_beats <= 0
 
 (* ----------------- External functions ------------------- *)
 
 let init_game () : gamestate =
-  { combo = 0; score = 0; beats = []; good_multiplier = 1.6; combo_multiplier = 10; player_x = 10; good_range = 2; ok_range = 4; bad_range = 5; game_length = 10; num_beats = 0 }
+  { combo = 0; score = 0; beats = []; beat_type = Idle; good_multiplier = 1.6; combo_multiplier = 10; player_x = 10; good_range = 2; ok_range = 4; bad_range = 5; game_length = 10; num_beats = 11 }
 
-let get_beats (gs : gamestate) = gs.beats
+let get_beats (gs : gamestate) : ((int * color) list) = gs.beats
 
-let get_score (gs : gamestate) = gs.score
+let get_num_beats (gs : gamestate) : int = gs.num_beats
+
+let get_score (gs : gamestate) : int = gs.score
+
+let get_beat_type (gs : gamestate) : beat = gs.beat_type
 
 (** Returns the type of hit based on range between beat and player x *)
 let range (beat_x : int) (gs : gamestate) (right_beat : bool) : hit =
@@ -79,21 +89,26 @@ let range (beat_x : int) (gs : gamestate) (right_beat : bool) : hit =
   if right_beat then (
     if diff < gs.good_range then (
       print_endline "Good";
-      draw_pixels 10 85 10 1 Graphics.red;
+      draw_pixels 10 90 25 10 Graphics.white;
+      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Good!";
       Good)
     else if diff < gs.ok_range then (
       print_endline "Ok";
-      draw_pixels 10 85 10 1 Graphics.green;
+      draw_pixels 10 90 25 10 Graphics.white;
+      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Ok";
       Ok)
     else if diff < gs.bad_range then (
       print_endline "Bad";
-      draw_pixels 10 85 10 1 Graphics.black;
+      draw_pixels 10 90 25 10 Graphics.white;
+      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Bad";
       Bad)
     else (
       print_endline "OutOfRange";
       OutOfRange)
   ) else (
     if diff < gs.bad_range then (
+      draw_pixels 10 90 25 10 Graphics.white;
+      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Bad";
       print_endline "Bad";
     Bad)
     else (
@@ -143,6 +158,7 @@ let process_left (gs : gamestate) : gamestate =
     let hit_type = range ht gs false in
     { 
       gs with 
+      beat_type = (Left 50);
       score = calc_score hit_type gs;
       combo = calc_combo hit_type gs;
       beats = calc_beats hit_type (fst closest) gs;
@@ -152,6 +168,7 @@ let process_left (gs : gamestate) : gamestate =
     let hit_type = range ht gs true in
     { 
         gs with 
+        beat_type = (Left 50);
         score = calc_score hit_type gs;
         combo = calc_combo hit_type gs;
         beats = calc_beats hit_type (fst closest) gs;
@@ -165,6 +182,7 @@ let process_right (gs : gamestate) : gamestate =
     let hit_type = range ht gs true in
     { 
       gs with 
+      beat_type = (Right 50);
       score = calc_score hit_type gs;
       combo = calc_combo hit_type gs;
       beats = calc_beats hit_type (fst closest) gs;
@@ -174,6 +192,7 @@ let process_right (gs : gamestate) : gamestate =
     let hit_type = range ht gs false in
     { 
       gs with 
+      beat_type = (Right 50);
       score = calc_score hit_type gs;
       combo = calc_combo hit_type gs;
       beats = calc_beats hit_type (fst closest) gs;
@@ -227,11 +246,16 @@ let process_middle (gs : gamestate) : gamestate = gs
   | [] -> gs *)
 
 let next (gs : gamestate) : gamestate =
-  (* if game_over gs then raise (Gameover gs.score)
-  else *)
-    { gs with beats = fall_beats gs.beats }
+  if game_over gs then raise (Gameover gs.score)
+  else
+    match gs.beat_type with
+    | (Left 0) -> { gs with beats = fall_beats gs.beats; beat_type = Idle }
+    | (Left x) -> { gs with beats = fall_beats gs.beats; beat_type = (Left (x - 1)) }
+    | (Right 0) -> { gs with beats = fall_beats gs.beats; beat_type = Idle }
+    | (Right x) -> { gs with beats = fall_beats gs.beats; beat_type = (Right (x - 1)) }
+    | Idle -> { gs with beats = fall_beats gs.beats }
 
 let add_beat (gs : gamestate) : gamestate =
   let beat_set = List.nth beats (Random.int (List.length beats)) in
   (* Beats only enter the frame in the next step *)
-  { gs with beats = gs.beats @ beat_set; num_beats = gs.num_beats + 1 }
+  { gs with beats = gs.beats @ beat_set; num_beats = gs.num_beats - 1 }

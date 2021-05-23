@@ -122,11 +122,11 @@ let gameover_screen
       and score_string = "Score: " ^ string_of_int score
       and quit_string = "Press 'S' to Quit" in
       (* Draw Score *)
-      draw_message cx (cy - dy) 50 red score_string;
+      draw_message cx (cy - dy) 50 black score_string;
       (* Draw Custom Message *)
-      draw_message cx (cy - (2 * dy)) 40 red message;
+      draw_message cx (cy - (2 * dy)) 40 black message;
       (* Draw Quit message *)
-      draw_message cx (cy - (3 * dy)) 30 green quit_string;
+      draw_message cx (cy - (3 * dy)) 30 black quit_string;
       set_color white)
     (fun s -> ())
     (fun s c ->
@@ -156,9 +156,9 @@ let gameover_screen_no_score
       and dy = vs.maxy * scale / 10
       and quit_string = "Press 'S' to Quit" in
       (* Draw Custom Message *)
-      draw_message cx (cy - (2 * dy)) 40 red message;
+      draw_message cx (cy - (3 * dy)) 40 black message;
       (* Draw Quit message *)
-      draw_message cx (cy - (3 * dy)) 30 green quit_string;
+      draw_message cx (cy - (4 * dy)) 30 black quit_string;
       set_color white)
     (fun s -> ())
     (fun s c ->

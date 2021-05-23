@@ -14,17 +14,17 @@ type game_var = {
   row_scale : int;
 }
 
+let vs : viewstate = { default_vs with animations = [] }
+
 let g =
   {
     game = init_game ();
     speed = 1;
-    beat_speed = 100;
+    beat_speed = 150;
     row_scale = 120 / Drum.max_height;
   }
 
 let lane_width = 25
-
-let beat_start_x = 120
 
 let game = init_game ()
 
@@ -42,14 +42,15 @@ let drum_exit s =
 let drum_except s ex =
   match ex with
   | Drum.Gameover score ->
-      print_endline (string_of_int score);
-      s.animations <-
-        {
-          gg_static with
-          cx = default_vs.maxx / 2;
-          cy = default_vs.maxy / 2;
-        }
-        :: s.animations
+    Graphics.clear_graph ();
+    draw_message
+      (default_vs.maxx * default_vs.scale / 2 + 50)
+      ((default_vs.maxy * default_vs.scale) - 40)
+      25 Graphics.black
+      "Sets of beats left: 0";
+    gameover_screen 500 (get_score g.game) "Game Over"
+      { drum_anim with cx = vs.maxx / 2; cy = vs.maxy / 2 + 20 }
+      s
   | _ -> raise ex
 
 let drum_key s c =
@@ -90,8 +91,28 @@ let rec get_beats_anims
          }
          :: lst_so_far)
 
+let get_player_anims (beat_type : Drum.beat) : Animation.animation =
+  match beat_type with
+  | (Left _) ->
+    {
+      left_drum_anim with
+      cx = vs.maxx / 2; cy = vs.maxy / 2 + 20
+    }
+  | (Right _) -> 
+    {
+      right_drum_anim with
+      cx = vs.maxx / 2; cy = vs.maxy / 2 + 20
+    }
+  | Idle -> 
+    {
+      idle_drummer_anim with
+      cx = vs.maxx / 2; cy = vs.maxy / 2 + 20
+    }
+
 let get_animations (game : Drum.gamestate) : Animation.animation list =
-  get_beats_anims (get_beats g.game) []
+  let beat_anims = get_beats_anims (get_beats g.game) [] in
+  let player_anims = get_player_anims (get_beat_type g.game) in
+  player_anims :: beat_anims
 
 let drum_step s =
   if s.tick mod g.beat_speed = 0 then g.game <- add_beat g.game;
@@ -108,9 +129,14 @@ let drum_predraw s =
   draw_pixels 5 60 1 10 Graphics.black;
   draw_pixels 15 60 1 11 Graphics.black;
   draw_pixels 10 65 10 1 Graphics.black;
-  draw_pixels 10 55 10 1 Graphics.black
-
-let vs : viewstate = { default_vs with animations = [] }
+  draw_pixels 10 55 10 1 Graphics.black;
+  draw_pixels 50 105
+    120 lane_width Graphics.white;
+  draw_message
+    (default_vs.maxx * default_vs.scale / 2 + 50)
+    ((default_vs.maxy * default_vs.scale) - 40)
+    25 Graphics.black
+    ("Sets of beats left: " ^ (string_of_int (get_num_beats g.game)))
 
 let draw () =
   draw_loop vs drum_init drum_exit drum_key drum_except drum_step
