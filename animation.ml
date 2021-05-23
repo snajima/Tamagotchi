@@ -576,31 +576,11 @@ let gg =
 let don_anim =
   { frames = [ black_sq ]; total = 1; current = 0; cx = 0; cy = 0 }
 
-let rock_static =
-  {
-    (* Temporary art for rocks *)
-    frames = [ black_sq ];
-    total = 1;
-    current = 0;
-    cx = 0;
-    cy = 0;
-  }
-
 (* let ka_anim = { frames = [ ka_1; ka_2 ]; total = 2; current = 0; cx =
    0; cy = 0; } *)
 
 let ka_anim =
   { frames = [ white_sq ]; total = 1; current = 0; cx = 0; cy = 0 }
-
-let dolphin_static =
-  {
-    (* Temporary art for dolphin *)
-    frames = [ black_triangle ];
-    total = 1;
-    current = 0;
-    cx = 0;
-    cy = 0;
-  }
 
 let gg_static =
   {
@@ -1028,7 +1008,7 @@ let robot_anim =
   { frames = [ robot ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 let dolphin =
-  scale 10
+  scale 5
     [|
       [| t; t; t; t; t; t; t; t; n; n; t; t; t; t; t |];
       [| t; t; t; t; t; t; t; n; t; n; t; t; t; t; t |];
@@ -1069,7 +1049,7 @@ let rice_ball =
     |]
 
 let rock =
-  scale 5
+  scale 4
     [|
       [| t; t; t; t; t; t; n; n; n; t; t; t; t; t; t; t |];
       [| t; t; t; t; n; n; n; t; n; n; n; t; t; t; t; t |];
@@ -1124,4 +1104,24 @@ let avatar =
     current = 0;
     cx = 60;
     cy = 60;
+  }
+
+let rock_static =
+  {
+    (* Temporary art for rocks *)
+    frames = [ rock ];
+    total = 1;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
+
+let dolphin_static =
+  {
+    (* Temporary art for dolphin *)
+    frames = [ dolphin ];
+    total = 1;
+    current = 0;
+    cx = 0;
+    cy = 0;
   }

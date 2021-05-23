@@ -7,9 +7,9 @@ type lane =
 
 exception Gameover of int
 
-(* ------------------------------------------------------- *)
-(* --------------------- Data Vars ----------------------- *)
-(* ------------------------------------------------------- *)
+(* ------------------------------------------------------------- *)
+(* ------------------------ Data Vars -------------------------- *)
+(* ------------------------------------------------------------- *)
 let max_height = 60
 
 type gamestate = {
@@ -23,9 +23,9 @@ type gamestate = {
   current_lane : lane;
 }
 
-(* -------------------------------------------------------- *)
-(* ----------------- Internal functions ------------------- *)
-(* -------------------------------------------------------- *)
+(* ------------------------------------------------------------- *)
+(* -------------------- Internal functions --------------------- *)
+(* ------------------------------------------------------------- *)
 
 (** Raised when the height of a rock falls below zero. Note that this
     exception is only raised by internal functions, it is not included
@@ -53,13 +53,13 @@ let game_over (gs : gamestate) : bool =
     match gs.current_lane with Left -> 0 | Middle -> 1 | Right -> 2
   in
   let lose_condition (rock_lane, rock_height) =
-    rock_height < 5 && rock_height > 2 && lane_num == rock_lane
+    rock_height < 10 && rock_height > 2 && lane_num == rock_lane
   in
   List.exists lose_condition gs.rocks
 
-(* -------------------------------------------------------- *)
-(* ----------------- External functions ------------------- *)
-(* -------------------------------------------------------- *)
+(* ------------------------------------------------------------- *)
+(* -------------------- External functions --------------------- *)
+(* ------------------------------------------------------------- *)
 
 let init_game () : gamestate =
   { step = 0; rocks = []; current_lane = Middle }
