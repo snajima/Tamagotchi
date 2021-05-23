@@ -2,19 +2,14 @@ open Drum
 open Gui
 open Animation
 
-(* Stores score *)
-exception Gameover of int
-
 type vs = Gui.viewstate
 
-type game_var = {
+type game_vars = {
   mutable game : Drum.gamestate;
   mutable speed : int;
   mutable beat_speed : int;
   row_scale : int;
 }
-
-let vs : viewstate = { default_vs with animations = [] }
 
 let g =
   {
@@ -24,6 +19,8 @@ let g =
     row_scale = 120 / Drum.max_height;
   }
 
+  let vs : viewstate = { default_vs with animations = [] }
+  
 let lane_width = 25
 
 let game = init_game ()
