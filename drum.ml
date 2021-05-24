@@ -91,16 +91,20 @@ let rec fall_beats (gs : gamestate) : gamestate =
   | h :: t -> (
       (* If beats fall offscreen, exclude from list of beats *)
       try
-        {gs with beats = ((fall_beat h) :: (fall_beats {gs with beats = t}).beats)}
-      with Miss -> {(fall_beats {gs with beats = t}) with combo = 0}
-  )
+        {
+          gs with
+          beats =
+            fall_beat h :: (fall_beats { gs with beats = t }).beats;
+        }
+      with Miss ->
+        { (fall_beats { gs with beats = t }) with combo = 0 })
 
 (** [game_over] returns a boolean indicating if the number of beats left
     is 0 *)
 let game_over (gs : gamestate) : bool = gs.num_beats <= 0
 
-(** [range_helper] draws the message based on if the hit type was [Good], 
-  [Ok], or [Bad] *)
+(** [range_helper] draws the message based on if the hit type was
+    [Good], [Ok], or [Bad] *)
 let range_helper (message : string) : unit =
   draw_pixels 10 90 25 10 Graphics.white;
   draw_message 50
@@ -185,7 +189,11 @@ let calc_beats
     (gs : gamestate) : (int * color) list =
   match hit_type with OutOfRange -> gs.beats | _ -> otherwise
 
-let process_helper (bt_type : beat) (hit_type : hit) (gs : gamestate) (bts : (int * color) list) : gamestate =
+let process_helper
+    (bt_type : beat)
+    (hit_type : hit)
+    (gs : gamestate)
+    (bts : (int * color) list) : gamestate =
   {
     gs with
     beat_type = bt_type;
@@ -224,7 +232,7 @@ let get_score (gs : gamestate) : int = gs.score
 let get_beat_type (gs : gamestate) : beat = gs.beat_type
 
 let process_left (gs : gamestate) : gamestate =
-  if List.length gs.beats = 0 then {gs with beat_type = (Left 50);}
+  if List.length gs.beats = 0 then { gs with beat_type = Left 50 }
   else
     let closest =
       closest_to_player
@@ -242,7 +250,7 @@ let process_left (gs : gamestate) : gamestate =
 let process_middle (gs : gamestate) : gamestate = gs
 
 let process_right (gs : gamestate) : gamestate =
-  if List.length gs.beats = 0 then {gs with beat_type = (Right 50);}
+  if List.length gs.beats = 0 then { gs with beat_type = Right 50 }
   else
     let closest =
       closest_to_player
@@ -261,10 +269,10 @@ let next (gs : gamestate) : gamestate =
   if game_over gs then raise (Gameover gs.score)
   else
     match gs.beat_type with
-    | (Left 0) -> {(fall_beats gs) with beat_type = Idle }
-    | (Left x) -> {(fall_beats gs) with beat_type = (Left (x - 1)) }
-    | (Right 0) -> {(fall_beats gs) with beat_type = Idle }
-    | (Right x) -> {(fall_beats gs) with beat_type = (Right (x - 1)) }
+    | Left 0 -> { (fall_beats gs) with beat_type = Idle }
+    | Left x -> { (fall_beats gs) with beat_type = Left (x - 1) }
+    | Right 0 -> { (fall_beats gs) with beat_type = Idle }
+    | Right x -> { (fall_beats gs) with beat_type = Right (x - 1) }
     | Idle -> fall_beats gs
 
 let add_beat (gs : gamestate) : gamestate =
