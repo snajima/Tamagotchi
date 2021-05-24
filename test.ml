@@ -632,13 +632,13 @@ let drum_test =
       (fun gs -> gs |> add_rock |> repeated_next 52 |> get_rocks)
       [ (1, 9) ];
     (* --------------------- Observer: num_rocks ---------------------- *)
-    dolphin_num_rock_test "Adding one rock "
+    beats_num_beat_test "Adding one rock "
       (init_game () |> add_rock |> num_rocks)
       1;
-    dolphin_num_rock_test "Adding two rock "
+      beats_num_beat_test "Adding two rock "
       (init_game () |> add_rock |> add_rock |> num_rocks)
       2;
-    dolphin_num_rock_test "Adding three rocks "
+      beats_num_beat_test "Adding three rocks "
       (init_game () |> add_rock |> add_rock |> add_rock |> num_rocks)
       3;
   ]
