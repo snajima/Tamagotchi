@@ -22,10 +22,7 @@ let elementals_init s =
   draw_pixels (default_vs.maxx / 2) (default_vs.maxy / 2)
     default_vs.maxx default_vs.maxy Graphics.white
 
-let elementals_exit s =
-  (* REPLACE draw user score on screen for a while then return to home
-     screen*)
-  ()
+let elementals_exit s = ()
 
 let draw_score (win : bool) =
   draw_pixels (default_vs.maxx / 2) (default_vs.maxy / 2)
@@ -80,11 +77,11 @@ let rec get_elems_anims
   | [] -> lst_so_far
   | (_, 100) :: t -> get_elems_anims t lst_so_far
   | (Water, height) :: t ->
-    get_elems_anims t (e_anims_helper height lst_so_far water_anim)
+      get_elems_anims t (e_anims_helper height lst_so_far water_anim)
   | (Fire, height) :: t ->
-    get_elems_anims t (e_anims_helper height lst_so_far fireball_anim)
+      get_elems_anims t (e_anims_helper height lst_so_far fireball_anim)
   | (Leaf, height) :: t ->
-    get_elems_anims t (e_anims_helper height lst_so_far leaf_anim)
+      get_elems_anims t (e_anims_helper height lst_so_far leaf_anim)
   | (Nothing, _) :: t -> get_elems_anims t lst_so_far
 
 let robot_and_tamagotchi =
@@ -103,11 +100,7 @@ let elementals_step s =
   (* Step Game *)
   if s.tick mod g.speed = 0 then g.game <- next g.game;
   (* Update Animations *)
-  (* if s.tick mod g.speed = 0 && not g.game.end_anim then s.animations <- get_animations g.game @ s.animations *)
   if s.tick mod g.speed = 0 then s.animations <- get_animations g.game;
-  (* if (g.game.start_anim) then (s.animations <- s.animations @ [ {cloud_anim with cx = default_vs.maxx / 2; cy = default_vs.maxy / 2 } ];); *)
-  (* if s.tick mod 30 = 0 then s.animations <- increment_anims s.animations; *)
-  (* if (s.animations |> List.rev |> List.hd).current = 3 then (s.animations <- (s.animations |> List.rev |> List.tl); g.game.end_anim <- true); *)
   s.tick <- (s.tick + 1) mod 4000
 
 let elementals_predraw s =
