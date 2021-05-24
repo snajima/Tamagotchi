@@ -482,8 +482,6 @@ let wide_f1_elder = pixel_array_from_json "wide_f1" elder_animation_json
 
 let wide_f2_elder = pixel_array_from_json "wide_f2" elder_animation_json
 
-let idle_elder = pixel_array_from_json "idle" elder_animation_json
-
 let eat_f1_elder = pixel_array_from_json "eat_f1" elder_animation_json
 
 let eat_f2_elder = pixel_array_from_json "eat_f2" elder_animation_json
@@ -545,8 +543,6 @@ let wide_f1_baby = pixel_array_from_json "wide_f1" baby_animation_json
 
 let wide_f2_baby = pixel_array_from_json "wide_f2" baby_animation_json
 
-let idle_baby = pixel_array_from_json "idle" baby_animation_json
-
 let eat_f1_baby = pixel_array_from_json "eat_f1" baby_animation_json
 
 let eat_f2_baby = pixel_array_from_json "eat_f2" baby_animation_json
@@ -560,8 +556,6 @@ let neutral_f2_adult = pixel_array_from_json "neutral_f2" animation_json
 let wide_f1_adult = pixel_array_from_json "wide_f1" animation_json
 
 let wide_f2_adult = pixel_array_from_json "wide_f2" animation_json
-
-let idle_adult = pixel_array_from_json "idle" animation_json
 
 let eat_f1_adult = pixel_array_from_json "eat_f1" animation_json
 
