@@ -51,7 +51,7 @@ val toilet_icon_static : animation
 (* Changed later anyways *)
 val play_icon_static : animation
 
-val shop_icon_static : animation
+val drum_icon_static : animation
 
 val inventory_icon_static : animation
 
@@ -72,7 +72,7 @@ val toilet_icon_bobble : animation
 (* Change later anyways *)
 val play_icon_bobble : animation
 
-val shop_icon_bobble : animation
+val drum_icon_bobble : animation
 
 val inventory_icon_bobble : animation
 
