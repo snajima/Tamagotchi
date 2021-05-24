@@ -67,9 +67,9 @@ let dolphin_exit s =
 let dolphin_except s ex =
   match ex with
   | Dolphin.Gameover score ->
-      gameover_screen 500 score "Game Over"
-        { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
-        s
+    gameover_screen_clear 500 score "Game Over"
+        { dolphin_static with cx = vs.maxx / 2; cy = vs.maxy / 2 + 10 }
+        {s with animations = []}
   | _ -> raise ex
 
 let dolphin_key s c =

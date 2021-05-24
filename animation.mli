@@ -93,6 +93,32 @@ val right_drum_anim : animation
     the left drumstick stricking the drum *)
 val left_drum_anim : animation
 
+(** [idle_drummer_anim_baby] is an [animation] that renders a baby Tamagotchi
+    with drumsticks in hand and is used to represent the state where the
+    player has not pressed any key input in the Drum game *)
+val idle_drummer_anim_baby : animation
+
+(** [right_drum_anim_baby] is an [animation] that renders a baby Tamagotchi
+    with the right drumstick stricking the drum *)
+val right_drum_anim_baby : animation
+
+(** [right_drum_anim_baby] is an [animation] that renders a baby Tamagotchi
+    with the left drumstick stricking the drum *)
+val left_drum_anim_baby : animation
+
+(** [idle_drummer_anim_elder] is an [animation] that renders an elder
+    Tamagotchi with drumsticks in hand and is used to represent the state
+    where the player has not pressed any key input in the Drum game *)
+val idle_drummer_anim_elder : animation
+
+(** [right_drum_anim_elder] is an [animation] that renders an elder
+    Tamagotchi with the right drumstick stricking the drum *)
+val right_drum_anim_elder : animation
+
+(** [right_drum_anim_elder] is an [animation] that renders an elder
+    Tamagotchi with the left drumstick stricking the drum *)
+val left_drum_anim_elder : animation
+
 (** [don_anim] is an [animation] that renders a the Don drum beat in the
     Drum game *)
 val don_anim : animation

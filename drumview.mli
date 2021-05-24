@@ -1,6 +1,25 @@
 (** Renders a visual representation of the [Drum] game and provides
     handler functions for the execution of the GUI draw loop *)
 
+(** Type [game_vars] represents the variables that the game requires to run:
+    - [game] is the [gamestate] of [Drum]
+    - [speed] represents how fast the beats move (lower the faster)
+    - [beat_speed] represents how spaced aparts the beats are
+    - [row_scale] is used for animating (higher the smoother)
+    - [lifestage] is a mutable field for storing the lifestage from Homeview,
+    used solely for animating *)
+
+type game_vars = {
+    mutable game : Drum.gamestate;
+    mutable speed : int;
+    mutable beat_speed : int;
+    row_scale : int;
+    mutable lifestage : string;
+}
+
+(** [g] is of type game_vars and stores all global game variables *)
+val g : game_vars
+
 (** [drum_init] initializes the GUI in the GUI draw loop *)
 val drum_init : Gui.viewstate -> unit
 

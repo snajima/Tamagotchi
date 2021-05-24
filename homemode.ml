@@ -85,6 +85,7 @@ let activate_button (active_button : button) =
       Dolphinview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
   | Drum ->
+      Drumview.g.lifestage <-  State.get_lifestage my_home.tam_state;
       Drumview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
   | Elementals ->

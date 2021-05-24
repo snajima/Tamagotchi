@@ -492,6 +492,14 @@ let beats_printer (beats : (int * Drum.color) list) : string =
     [num_beats] *)
 let num_beats_printer num_beats : string = string_of_int num_beats
 
+(** [drum_combo_printer num_rocks] returns a string representing
+    [combo] *)
+let drum_combo_printer combo : string = string_of_int combo
+
+(** [drum_score_printer num_rocks] returns a string representing
+    [score] *)
+let drum_score_printer score : string = string_of_int score
+
 (** [drum_color_test name actual_value expected_output] constructs an
     OUnit test named [name] that checks if [expected_output] is equal to
     [actual_value] and uses a custom [color_printer] *)
@@ -534,6 +542,22 @@ let beats_num_beat_test (name : string) actual_value expected_out :
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:num_beats_printer
 
+(** [drum_combo_test name actual_value expected_output] constructs
+    an OUnit test named [name] that checks if [expected_output] is equal
+    to [actual_value] and uses a custom [num_beats_printer] *)
+let drum_combo_test (name : string) actual_value expected_out :
+    test =
+  name >:: fun _ ->
+  assert_equal expected_out actual_value ~printer:drum_combo_printer
+
+(** [drum_score_test name actual_value expected_output] constructs
+    an OUnit test named [name] that checks if [expected_output] is equal
+    to [actual_value] and uses a custom [num_beats_printer] *)
+let drum_score_test (name : string) actual_value expected_out :
+    test =
+  name >:: fun _ ->
+  assert_equal expected_out actual_value ~printer:drum_score_printer
+
 (** [drum_repeated_next n gamestate] returns the result of applying the
     Drum.next function on [gamestate] [n] time *)
 let rec drum_repeated_next (n : int) (gamestate : Drum.gamestate) :
@@ -544,7 +568,7 @@ let rec drum_repeated_next (n : int) (gamestate : Drum.gamestate) :
 let drum_test =
   let open Drum in
   [
-    (* ----------------- Observer: get_drum_lane ------------------- *)
+    (* ----------------- Observer: get_beat_type ------------------- *)
     drum_beat_test "Beat type upon hitting right button"
       (init_game () |> process_right |> get_beat_type)
       (Right 50);
@@ -570,58 +594,58 @@ let drum_test =
       (init_game () |> get_beat_type)
       Idle;
       
-    drum_color_test "Middle |> Right |> Right |> Right"
-      ( init_game () |> add_beat |> get_beats |> List.hd |> snd
+    drum_color_test "Check if adding Don has color Don"
+      ( init_game () |> add_don |> get_beats |> List.hd |> snd
        )
       Don;
 
-    drum_color_test "Middle |> Right |> Right |> Right"
-      ( init_game () |> add_beat |> get_beats |> List.tl |> List.hd |> snd
+    drum_color_test "Check if adding Ka has color Ka"
+      ( init_game () |> add_ka |> get_beats |> List.hd |> snd
        )
-      Don;
-(*       
+      Ka;
+      
     (* --------------------- Observer: get_beats ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
        0, 2 *)
     (* The application of the gamestate functions are delayed since the
        seed needs to be reset each time the [drum_beats_test_w_seed]
        function is called *)
-    drum_beats_test_w_seed "Adding one rock - middle lane"
-      (fun gs -> gs |> add_rock |> next |> get_rocks)
-      [ (1, 60) ];
-    drum_beats_test_w_seed "Adding two rock - left, right lanes"
-      (fun gs -> gs |> add_rock |> add_rock |> next |> get_rocks)
-      [ (0, 60); (2, 60) ];
-    drum_beats_test_w_seed "Add rock |> next |> add 2 rocks"
+    drum_beats_test_w_seed "Adding one beat set - single Don"
+      (fun gs -> gs |> add_beat |> next |> get_beats)
+      [ (120, Don) ];
+    drum_beats_test_w_seed "Adding two beat sets - Ka Ka, and Don Don Don"
+      (fun gs -> gs |> add_beat |> add_beat |> next |> get_beats)
+      [ (120, Ka); (140, Ka); (120, Don); (135, Don); (150, Don) ];
+    drum_beats_test_w_seed "Add beat set |> next |> add 2 beat sets"
       (fun gs ->
-        gs |> add_rock |> next |> add_rock |> add_rock |> next
-        |> get_rocks)
-      [ (2, 60); (2, 60); (0, 59) ];
+        gs |> add_beat |> next |> add_beat |> add_beat |> next
+        |> get_beats)
+      [ (119, Ka); (134, Ka); (149, Ka); (120, Don); (135, Ka); (150, Don); (120, Don); (140, Don) ];
     drum_beats_test_w_seed
-      "Repeat (Add rock |> next) three times then add one last rock"
+      "Repeat (Add beat set |> next) three times then add one last beat set"
       (fun gs ->
-        gs |> add_rock |> next |> add_rock |> next |> add_rock |> next
-        |> add_rock |> next |> get_rocks)
-      [ (0, 60); (0, 59); (0, 58); (2, 57) ];
+        gs |> add_beat |> next |> add_beat |> next |> add_beat |> next
+        |> add_beat |> next |> get_beats)
+      [ (117, Ka); (137, Ka); (118, Ka); (138, Ka); (119, Ka); (134, Ka); (149, Ka); (120, Ka); (140, Ka) ];
     drum_beats_test_w_seed
-      "Repeat (Add rock |> next) three times then add one last rock"
+      "Repeat (Add beat set |> next) three times then add one last beat set"
       (fun gs ->
-        gs |> add_rock |> next |> add_rock |> next |> add_rock |> next
-        |> add_rock |> next |> get_rocks)
-      [ (0, 60); (1, 59); (2, 58); (2, 57) ];
-    drum_beats_test_w_seed "Add one rock and fall to bottom"
-      (fun gs -> gs |> add_rock |> repeated_next 52 |> get_rocks)
-      [ (1, 9) ];
-    (* --------------------- Observer: num_rocks ---------------------- *)
-    beats_num_beat_test "Adding one rock "
-      (init_game () |> add_rock |> num_rocks)
-      1;
-      beats_num_beat_test "Adding two rock "
-      (init_game () |> add_rock |> add_rock |> num_rocks)
-      2;
-      beats_num_beat_test "Adding three rocks "
-      (init_game () |> add_rock |> add_rock |> add_rock |> num_rocks)
-      3; *)
+        gs |> add_beat |> next |> add_beat |> next |> add_beat |> next
+        |> add_beat |> next |> get_beats)
+      [ (117, Ka); (132, Ka); (147, Ka); (118, Ka); (133, Ka); (148, Ka); (119, Ka); (139, Ka); (120, Don) ];
+    drum_beats_test_w_seed "Add one beat set and fall to bottom"
+      (fun gs -> gs |> add_beat |> drum_repeated_next 52 |> get_beats)
+      [ (69, Ka); (89, Ka) ];
+    (* --------------------- Observer: get_num_beats ---------------------- *)
+    beats_num_beat_test "Adding one beat set "
+      (init_game () |> add_don |> get_num_beats)
+      10;
+    beats_num_beat_test "Adding two beat sets "
+      (init_game () |> add_don |> add_don |> get_num_beats)
+      9;
+    beats_num_beat_test "Adding three beat sets "
+      (init_game () |> add_don |> add_don |> add_don |> get_num_beats)
+      8;
   ]
 
 (* -------------------------------------------------------------------- *)

@@ -277,6 +277,18 @@ let right_drum = pixel_array_from_json "right_drum" drum_json
 
 let left_drum = pixel_array_from_json "left_drum" drum_json
 
+let idle_drummer_baby = pixel_array_from_json "idle_drummer_baby" drum_json
+
+let right_drum_baby = pixel_array_from_json "right_drum_baby" drum_json
+
+let left_drum_baby = pixel_array_from_json "left_drum_baby" drum_json
+
+let idle_drummer_elder = pixel_array_from_json "idle_drummer_elder" drum_json
+
+let right_drum_elder = pixel_array_from_json "right_drum_elder" drum_json
+
+let left_drum_elder = pixel_array_from_json "left_drum_elder" drum_json
+
 let black_sq = pixel_array_from_json "black_icon" drum_json
 
 let white_sq = pixel_array_from_json "white_icon" drum_json
@@ -308,6 +320,36 @@ let right_drum_anim =
 
 let left_drum_anim =
   { frames = [ left_drum ]; total = 1; current = 0; cx = 60; cy = 60 }
+
+let idle_drummer_anim_baby =
+  {
+    frames = [ idle_drummer_baby ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let right_drum_anim_baby =
+    { frames = [ right_drum_baby ]; total = 1; current = 0; cx = 60; cy = 60 }
+  
+let left_drum_anim_baby =
+  { frames = [ left_drum_baby ]; total = 1; current = 0; cx = 60; cy = 60 }
+
+let idle_drummer_anim_elder =
+  {
+    frames = [ idle_drummer_elder ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let right_drum_anim_elder =
+  { frames = [ right_drum_elder ]; total = 1; current = 0; cx = 60; cy = 60 }
+
+let left_drum_anim_elder =
+  { frames = [ left_drum_elder ]; total = 1; current = 0; cx = 60; cy = 60 }
 
 let don_anim =
   { frames = [ black_sq ]; total = 1; current = 0; cx = 0; cy = 0 }

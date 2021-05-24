@@ -279,3 +279,13 @@ let add_beat (gs : gamestate) : gamestate =
   let beat_set = List.nth beats (Random.int (List.length beats)) in
   (* Beats only enter the frame in the next step *)
   { gs with beats = gs.beats @ beat_set; num_beats = gs.num_beats - 1 }
+
+let add_don (gs : gamestate) : gamestate =
+  let beat_set = [ (max_height + 1, Don) ]; in
+  (* Beats only enter the frame in the next step *)
+  { gs with beats = gs.beats @ beat_set; num_beats = gs.num_beats - 1 }
+
+let add_ka (gs : gamestate) : gamestate =
+  let beat_set = [ (max_height + 1, Ka) ]; in
+  (* Beats only enter the frame in the next step *)
+  { gs with beats = gs.beats @ beat_set; num_beats = gs.num_beats - 1 }

@@ -29,13 +29,18 @@ type element =
     - losses : an integer representing the number of losses the player
       currently has
     - currently_animated : a boolean representing whether or not the
-      gamestate is currently being animated or not*)
+      gamestate is currently being animated or not
+    - start_anim : a boolean representing when the animation got started
+    - end_anim : a boolean representing whether the explosion is done being
+    animated *)
 type gamestate = {
   ours : element * int;
   opponent : element * int;
   wins : int;
   losses : int;
   currently_animated : bool;
+  start_anim : bool;
+  mutable end_anim : bool;
 }
 
 (** Raised when either the player losses or wins 2 games*)

@@ -9,6 +9,7 @@ type game_vars = {
   mutable speed : int;
   mutable beat_speed : int;
   row_scale : int;
+  mutable lifestage : string;
 }
 
 let g =
@@ -17,6 +18,7 @@ let g =
     speed = 1;
     beat_speed = 150;
     row_scale = 120 / Drum.max_height;
+    lifestage = "";
   }
 
 let vs : viewstate = { default_vs with animations = [] }
@@ -74,18 +76,29 @@ let rec get_beats_anims
   | (height, Drum.Don) :: t ->
       get_beats_anims t (b_anims_helper height lst_so_far don_anim)
 
+let get_player_anims_helper (anim : Animation.animation) : Animation.animation = 
+  { anim with cx = vs.maxx / 2; cy = (vs.maxy / 2) + 20 }
+
 let get_player_anims (beat_type : Drum.beat) : Animation.animation =
   match beat_type with
-  | Left _ ->
-      { left_drum_anim with cx = vs.maxx / 2; cy = (vs.maxy / 2) + 20 }
-  | Right _ ->
-      { right_drum_anim with cx = vs.maxx / 2; cy = (vs.maxy / 2) + 20 }
-  | Idle ->
-      {
-        idle_drummer_anim with
-        cx = vs.maxx / 2;
-        cy = (vs.maxy / 2) + 20;
-      }
+  | Left _ -> (
+    match g.lifestage with
+    | "Baby" | "Teenager" -> get_player_anims_helper left_drum_anim_baby
+    | "Adult" -> get_player_anims_helper left_drum_anim
+    | "Senior" -> get_player_anims_helper left_drum_anim_elder
+    | _ -> failwith "Impossible" )
+  | Right _ -> (
+    match g.lifestage with
+    | "Baby" | "Teenager" -> get_player_anims_helper right_drum_anim_baby
+    | "Adult" -> get_player_anims_helper right_drum_anim
+    | "Senior" -> get_player_anims_helper right_drum_anim_elder
+    | _ -> failwith "Impossible" )
+  | Idle -> (
+    match g.lifestage with 
+    | "Baby" | "Teenager" -> get_player_anims_helper idle_drummer_anim_baby
+    | "Adult" -> get_player_anims_helper idle_drummer_anim
+    | "Senior" -> get_player_anims_helper idle_drummer_anim_elder
+    | _ -> failwith "Impossible" )
 
 let get_animations (game : Drum.gamestate) : Animation.animation list =
   let beat_anims = get_beats_anims (get_beats g.game) [] in

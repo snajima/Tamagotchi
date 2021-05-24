@@ -114,8 +114,16 @@ val process_right : gamestate -> gamestate
     Raises: [Gameover] if the number of beats left is 0. *)
 val next : gamestate -> gamestate
 
-(** [add_rock gs] randomly selects a beat pattern in [beats] and adds it
+(** [add_beat gs] randomly selects a beat pattern in [beats] and adds it
     to the game with [max_height + 1]. Note that the beats only enters
     the game simulation when next is called to have consistent behaviour
     \-- all beats fall for the same number of turns *)
 val add_beat : gamestate -> gamestate
+
+
+(** [add_don gs] adds a Don beat for testing purposes *)
+val add_don : gamestate -> gamestate
+
+
+(** [add_ka gs] adds a Ka beat for testing purposes *)
+val add_ka : gamestate -> gamestate

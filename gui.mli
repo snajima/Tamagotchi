@@ -88,6 +88,13 @@ val draw_loop :
     the score. Finally, it renders [animation] *)
 val gameover_screen :
   int -> int -> string -> Animation.animation -> viewstate -> unit
+  
+(** [gameover_screen_clear] does the same thing but clears graph before
+    displaying the animation score unlike [gameover_screen] *)
+val gameover_screen_clear :
+  int -> int -> string -> Animation.animation -> viewstate -> unit
 
+(** [gameover_screen_no_score] does the same thing but doesn't display
+    a score unlike [gameover_screen] *)
 val gameover_screen_no_score :
   int -> string -> Animation.animation -> viewstate -> unit

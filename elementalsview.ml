@@ -103,7 +103,11 @@ let elementals_step s =
   (* Step Game *)
   if s.tick mod g.speed = 0 then g.game <- next g.game;
   (* Update Animations *)
+  (* if s.tick mod g.speed = 0 && not g.game.end_anim then s.animations <- get_animations g.game @ s.animations *)
   if s.tick mod g.speed = 0 then s.animations <- get_animations g.game;
+  (* if (g.game.start_anim) then (s.animations <- s.animations @ [ {cloud_anim with cx = default_vs.maxx / 2; cy = default_vs.maxy / 2 } ];); *)
+  (* if s.tick mod 30 = 0 then s.animations <- increment_anims s.animations; *)
+  (* if (s.animations |> List.rev |> List.hd).current = 3 then (s.animations <- (s.animations |> List.rev |> List.tl); g.game.end_anim <- true); *)
   s.tick <- (s.tick + 1) mod 4000
 
 let elementals_predraw s =
