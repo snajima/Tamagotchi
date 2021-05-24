@@ -523,7 +523,7 @@ let drum_beats_test_w_seed
   Random.init 1;
   name >:: fun _ ->
   assert_equal expected_out
-    (Dolphin.init_game () |> gamestate_func)
+    (Drum.init_game () |> gamestate_func)
     ~printer:beats_printer
 
 (** [beats_num_beat_test name actual_value expected_output] constructs
@@ -570,27 +570,15 @@ let drum_test =
       (init_game () |> get_beat_type)
       Idle;
       
-    (* ------------------------- Three -------------------------- *)
     drum_color_test "Middle |> Right |> Right |> Right"
-      ( init_game () |> process_right |> process_right |> process_right
-      |> get_dolphin_lane )
-      Right;
-    drum_color_test "Middle |> Right |> Right |> Left"
-      ( init_game () |> process_right |> process_right |> process_left
-      |> get_dolphin_lane )
-      Middle;
-    drum_color_test "Middle |> Right |> Left |> Right"
-      ( init_game () |> process_right |> process_left |> process_right
-      |> get_dolphin_lane )
-      Right;
-    drum_color_test "Middle |> Left |> Right |> Right"
-      ( init_game () |> process_left |> process_right |> process_right
-      |> get_dolphin_lane )
-      Right;
-    drum_color_test "Middle |> Left |> Left |> Right"
-      ( init_game () |> process_left |> process_left |> process_right
-      |> get_dolphin_lane )
-      Middle;
+      ( init_game () |> add_beat |> get_beats |> List.hd |> snd
+       )
+      Don;
+
+    drum_color_test "Middle |> Right |> Right |> Right"
+      ( init_game () |> add_beat |> get_beats |> List.hd |> snd
+       )
+      Don;
 (*       
     (* --------------------- Observer: get_beats ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,

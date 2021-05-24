@@ -81,11 +81,11 @@ let rec get_elems_anims
   | [] -> lst_so_far
   | (_, 100) :: t -> get_elems_anims t lst_so_far
   | (Water, height) :: t ->
-    get_beats_anims t (e_anims_helper height lst_so_far water_anim)
+    get_elems_anims t (e_anims_helper height lst_so_far water_anim)
   | (Fire, height) :: t ->
-    get_beats_anims t (e_anims_helper height lst_so_far fireball_anim)
+    get_elems_anims t (e_anims_helper height lst_so_far fireball_anim)
   | (Leaf, height) :: t ->
-    get_beats_anims t (e_anims_helper height lst_so_far leaf_anim)
+    get_elems_anims t (e_anims_helper height lst_so_far leaf_anim)
   | (Nothing, _) :: t -> get_elems_anims t lst_so_far
 
 let robot_and_tamagotchi =
