@@ -361,12 +361,12 @@ let dolphin_num_rock_test (name : string) actual_value expected_out :
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:num_rocks_printer
 
-(** [repeated_next n gamestate] returns the result of applying the
-    Dolphin.next function on [gamestate] [n] time *)
-let rec repeated_next (n : int) (gamestate : Dolphin.gamestate) :
-    Dolphin.gamestate =
+(** [dolphin_repeated_next n gamestate] returns the result of applying
+    the Dolphin.next function on [gamestate] [n] time *)
+let rec dolphin_repeated_next (n : int) (gamestate : Dolphin.gamestate)
+    : Dolphin.gamestate =
   if n = 0 then gamestate
-  else repeated_next (n - 1) (gamestate |> Dolphin.next)
+  else dolphin_repeated_next (n - 1) (gamestate |> Dolphin.next)
 
 let dolphin_test =
   let open Dolphin in
@@ -456,7 +456,8 @@ let dolphin_test =
         |> add_rock |> next |> get_rocks)
       [ (0, 60); (1, 59); (2, 58); (2, 57) ];
     dolphin_rock_test_w_seed "Add one rock and fall to bottom"
-      (fun gs -> gs |> add_rock |> repeated_next 52 |> get_rocks)
+      (fun gs ->
+        gs |> add_rock |> dolphin_repeated_next 52 |> get_rocks)
       [ (1, 9) ];
     (* --------------------- Observer: num_rocks ---------------------- *)
     dolphin_num_rock_test "Adding one rock "
@@ -545,113 +546,99 @@ let beats_num_beat_test (name : string) actual_value expected_out : test
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:num_beats_printer
 
-(** [repeated_next n gamestate] returns the result of applying the
-    Dolphin.next function on [gamestate] [n] time *)
-let rec repeated_next (n : int) (gamestate : Dolphin.gamestate) :
-    Dolphin.gamestate =
+(** [drum_repeated_next n gamestate] returns the result of applying the
+    Drum.next function on [gamestate] [n] time *)
+let rec drum_repeated_next (n : int) (gamestate : Drum.gamestate) :
+    Drum.gamestate =
   if n = 0 then gamestate
-  else repeated_next (n - 1) (gamestate |> Dolphin.next)
+  else drum_repeated_next (n - 1) (gamestate |> Drum.next)
 
 let drum_test =
   let open Drum in
   [
-    (* ----------------- Observer: get_dolphin_lane ------------------- *)
-    (* -------------------------- One --------------------------- *)
-    dolphin_lane_test "Middle to Right"
-      (init_game () |> process_right |> get_dolphin_lane)
-      Right;
-    dolphin_lane_test "Middle to Left"
-      (init_game () |> process_left |> get_dolphin_lane)
-      Left;
-    (* -------------------------- Two --------------------------- *)
-    dolphin_lane_test "Middle |> Right |> Right"
-      ( init_game () |> process_right |> process_right
-      |> get_dolphin_lane )
-      Right;
-    dolphin_lane_test "Middle |> Left |> Left"
-      (init_game () |> process_left |> process_left |> get_dolphin_lane)
-      Left;
-    dolphin_lane_test "Middle |> Right |> Left"
-      (init_game () |> process_right |> process_left |> get_dolphin_lane)
-      Middle;
-    dolphin_lane_test "Middle |> Left |> Right"
-      (init_game () |> process_left |> process_right |> get_dolphin_lane)
-      Middle;
+    (* ----------------- Observer: get_drum_lane ------------------- *)
+    drum_beat_test "Beat type upon hitting right button"
+      (init_game () |> process_right |> get_beat_type)
+      (Right 50);
+    drum_beat_test
+      "Beat type upon hitting right button and waiting a frame"
+      ( init_game () |> process_right |> drum_repeated_next 1
+      |> get_beat_type )
+      (Right 49);
+    drum_beat_test
+      "Beat type upon hitting right button and waiting 51 frames"
+      ( init_game () |> process_right |> drum_repeated_next 51
+      |> get_beat_type )
+      Idle;
+    drum_beat_test "Beat type upon hitting left button"
+      (init_game () |> process_left |> get_beat_type)
+      (Left 50);
+    drum_beat_test
+      "Beat type upon hitting left button and waiting a frame"
+      ( init_game () |> process_left |> drum_repeated_next 1
+      |> get_beat_type )
+      (Left 49);
+    drum_beat_test
+      "Beat type upon hitting left button and waiting 51 frames"
+      ( init_game () |> process_left |> drum_repeated_next 51
+      |> get_beat_type )
+      Idle;
+    drum_beat_test "Beat type upon pressing nothing"
+      (init_game () |> get_beat_type)
+      Idle;
+    drum_beat_test "Beat type upon pressing middle button"
+      (init_game () |> get_beat_type)
+      Idle;
     (* ------------------------- Three -------------------------- *)
-    dolphin_lane_test "Middle |> Right |> Right |> Right"
+    drum_color_test "Middle |> Right |> Right |> Right"
       ( init_game () |> process_right |> process_right |> process_right
       |> get_dolphin_lane )
       Right;
-    dolphin_lane_test "Middle |> Right |> Right |> Left"
+    drum_color_test "Middle |> Right |> Right |> Left"
       ( init_game () |> process_right |> process_right |> process_left
       |> get_dolphin_lane )
       Middle;
-    dolphin_lane_test "Middle |> Right |> Left |> Right"
+    drum_color_test "Middle |> Right |> Left |> Right"
       ( init_game () |> process_right |> process_left |> process_right
       |> get_dolphin_lane )
       Right;
-    dolphin_lane_test "Middle |> Left |> Right |> Right"
+    drum_color_test "Middle |> Left |> Right |> Right"
       ( init_game () |> process_left |> process_right |> process_right
       |> get_dolphin_lane )
       Right;
-    dolphin_lane_test "Middle |> Left |> Left |> Right"
+    drum_color_test "Middle |> Left |> Left |> Right"
       ( init_game () |> process_left |> process_left |> process_right
       |> get_dolphin_lane )
       Middle;
-    dolphin_lane_test "Middle |> Left |> Right |> Left"
-      ( init_game () |> process_left |> process_right |> process_left
-      |> get_dolphin_lane )
-      Left;
-    dolphin_lane_test "Middle |> Right |> Left |> Left"
-      ( init_game () |> process_right |> process_left |> process_left
-      |> get_dolphin_lane )
-      Left;
-    dolphin_lane_test "Middle |> Left |> Left |> Left"
-      ( init_game () |> process_left |> process_left |> process_left
-      |> get_dolphin_lane )
-      Left;
-    (* --------------------- Observer: get_rocks ---------------------- *)
-    (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
-       0, 2 *)
-    (* The application of the gamestate functions are delayed since the
-       seed needs to be reset each time the [dolphin_rock_test_w_seed]
-       function is called *)
-    dolphin_rock_test_w_seed "Adding one rock - middle lane"
-      (fun gs -> gs |> add_rock |> next |> get_rocks)
-      [ (1, 60) ];
-    dolphin_rock_test_w_seed "Adding two rock - left, right lanes"
-      (fun gs -> gs |> add_rock |> add_rock |> next |> get_rocks)
-      [ (0, 60); (2, 60) ];
-    dolphin_rock_test_w_seed "Add rock |> next |> add 2 rocks"
-      (fun gs ->
-        gs |> add_rock |> next |> add_rock |> add_rock |> next
-        |> get_rocks)
-      [ (2, 60); (2, 60); (0, 59) ];
-    dolphin_rock_test_w_seed
-      "Repeat (Add rock |> next) three times then add one last rock"
-      (fun gs ->
-        gs |> add_rock |> next |> add_rock |> next |> add_rock |> next
-        |> add_rock |> next |> get_rocks)
-      [ (0, 60); (0, 59); (0, 58); (2, 57) ];
-    dolphin_rock_test_w_seed
-      "Repeat (Add rock |> next) three times then add one last rock"
-      (fun gs ->
-        gs |> add_rock |> next |> add_rock |> next |> add_rock |> next
-        |> add_rock |> next |> get_rocks)
-      [ (0, 60); (1, 59); (2, 58); (2, 57) ];
-    dolphin_rock_test_w_seed "Add one rock and fall to bottom"
-      (fun gs -> gs |> add_rock |> repeated_next 52 |> get_rocks)
-      [ (1, 9) ];
-    (* --------------------- Observer: num_rocks ---------------------- *)
-    dolphin_num_rock_test "Adding one rock "
-      (init_game () |> add_rock |> num_rocks)
-      1;
-    dolphin_num_rock_test "Adding two rock "
-      (init_game () |> add_rock |> add_rock |> num_rocks)
-      2;
-    dolphin_num_rock_test "Adding three rocks "
-      (init_game () |> add_rock |> add_rock |> add_rock |> num_rocks)
-      3;
+    (* (* --------------------- Observer: get_beats
+       ---------------------- *) (* Seed default is set to 1 - values
+       are: 1, 2, 0, 0, 2, 2, 2, 0, 0, 0, 2 *) (* The application of the
+       gamestate functions are delayed since the seed needs to be reset
+       each time the [drum_beats_test_w_seed] function is called *)
+       drum_beats_test_w_seed "Adding one rock - middle lane" (fun gs ->
+       gs |> add_rock |> next |> get_rocks) [ (1, 60) ];
+       drum_beats_test_w_seed "Adding two rock - left, right lanes" (fun
+       gs -> gs |> add_rock |> add_rock |> next |> get_rocks) [ (0, 60);
+       (2, 60) ]; drum_beats_test_w_seed "Add rock |> next |> add 2
+       rocks" (fun gs -> gs |> add_rock |> next |> add_rock |> add_rock
+       |> next |> get_rocks) [ (2, 60); (2, 60); (0, 59) ];
+       drum_beats_test_w_seed "Repeat (Add rock |> next) three times
+       then add one last rock" (fun gs -> gs |> add_rock |> next |>
+       add_rock |> next |> add_rock |> next |> add_rock |> next |>
+       get_rocks) [ (0, 60); (0, 59); (0, 58); (2, 57) ];
+       drum_beats_test_w_seed "Repeat (Add rock |> next) three times
+       then add one last rock" (fun gs -> gs |> add_rock |> next |>
+       add_rock |> next |> add_rock |> next |> add_rock |> next |>
+       get_rocks) [ (0, 60); (1, 59); (2, 58); (2, 57) ];
+       drum_beats_test_w_seed "Add one rock and fall to bottom" (fun gs
+       -> gs |> add_rock |> repeated_next 52 |> get_rocks) [ (1, 9) ];
+       (* --------------------- Observer: num_rocks
+       ---------------------- *) beats_num_beat_test "Adding one rock "
+       (init_game () |> add_rock |> num_rocks) 1; beats_num_beat_test
+       "Adding two rock " (init_game () |> add_rock |> add_rock |>
+       num_rocks) 2; beats_num_beat_test "Adding three rocks "
+       (init_game () |> add_rock |> add_rock |> add_rock |> num_rocks)
+       3; *)
   ]
 
 (* -------------------------------------------------------------------- *)
@@ -869,6 +856,6 @@ let elementals_test =
 
 let suite =
   "test suite for Tamagotchi Final Project"
-  >::: List.flatten [ state_tests; dolphin_test; elementals_test ]
+  >::: List.flatten [ state_tests; dolphin_test; drum_test ]
 
 let _ = run_test_tt_main suite

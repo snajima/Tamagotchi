@@ -13,9 +13,9 @@ type button =
   | Eat
   | Sleep
   | Toilet
-  | Play
-  | Shop
-  | Inventory
+  | Dolphin
+  | Drum
+  | Elementals
 
 type avatar_anim =
   | Eating
@@ -24,7 +24,7 @@ type avatar_anim =
   | Idle
 
 type homestate = {
-  (* 0 = Eat, 1 = Sleep, 2 = Toilet, 3 = Play, 4 = Shop, 5 = Inventory *)
+  (* 0 = Eat, 1 = Sleep, 2 = Toilet, 3 = Dolphin, 4 = Drum, 5 = Elementals *)
   mutable tam_state : tamagotchi;
   total_icons : int;
   mutable active_icon : int;
@@ -59,9 +59,9 @@ let button_of_int (active_icon_num : int) =
   | 0 -> Eat
   | 1 -> Sleep
   | 2 -> Toilet
-  | 3 -> Play
-  | 4 -> Shop
-  | 5 -> Inventory
+  | 3 -> Dolphin
+  | 4 -> Drum
+  | 5 -> Elementals
   | _ -> failwith "Impossible: Precondition violation"
 
 let activate_button (active_button : button) =
@@ -81,13 +81,13 @@ let activate_button (active_button : button) =
       my_home.anim_counter <- default_anim_length;
       ignore (State.increment_cleanliness my_home.tam_state);
       ignore (State.decrement_happy my_home.tam_state)
-  | Play ->
+  | Dolphin ->
       Dolphinview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
-  | Shop ->
+  | Drum ->
       Drumview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
-  | Inventory ->
+  | Elementals ->
       Elementalsview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
 
@@ -119,7 +119,10 @@ let get_avatar_animations (hs : homestate) : Animation.animation =
       lifestage_to_anim
         (State.get_lifestage hs.tam_state)
         sleep_anim_baby sleep_anim_adult sleep_anim_elder
-  | Cleaning -> clean_anim
+  | Cleaning ->
+      lifestage_to_anim
+        (State.get_lifestage hs.tam_state)
+        clean_anim_baby clean_anim_adult clean_anim_elder
   | Idle ->
       lifestage_to_anim
         (State.get_lifestage hs.tam_state)
@@ -129,38 +132,50 @@ let reset_avatar_animations (hs : homestate) =
   hs.active_anim <- Idle;
   hs.anim_counter <- 0
 
+let eat_active =
+  [
+    eat_icon_bobble; sleep_icon_static; toilet_icon_static;
+    dolphin_icon_static; drum_icon_static; elementals_icon_static;
+  ]
+
+let sleep_active =
+  [
+    eat_icon_static; sleep_icon_bobble; toilet_icon_static;
+    dolphin_icon_static; drum_icon_static; elementals_icon_static;
+  ]
+
+let clean_active =
+  [
+    eat_icon_static; sleep_icon_static; toilet_icon_bobble;
+    dolphin_icon_static; drum_icon_static; elementals_icon_static;
+  ]
+
+let dolphin_active =
+  [
+    eat_icon_static; sleep_icon_static; toilet_icon_static;
+    dolphin_icon_bobble; drum_icon_static; elementals_icon_static;
+  ]
+
+let drum_active =
+  [
+    eat_icon_static; sleep_icon_static; toilet_icon_static;
+    dolphin_icon_static; drum_icon_bobble; elementals_icon_static;
+  ]
+
+let elementals_active =
+  [
+    eat_icon_static; sleep_icon_static; toilet_icon_static;
+    dolphin_icon_static; drum_icon_static; elementals_icon_bobble;
+  ]
+
 let get_toolbar_animations (hs : homestate) : Animation.animation list =
   match button_of_int hs.active_icon with
-  | Eat ->
-      [
-        eat_icon_bobble; sleep_icon_static; toilet_icon_static;
-        play_icon_static; shop_icon_static; inventory_icon_static;
-      ]
-  | Sleep ->
-      [
-        eat_icon_static; sleep_icon_bobble; toilet_icon_static;
-        play_icon_static; shop_icon_static; inventory_icon_static;
-      ]
-  | Toilet ->
-      [
-        eat_icon_static; sleep_icon_static; toilet_icon_bobble;
-        play_icon_static; shop_icon_static; inventory_icon_static;
-      ]
-  | Play ->
-      [
-        eat_icon_static; sleep_icon_static; toilet_icon_static;
-        play_icon_bobble; shop_icon_static; inventory_icon_static;
-      ]
-  | Shop ->
-      [
-        eat_icon_static; sleep_icon_static; toilet_icon_static;
-        play_icon_static; shop_icon_bobble; inventory_icon_static;
-      ]
-  | Inventory ->
-      [
-        eat_icon_static; sleep_icon_static; toilet_icon_static;
-        play_icon_static; shop_icon_static; inventory_icon_bobble;
-      ]
+  | Eat -> eat_active
+  | Sleep -> sleep_active
+  | Toilet -> clean_active
+  | Dolphin -> dolphin_active
+  | Drum -> drum_active
+  | Elementals -> elementals_active
 
 let get_status_height (order : int) : int =
   let y_spacing = 8 and y_start = 35 and scale = 4 in
@@ -172,13 +187,11 @@ let get_status_animations (hs : homestate) : unit =
   and hunger = hs.tam_state |> get_hunger
   and age = hs.tam_state |> get_age
   and happy = hs.tam_state |> get_happy in
-  (* Status Name *)
   draw_message 50 (get_status_height 4) 20 Graphics.black "Happy:";
   draw_message 50 (get_status_height 3) 20 Graphics.black "Sleep:";
   draw_message 50 (get_status_height 2) 20 Graphics.black "Clean:";
   draw_message 50 (get_status_height 1) 20 Graphics.black "Hunger:";
   draw_message 50 (get_status_height 0) 20 Graphics.black "Age:";
-  (* Status Value *)
   draw_message 120 (get_status_height 4) 25 Graphics.black
     (string_of_int happy);
   draw_message 120 (get_status_height 3) 25 Graphics.black
@@ -193,17 +206,15 @@ let get_status_animations (hs : homestate) : unit =
 let get_poop_animations (hs : homestate) : unit =
   let scaled_cleanliness = (hs.tam_state |> get_cleanliness) / 10 in
   let poop_count = 10 - scaled_cleanliness in
-  for i = 1 to (poop_count / 4 + 1) do
-    if i = (poop_count / 4 + 1) then (
-      for j = 1 to (poop_count mod 4) do
-        draw_img (120 - 10 * i) (27 + (j * 10)) poop
+  for i = 1 to (poop_count / 4) + 1 do
+    if i = (poop_count / 4) + 1 then
+      for j = 1 to poop_count mod 4 do
+        draw_img (120 - (10 * i)) (27 + (j * 10)) poop
       done
-    )
-    else (
+    else
       for j = 1 to 4 do
-        draw_img (120 - 10 * i) (27 + (j * 10)) poop
+        draw_img (120 - (10 * i)) (27 + (j * 10)) poop
       done
-    )
   done
 
 let get_animations (hs : homestate) : Animation.animation list =
@@ -263,13 +274,11 @@ let key s c =
   | 'd' ->
       my_home.active_icon <-
         (my_home.active_icon + 1 + my_home.total_icons)
-        mod my_home.total_icons;
-      print_endline (string_of_int my_home.active_icon)
+        mod my_home.total_icons
   | 's' -> my_home.active_icon |> button_of_int |> activate_button
   | 'x' -> raise End
   | _ -> ());
-  s.animations <- get_animations my_home;
-  print_endline (Char.escaped c)
+  s.animations <- get_animations my_home
 
 let clear_center (state : viewstate) : unit =
   Graphics.set_color state.bc;
@@ -297,27 +306,28 @@ let predraw (state : viewstate) : unit =
   draw_pixels_ll 0 0 120 10 Graphics.black;
   draw_pixels_ll 0 110 120 10 Graphics.black;
   clear_center state;
-  let {tm_sec = sec;
-     tm_min = min;
-     tm_hour = hour;
-     tm_mday = mday;
-     tm_mon = mon;
-     tm_year = year;} = localtime (time ()) in
-  let date = Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday in 
+  let {
+    tm_sec = sec;
+    tm_min = min;
+    tm_hour = hour;
+    tm_mday = mday;
+    tm_mon = mon;
+    tm_year = year;
+  } =
+    localtime (time ())
+  in
+  let date =
+    Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday
+  in
   let time = Printf.sprintf "%02d:%02d:%02d" hour min sec in
-  draw_message
-      75
-     ((default_vs.maxy * default_vs.scale) * 42 / 60)
-     25 Graphics.black
-     date;
-  draw_message
-      75
-     ((default_vs.maxy * default_vs.scale) * 38 / 60)
-     25 Graphics.black
-     time;
-  if (hour < 18 && hour > 6)
-    then draw_img 100 80 sun
-    else draw_img 100 80 moon;
+  draw_message 75
+    (default_vs.maxy * default_vs.scale * 42 / 60)
+    25 Graphics.black date;
+  draw_message 75
+    (default_vs.maxy * default_vs.scale * 38 / 60)
+    25 Graphics.black time;
+  if hour < 18 && hour > 6 then draw_img 100 80 sun
+  else draw_img 100 80 moon;
   get_status_animations my_home;
   get_poop_animations my_home
 
