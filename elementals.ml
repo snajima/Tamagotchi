@@ -16,8 +16,6 @@ type gamestate = {
   wins : int;
   losses : int;
   currently_animated : bool;
-  start_anim : bool;
-  mutable end_anim : bool;
 }
 
 (* ----------------------- Internal functions ------------------------- *)
@@ -44,8 +42,6 @@ let after_update (gs : gamestate) : gamestate =
       opponent = (element, 100);
       ours = (Nothing, 0);
       currently_animated = false;
-      start_anim = true;
-      end_anim = false;
     }
 
 (*[next_helper gs] increments the second value of the [gs.our] and
@@ -58,7 +54,6 @@ let rec next_helper (gs : gamestate) : gamestate =
       gs with
       ours = (fst gs.ours, snd gs.ours + 1);
       opponent = (fst gs.opponent, snd gs.opponent - 1);
-      start_anim = false;
     }
 
 (* ------------------------ External functions ------------------------- *)
@@ -77,8 +72,6 @@ let init_game () : gamestate =
     wins = 0;
     losses = 0;
     currently_animated = false;
-    start_anim = false;
-    end_anim = true;
   }
 
 let win_loss (gs : gamestate) : gamestate =
@@ -119,4 +112,4 @@ let play_leaf (gs : gamestate) : gamestate =
 let next (gs : gamestate) : gamestate =
   if gs.currently_animated then
     try next_helper gs with WinnerDetermined -> win_loss gs
-  else { gs with start_anim = false; }
+  else gs

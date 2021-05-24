@@ -39,8 +39,6 @@ type gamestate = {
   wins : int;
   losses : int;
   currently_animated : bool;
-  start_anim : bool;
-  mutable end_anim : bool;
 }
 
 (** Raised when either the player losses or wins 2 games*)
