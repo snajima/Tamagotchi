@@ -34,7 +34,7 @@ let drum_init s =
 let drum_exit s =
   (* REPLACE draw user score on screen for a while then return to home
      screen*)
-  print_endline "Bye"
+  ()
 
 let drum_except s ex =
   match ex with
@@ -53,16 +53,12 @@ let drum_except s ex =
 let drum_key s c =
   match c with
   | 'a' ->
-      print_endline (string_of_int (get_score g.game));
       g.game <- process_left g.game
   | 's' ->
-      print_endline (string_of_int (get_score g.game));
       g.game <- process_middle g.game
   | 'd' ->
-      print_endline (string_of_int (get_score g.game));
       g.game <- process_right g.game
   | 'x' ->
-      print_endline (string_of_int (get_score g.game));
       raise End
   | _ -> print_endline "Invalid Key_pressed"
 

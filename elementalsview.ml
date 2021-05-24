@@ -25,7 +25,7 @@ let elementals_init s =
 let elementals_exit s =
   (* REPLACE draw user score on screen for a while then return to home
      screen*)
-  print_endline "Bye"
+  ()
 
 let elementals_except s ex =
   match ex with

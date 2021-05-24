@@ -106,13 +106,13 @@ let win_loss (gs : gamestate) : gamestate =
     || (fst gs.ours = Fire && fst gs.opponent = Water)
     || (fst gs.ours = Leaf && fst gs.opponent = Fire)
   then (
-    print_endline "You lost";
+    (* print_endline "You lost"; *)
     after_update { gs with losses = gs.losses + 1 } )
   else if fst gs.ours = fst gs.opponent then (
-    print_endline "You drew";
+    (* print_endline "You drew"; *)
     after_update gs )
   else (
-    print_endline "You won";
+    (* print_endline "You won"; *)
     after_update { gs with wins = gs.wins + 1 } )
 
 let get_ours (gs : gamestate) : element * int = gs.ours

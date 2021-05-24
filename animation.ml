@@ -143,6 +143,10 @@ let inventory_icon_f2 =
 
 let poop = pixel_array_from_json "poop" homescreen_anim_json
 
+let sun = pixel_array_from_json "sun" homescreen_anim_json
+
+let moon = pixel_array_from_json "moon" homescreen_anim_json
+
 let poop_shovel =
   pixel_array_from_json "poop_shovel" homescreen_anim_json
 

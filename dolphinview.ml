@@ -64,7 +64,7 @@ let dolphin_init s =
 let dolphin_exit s =
   (* REPLACE draw user score on screen for a while then return to home
      screen*)
-  print_endline "Bye"
+  ()
 
 let dolphin_except s ex =
   match ex with
@@ -72,7 +72,6 @@ let dolphin_except s ex =
       gameover_screen 500 score "Game Over"
         { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
         s
-      (* print_endline (string_of_int score) *)
   | _ -> raise ex
 
 let dolphin_key s c =

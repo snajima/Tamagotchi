@@ -174,57 +174,61 @@ let get_score (gs : gamestate) : int = gs.score
 let get_beat_type (gs : gamestate) : beat = gs.beat_type
   
 let process_left (gs : gamestate) : gamestate =
-  let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
-  match (snd closest) with
-  | (ht, Don) -> (
-    let hit_type = range ht gs false in
-    { 
-      gs with 
-      beat_type = (Left 50);
-      score = calc_score hit_type gs;
-      combo = calc_combo hit_type gs;
-      beats = calc_beats hit_type (fst closest) gs;
-    }
-  )
-  | (ht, Ka) -> (
-    let hit_type = range ht gs true in
-    { 
+  if (List.length gs.beats = 0) then gs else (
+    let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
+    match (snd closest) with
+    | (ht, Don) -> (
+      let hit_type = range ht gs false in
+      { 
         gs with 
         beat_type = (Left 50);
         score = calc_score hit_type gs;
         combo = calc_combo hit_type gs;
         beats = calc_beats hit_type (fst closest) gs;
       }
+    )
+    | (ht, Ka) -> (
+      let hit_type = range ht gs true in
+      { 
+          gs with 
+          beat_type = (Left 50);
+          score = calc_score hit_type gs;
+          combo = calc_combo hit_type gs;
+          beats = calc_beats hit_type (fst closest) gs;
+        }
+    )
   )
 
 let process_middle (gs : gamestate) : gamestate = gs
 
 let process_right (gs : gamestate) : gamestate =
-  let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
-  match (snd closest) with
-  | (ht, Don) -> (
-    let hit_type = range ht gs true in
-    { 
-      gs with 
-      beat_type = (Right 50);
-      score = calc_score hit_type gs;
-      combo = calc_combo hit_type gs;
-      beats = calc_beats hit_type (fst closest) gs;
-    }
-  )
-  | (ht, Ka) -> (
-    let hit_type = range ht gs false in
-    { 
-      gs with 
-      beat_type = (Right 50);
-      score = calc_score hit_type gs;
-      combo = calc_combo hit_type gs;
-      beats = calc_beats hit_type (fst closest) gs;
-    }
+  if (List.length gs.beats = 0) then gs else (
+    let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
+    match (snd closest) with
+    | (ht, Don) -> (
+      let hit_type = range ht gs true in
+      { 
+        gs with 
+        beat_type = (Right 50);
+        score = calc_score hit_type gs;
+        combo = calc_combo hit_type gs;
+        beats = calc_beats hit_type (fst closest) gs;
+      }
+    )
+    | (ht, Ka) -> (
+      let hit_type = range ht gs false in
+      { 
+        gs with 
+        beat_type = (Right 50);
+        score = calc_score hit_type gs;
+        combo = calc_combo hit_type gs;
+        beats = calc_beats hit_type (fst closest) gs;
+      }
+    )
   )
 
 let next (gs : gamestate) : gamestate =
-  if game_over gs then raise (Gameover gs.score)
+  if game_over gs then raise (Gameover gs.score) 
   else
     match gs.beat_type with
     | (Left 0) -> { gs with beats = fall_beats gs.beats; beat_type = Idle }

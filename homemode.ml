@@ -306,15 +306,18 @@ let predraw (state : viewstate) : unit =
   let date = Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday in 
   let time = Printf.sprintf "%02d:%02d:%02d" hour min sec in
   draw_message
-     (default_vs.maxx * default_vs.scale / 2)
-     ((default_vs.maxy * default_vs.scale) * 20 / 60)
-     20 Graphics.black
+      75
+     ((default_vs.maxy * default_vs.scale) * 42 / 60)
+     25 Graphics.black
      date;
   draw_message
-     (default_vs.maxx * default_vs.scale / 2)
-     ((default_vs.maxy * default_vs.scale) * 17 / 60)
-     20 Graphics.black
+      75
+     ((default_vs.maxy * default_vs.scale) * 38 / 60)
+     25 Graphics.black
      time;
+  if (hour < 18 && hour > 6)
+    then draw_img 100 80 sun
+    else draw_img 100 80 moon;
   get_status_animations my_home;
   get_poop_animations my_home
 

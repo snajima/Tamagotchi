@@ -478,37 +478,44 @@ let beat_printer (beat : Drum.beat) : string =
   | Idle -> "Idle"
   | Left _ -> "Left"
 
-(** [rock_printer rocks] returns a string representing [rocks] *)
-let rock_printer (rocks : (int * int) list) : string =
+(** [beats_printer beats] returns a string representing [beats] *)
+let beats_printer (beats : (int * Drum.color) list) : string =
   let str_list =
     List.map
-      (fun (lane, height) ->
-        "(" ^ string_of_int lane ^ ", " ^ string_of_int height ^ ") ")
-      rocks
+      (fun (height, c) ->
+        "(" ^ string_of_int height ^ ", " ^ color_printer c ^ ") ")
+      beats
   in
   List.fold_left ( ^ ) "( " str_list ^ ")"
 
-(** [num_rocks_printer num_rocks] returns a string representing
-    [num_rocks] *)
-let num_rocks_printer num_rocks : string = string_of_int num_rocks
+(** [num_beats_printer num_rocks] returns a string representing
+    [num_beats] *)
+let num_beats_printer num_beats : string = string_of_int num_beats
 
-(** [dolphin_lane_test name actual_value expected_output] constructs an
+(** [drum_color_test name actual_value expected_output] constructs an
     OUnit test named [name] that checks if [expected_output] is equal to
-    [actual_value] and uses a custom [lane_printer] *)
-let dolphin_lane_test (name : string) actual_value expected_out : test =
+    [actual_value] and uses a custom [color_printer] *)
+let drum_color_test (name : string) actual_value expected_out : test =
   name >:: fun _ ->
-  assert_equal expected_out actual_value ~printer:lane_printer
+  assert_equal expected_out actual_value ~printer:color_printer
 
-(** [dolphin_rock_test_w_seed name gamestate_func expected_output]
+(** [drum_beat_test name actual_value expected_output] constructs an
+    OUnit test named [name] that checks if [expected_output] is equal to
+    [actual_value] and uses a custom [beat_printer] *)
+let drum_beat_test (name : string) actual_value expected_out : test =
+  name >:: fun _ ->
+  assert_equal expected_out actual_value ~printer:beat_printer
+
+(** [drum_beats_test_w_seed name gamestate_func expected_output]
     constructs an OUnit test named [name] that checks if
     [expected_output] is equal to [gamestate_func] applied on a freshly
-    initialized Dolphin.gamestate and uses a custom [rock_printer]
+    initialized Dolphin.gamestate and uses a custom [beats_printer]
 
     Note that gamestate_func allows for delayed application of the
-    Dolphin.add_rock functions. The purpose of this is to allow the seed
-    to be set before the add_rock methods (which involve randomness) to
+    Drum.add_beat functions. The purpose of this is to allow the seed
+    to be set before the add_beat methods (which involve randomness) to
     allow for testing*)
-let dolphin_rock_test_w_seed
+let drum_beats_test_w_seed
     ?(seed = 1)
     (name : string)
     gamestate_func
@@ -517,15 +524,15 @@ let dolphin_rock_test_w_seed
   name >:: fun _ ->
   assert_equal expected_out
     (Dolphin.init_game () |> gamestate_func)
-    ~printer:rock_printer
+    ~printer:beats_printer
 
-(** [dolphin_num_rock_test name actual_value expected_output] constructs
+(** [beats_num_beat_test name actual_value expected_output] constructs
     an OUnit test named [name] that checks if [expected_output] is equal
-    to [actual_value] and uses a custom [num_rocks_printer] *)
-let dolphin_num_rock_test (name : string) actual_value expected_out :
+    to [actual_value] and uses a custom [num_beats_printer] *)
+let beats_num_beat_test (name : string) actual_value expected_out :
     test =
   name >:: fun _ ->
-  assert_equal expected_out actual_value ~printer:num_rocks_printer
+  assert_equal expected_out actual_value ~printer:num_beats_printer
 
 (** [repeated_next n gamestate] returns the result of applying the
     Dolphin.next function on [gamestate] [n] time *)
@@ -534,8 +541,8 @@ let rec repeated_next (n : int) (gamestate : Dolphin.gamestate) :
   if n = 0 then gamestate
   else repeated_next (n - 1) (gamestate |> Dolphin.next)
 
-let dolphin_test =
-  let open Dolphin in
+let drum_test =
+  let open Drum in
   [
     (* ----------------- Observer: get_dolphin_lane ------------------- *)
     (* -------------------------- One --------------------------- *)
