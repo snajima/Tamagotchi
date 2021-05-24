@@ -254,7 +254,7 @@ let dolphin_icon_bobble =
 let drum_icon_bobble =
   {
     drum_icon_static with
-    frames = [ drum_icon_f1; drum_icon_f2 ];
+    frames = [ drum_icon_f2; drum_icon_f1 ];
     total = 2;
   }
 
