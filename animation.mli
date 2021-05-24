@@ -1,10 +1,13 @@
 (** Provides abstract methods to load and render custom animations with
     variable refresh rates *)
 
-(** The type [pixel_array] represents.. *)
+(** The type [pixel_array] represents an black and white image (frame in
+    an animation) by listing out the color of each of the pixel *)
 type pixel_array = int array array
 
-(** The type [animation] represents .. *)
+(** The type [animation] represents a filmstrip that stores the list of
+    frames and a pointer to the current frame. It also stores the center
+    of where to render the current animation *)
 type animation = {
   (* Drawing information *)
   frames : pixel_array list;
@@ -48,11 +51,16 @@ val sleep_icon_static : animation
     in the toolbar in the homescreen *)
 val toilet_icon_static : animation
 
-(* Changed later anyways *)
+(** [dolphin_icon_static] is an [animation] that renders the dolphin button
+    in the toolbar in the homescreen *)
 val dolphin_icon_static : animation
 
+(** [drum_icon_static] is an [animation] that renders the drum button
+    in the toolbar in the homescreen *)
 val drum_icon_static : animation
 
+(** [elementals_icon_static] is an [animation] that renders the elementals 
+(robot) button in the toolbar in the homescreen *)
 val elementals_icon_static : animation
 
 (** [eat_icon_bobble] is an [animation] that renders the eat button in
@@ -69,11 +77,19 @@ val sleep_icon_bobble : animation
     over *)
 val toilet_icon_bobble : animation
 
-(* Change later anyways *)
+(** [dolphin_icon_bobble] is an [animation] that renders the dolphin button
+    in the toolbar in the homescreen when the option is being hovered
+    over *)
 val dolphin_icon_bobble : animation
 
+(** [drum_icon_bobble] is an [animation] that renders the drum button
+    in the toolbar in the homescreen when the option is being hovered
+    over *)
 val drum_icon_bobble : animation
 
+(** [toilet_icon_bobble] is an [animation] that renders the elementals (robot)
+    button in the toolbar in the homescreen when the option is being hovered
+    over *)
 val elementals_icon_bobble : animation
 
 (** [drum_anim] is an [animation] that renders a Tamagotchi drumming
@@ -93,22 +109,24 @@ val right_drum_anim : animation
     the left drumstick stricking the drum *)
 val left_drum_anim : animation
 
-(** [idle_drummer_anim_baby] is an [animation] that renders a baby Tamagotchi
-    with drumsticks in hand and is used to represent the state where the
-    player has not pressed any key input in the Drum game *)
+(** [idle_drummer_anim_baby] is an [animation] that renders a baby
+    Tamagotchi with drumsticks in hand and is used to represent the
+    state where the player has not pressed any key input in the Drum
+    game *)
 val idle_drummer_anim_baby : animation
 
-(** [right_drum_anim_baby] is an [animation] that renders a baby Tamagotchi
-    with the right drumstick stricking the drum *)
+(** [right_drum_anim_baby] is an [animation] that renders a baby
+    Tamagotchi with the right drumstick stricking the drum *)
 val right_drum_anim_baby : animation
 
-(** [right_drum_anim_baby] is an [animation] that renders a baby Tamagotchi
-    with the left drumstick stricking the drum *)
+(** [right_drum_anim_baby] is an [animation] that renders a baby
+    Tamagotchi with the left drumstick stricking the drum *)
 val left_drum_anim_baby : animation
 
 (** [idle_drummer_anim_elder] is an [animation] that renders an elder
-    Tamagotchi with drumsticks in hand and is used to represent the state
-    where the player has not pressed any key input in the Drum game *)
+    Tamagotchi with drumsticks in hand and is used to represent the
+    state where the player has not pressed any key input in the Drum
+    game *)
 val idle_drummer_anim_elder : animation
 
 (** [right_drum_anim_elder] is an [animation] that renders an elder
