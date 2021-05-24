@@ -465,6 +465,177 @@ let dolphin_test =
 (* --------------------------- Drum Testing --------------------------- *)
 (* -------------------------------------------------------------------- *)
 
+(** [color_printer color] returns a string representing [color] *)
+let color_printer (color : Drum.color) : string =
+  match color with
+  | Don -> "Don"
+  | Ka -> "Ka"
+
+(** [beat_printer beat] returns a string representing [beat] *)
+let beat_printer (beat : Drum.beat) : string =
+  match beat with
+  | Right _ -> "Right"
+  | Idle -> "Idle"
+  | Left _ -> "Left"
+
+(** [rock_printer rocks] returns a string representing [rocks] *)
+let rock_printer (rocks : (int * int) list) : string =
+  let str_list =
+    List.map
+      (fun (lane, height) ->
+        "(" ^ string_of_int lane ^ ", " ^ string_of_int height ^ ") ")
+      rocks
+  in
+  List.fold_left ( ^ ) "( " str_list ^ ")"
+
+(** [num_rocks_printer num_rocks] returns a string representing
+    [num_rocks] *)
+let num_rocks_printer num_rocks : string = string_of_int num_rocks
+
+(** [dolphin_lane_test name actual_value expected_output] constructs an
+    OUnit test named [name] that checks if [expected_output] is equal to
+    [actual_value] and uses a custom [lane_printer] *)
+let dolphin_lane_test (name : string) actual_value expected_out : test =
+  name >:: fun _ ->
+  assert_equal expected_out actual_value ~printer:lane_printer
+
+(** [dolphin_rock_test_w_seed name gamestate_func expected_output]
+    constructs an OUnit test named [name] that checks if
+    [expected_output] is equal to [gamestate_func] applied on a freshly
+    initialized Dolphin.gamestate and uses a custom [rock_printer]
+
+    Note that gamestate_func allows for delayed application of the
+    Dolphin.add_rock functions. The purpose of this is to allow the seed
+    to be set before the add_rock methods (which involve randomness) to
+    allow for testing*)
+let dolphin_rock_test_w_seed
+    ?(seed = 1)
+    (name : string)
+    gamestate_func
+    expected_out : test =
+  Random.init 1;
+  name >:: fun _ ->
+  assert_equal expected_out
+    (Dolphin.init_game () |> gamestate_func)
+    ~printer:rock_printer
+
+(** [dolphin_num_rock_test name actual_value expected_output] constructs
+    an OUnit test named [name] that checks if [expected_output] is equal
+    to [actual_value] and uses a custom [num_rocks_printer] *)
+let dolphin_num_rock_test (name : string) actual_value expected_out :
+    test =
+  name >:: fun _ ->
+  assert_equal expected_out actual_value ~printer:num_rocks_printer
+
+(** [repeated_next n gamestate] returns the result of applying the
+    Dolphin.next function on [gamestate] [n] time *)
+let rec repeated_next (n : int) (gamestate : Dolphin.gamestate) :
+    Dolphin.gamestate =
+  if n = 0 then gamestate
+  else repeated_next (n - 1) (gamestate |> Dolphin.next)
+
+let dolphin_test =
+  let open Dolphin in
+  [
+    (* ----------------- Observer: get_dolphin_lane ------------------- *)
+    (* -------------------------- One --------------------------- *)
+    dolphin_lane_test "Middle to Right"
+      (init_game () |> process_right |> get_dolphin_lane)
+      Right;
+    dolphin_lane_test "Middle to Left"
+      (init_game () |> process_left |> get_dolphin_lane)
+      Left;
+    (* -------------------------- Two --------------------------- *)
+    dolphin_lane_test "Middle |> Right |> Right"
+      ( init_game () |> process_right |> process_right
+      |> get_dolphin_lane )
+      Right;
+    dolphin_lane_test "Middle |> Left |> Left"
+      (init_game () |> process_left |> process_left |> get_dolphin_lane)
+      Left;
+    dolphin_lane_test "Middle |> Right |> Left"
+      (init_game () |> process_right |> process_left |> get_dolphin_lane)
+      Middle;
+    dolphin_lane_test "Middle |> Left |> Right"
+      (init_game () |> process_left |> process_right |> get_dolphin_lane)
+      Middle;
+    (* ------------------------- Three -------------------------- *)
+    dolphin_lane_test "Middle |> Right |> Right |> Right"
+      ( init_game () |> process_right |> process_right |> process_right
+      |> get_dolphin_lane )
+      Right;
+    dolphin_lane_test "Middle |> Right |> Right |> Left"
+      ( init_game () |> process_right |> process_right |> process_left
+      |> get_dolphin_lane )
+      Middle;
+    dolphin_lane_test "Middle |> Right |> Left |> Right"
+      ( init_game () |> process_right |> process_left |> process_right
+      |> get_dolphin_lane )
+      Right;
+    dolphin_lane_test "Middle |> Left |> Right |> Right"
+      ( init_game () |> process_left |> process_right |> process_right
+      |> get_dolphin_lane )
+      Right;
+    dolphin_lane_test "Middle |> Left |> Left |> Right"
+      ( init_game () |> process_left |> process_left |> process_right
+      |> get_dolphin_lane )
+      Middle;
+    dolphin_lane_test "Middle |> Left |> Right |> Left"
+      ( init_game () |> process_left |> process_right |> process_left
+      |> get_dolphin_lane )
+      Left;
+    dolphin_lane_test "Middle |> Right |> Left |> Left"
+      ( init_game () |> process_right |> process_left |> process_left
+      |> get_dolphin_lane )
+      Left;
+    dolphin_lane_test "Middle |> Left |> Left |> Left"
+      ( init_game () |> process_left |> process_left |> process_left
+      |> get_dolphin_lane )
+      Left;
+    (* --------------------- Observer: get_rocks ---------------------- *)
+    (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
+       0, 2 *)
+    (* The application of the gamestate functions are delayed since the
+       seed needs to be reset each time the [dolphin_rock_test_w_seed]
+       function is called *)
+    dolphin_rock_test_w_seed "Adding one rock - middle lane"
+      (fun gs -> gs |> add_rock |> next |> get_rocks)
+      [ (1, 60) ];
+    dolphin_rock_test_w_seed "Adding two rock - left, right lanes"
+      (fun gs -> gs |> add_rock |> add_rock |> next |> get_rocks)
+      [ (0, 60); (2, 60) ];
+    dolphin_rock_test_w_seed "Add rock |> next |> add 2 rocks"
+      (fun gs ->
+        gs |> add_rock |> next |> add_rock |> add_rock |> next
+        |> get_rocks)
+      [ (2, 60); (2, 60); (0, 59) ];
+    dolphin_rock_test_w_seed
+      "Repeat (Add rock |> next) three times then add one last rock"
+      (fun gs ->
+        gs |> add_rock |> next |> add_rock |> next |> add_rock |> next
+        |> add_rock |> next |> get_rocks)
+      [ (0, 60); (0, 59); (0, 58); (2, 57) ];
+    dolphin_rock_test_w_seed
+      "Repeat (Add rock |> next) three times then add one last rock"
+      (fun gs ->
+        gs |> add_rock |> next |> add_rock |> next |> add_rock |> next
+        |> add_rock |> next |> get_rocks)
+      [ (0, 60); (1, 59); (2, 58); (2, 57) ];
+    dolphin_rock_test_w_seed "Add one rock and fall to bottom"
+      (fun gs -> gs |> add_rock |> repeated_next 52 |> get_rocks)
+      [ (1, 9) ];
+    (* --------------------- Observer: num_rocks ---------------------- *)
+    dolphin_num_rock_test "Adding one rock "
+      (init_game () |> add_rock |> num_rocks)
+      1;
+    dolphin_num_rock_test "Adding two rock "
+      (init_game () |> add_rock |> add_rock |> num_rocks)
+      2;
+    dolphin_num_rock_test "Adding three rocks "
+      (init_game () |> add_rock |> add_rock |> add_rock |> num_rocks)
+      3;
+  ]
+
 (* -------------------------------------------------------------------- *)
 (* ----------------------- Elementalist Testing ----------------------- *)
 (* -------------------------------------------------------------------- *)

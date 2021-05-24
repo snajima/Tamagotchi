@@ -1,9 +1,6 @@
 (** Renders a visual representation of the [Drum] game and provides
     handler functions for the execution of the GUI draw loop *)
 
-(* Stores score *)
-exception Gameover of int
-
 (** [drum_init] initializes the GUI in the GUI draw loop *)
 val drum_init : Gui.viewstate -> unit
 

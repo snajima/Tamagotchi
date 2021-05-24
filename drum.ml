@@ -167,6 +167,8 @@ let get_beats (gs : gamestate) : ((int * color) list) = gs.beats
 
 let get_num_beats (gs : gamestate) : int = gs.num_beats
 
+let get_combo (gs : gamestate) : int = gs.combo
+
 let get_score (gs : gamestate) : int = gs.score
 
 let get_beat_type (gs : gamestate) : beat = gs.beat_type
