@@ -162,6 +162,10 @@ let get_toolbar_animations (hs : homestate) : Animation.animation list =
         play_icon_static; shop_icon_static; inventory_icon_bobble;
       ]
 
+let get_status_height (order : int) : int =
+  let y_spacing = 8 and y_start = 35 and scale = 4 in
+  (y_start + (y_spacing * order)) * scale
+
 let get_status_animations (hs : homestate) : unit =
   let sleep = hs.tam_state |> get_sleep
   and cleanliness = hs.tam_state |> get_cleanliness
@@ -169,18 +173,22 @@ let get_status_animations (hs : homestate) : unit =
   and age = hs.tam_state |> get_age
   and happy = hs.tam_state |> get_happy in
   (* Status Name *)
-  draw_message 50 (80 * 4) 25 Graphics.black "Happy:";
-  draw_message 50 (70 * 4) 25 Graphics.black "Sleep:";
-  draw_message 50 (60 * 4) 25 Graphics.black "Clean:";
-  draw_message 50 (50 * 4) 25 Graphics.black "Hunger:";
-  draw_message 50 (40 * 4) 25 Graphics.black "Age:";
+  draw_message 50 (get_status_height 4) 20 Graphics.black "Happy:";
+  draw_message 50 (get_status_height 3) 20 Graphics.black "Sleep:";
+  draw_message 50 (get_status_height 2) 20 Graphics.black "Clean:";
+  draw_message 50 (get_status_height 1) 20 Graphics.black "Hunger:";
+  draw_message 50 (get_status_height 0) 20 Graphics.black "Age:";
   (* Status Value *)
-  draw_message 120 (80 * 4) 30 Graphics.black (string_of_int happy);
-  draw_message 120 (70 * 4) 30 Graphics.black (string_of_int sleep);
-  draw_message 120 (60 * 4) 30 Graphics.black
+  draw_message 120 (get_status_height 4) 25 Graphics.black
+    (string_of_int happy);
+  draw_message 120 (get_status_height 3) 25 Graphics.black
+    (string_of_int sleep);
+  draw_message 120 (get_status_height 2) 25 Graphics.black
     (string_of_int cleanliness);
-  draw_message 120 (50 * 4) 30 Graphics.black (string_of_int hunger);
-  draw_message 120 (40 * 4) 30 Graphics.black (string_of_int age)
+  draw_message 120 (get_status_height 1) 25 Graphics.black
+    (string_of_int hunger);
+  draw_message 120 (get_status_height 0) 25 Graphics.black
+    (string_of_int age)
 
 let get_poop_animations (hs : homestate) : unit =
   let scaled_cleanliness = (hs.tam_state |> get_cleanliness) / 10 in
