@@ -1,6 +1,7 @@
 open Animation
 open Gui
 open State
+open Unix
 
 let delta = 30
 
@@ -192,17 +193,18 @@ let get_status_animations (hs : homestate) : unit =
 let get_poop_animations (hs : homestate) : unit =
   let scaled_cleanliness = (hs.tam_state |> get_cleanliness) / 10 in
   let poop_count = 10 - scaled_cleanliness in
-  if poop_count <= 5 then
-    for i = 1 to poop_count do
-      draw_img 100 (30 + (i * 10)) poop
-    done
-  else (
-    for i = 1 to poop_count - 5 do
-      draw_img 100 (30 + (i * 10)) poop
-    done;
-    for i = 1 to poop_count do
-      draw_img 110 (30 + (i * 10)) poop
-    done)
+  for i = 1 to (poop_count / 4 + 1) do
+    if i = (poop_count / 4 + 1) then (
+      for j = 1 to (poop_count mod 4) do
+        draw_img (120 - 10 * i) (27 + (j * 10)) poop
+      done
+    )
+    else (
+      for j = 1 to 4 do
+        draw_img (120 - 10 * i) (27 + (j * 10)) poop
+      done
+    )
+  done
 
 let get_animations (hs : homestate) : Animation.animation list =
   let tool_bar_anims = get_toolbar_animations hs
@@ -295,6 +297,27 @@ let predraw (state : viewstate) : unit =
   draw_pixels_ll 0 0 120 10 Graphics.black;
   draw_pixels_ll 0 110 120 10 Graphics.black;
   clear_center state;
+  let {tm_sec = sec;
+     tm_min = min;
+     tm_hour = hour;
+     tm_mday = mday;
+     tm_mon = mon;
+     tm_year = year;} = localtime (time ()) in
+  let date = Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday in 
+  let time = Printf.sprintf "%02d:%02d:%02d" hour min sec in
+  draw_message
+      75
+     ((default_vs.maxy * default_vs.scale) * 42 / 60)
+     25 Graphics.black
+     date;
+  draw_message
+      75
+     ((default_vs.maxy * default_vs.scale) * 38 / 60)
+     25 Graphics.black
+     time;
+  if (hour < 18 && hour > 6)
+    then draw_img 100 80 sun
+    else draw_img 100 80 moon;
   get_status_animations my_home;
   get_poop_animations my_home
 

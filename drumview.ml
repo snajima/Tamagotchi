@@ -34,17 +34,17 @@ let drum_init s =
 let drum_exit s =
   (* REPLACE draw user score on screen for a while then return to home
      screen*)
-  print_endline "Bye"
+  ()
 
 let drum_except s ex =
   match ex with
   | Drum.Gameover score ->
     Graphics.clear_graph ();
     draw_message
-      (default_vs.maxx * default_vs.scale / 2 + 50)
-      ((default_vs.maxy * default_vs.scale) - 40)
-      25 Graphics.black
-      "Sets of beats left: 0";
+    (default_vs.maxx * default_vs.scale / 2 + 50)
+    ((default_vs.maxy * default_vs.scale) - 20)
+    25 Graphics.black
+    "Sets of beats left: 0";
     gameover_screen 500 (get_score g.game) "Game Over"
       { drum_anim with cx = vs.maxx / 2; cy = vs.maxy / 2 + 20 }
       s
@@ -53,16 +53,12 @@ let drum_except s ex =
 let drum_key s c =
   match c with
   | 'a' ->
-      print_endline (string_of_int (get_score g.game));
       g.game <- process_left g.game
   | 's' ->
-      print_endline (string_of_int (get_score g.game));
       g.game <- process_middle g.game
   | 'd' ->
-      print_endline (string_of_int (get_score g.game));
       g.game <- process_right g.game
   | 'x' ->
-      print_endline (string_of_int (get_score g.game));
       raise End
   | _ -> print_endline "Invalid Key_pressed"
 
@@ -131,9 +127,19 @@ let drum_predraw s =
     120 lane_width Graphics.white;
   draw_message
     (default_vs.maxx * default_vs.scale / 2 + 50)
-    ((default_vs.maxy * default_vs.scale) - 40)
+    ((default_vs.maxy * default_vs.scale) - 20)
     25 Graphics.black
-    ("Sets of beats left: " ^ (string_of_int (get_num_beats g.game)))
+    ("Sets of beats left: " ^ (string_of_int (get_num_beats g.game)));
+  draw_message
+    (default_vs.maxx * default_vs.scale / 2 + 130)
+    ((default_vs.maxy * default_vs.scale) - 45)
+    25 Graphics.black
+    ("Combo: " ^ (string_of_int (get_combo g.game)));
+  draw_message
+    (default_vs.maxx * default_vs.scale / 2 + 130)
+    ((default_vs.maxy * default_vs.scale) - 70)
+    25 Graphics.black
+    ("Score: " ^ (string_of_int (get_score g.game)))
 
 let draw () =
   draw_loop vs drum_init drum_exit drum_key drum_except drum_step

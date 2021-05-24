@@ -78,6 +78,9 @@ val get_beats : gamestate -> (int * color) list
   the game is over. *)
 val get_num_beats : gamestate -> int
 
+(** [get_combo gs] returns the combo of the player. *)
+val get_combo : gamestate -> int
+
 (** [get_score gs] returns the score of the player. *)
 val get_score : gamestate -> int
 
