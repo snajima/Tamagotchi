@@ -24,7 +24,8 @@ type avatar_anim =
   | Idle
 
 type homestate = {
-  (* 0 = Eat, 1 = Sleep, 2 = Toilet, 3 = Dolphin, 4 = Drum, 5 = Elementals *)
+  (* 0 = Eat, 1 = Sleep, 2 = Toilet, 3 = Dolphin, 4 = Drum, 5 =
+     Elementals *)
   mutable tam_state : tamagotchi;
   total_icons : int;
   mutable active_icon : int;
@@ -85,7 +86,7 @@ let activate_button (active_button : button) =
       Dolphinview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
   | Drum ->
-      Drumview.g.lifestage <-  State.get_lifestage my_home.tam_state;
+      Drumview.g.lifestage <- State.get_lifestage my_home.tam_state;
       Drumview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
   | Elementals ->
@@ -182,27 +183,33 @@ let get_status_height (order : int) : int =
   let y_spacing = 8 and y_start = 35 and scale = 4 in
   (y_start + (y_spacing * order)) * scale
 
-let get_status_animations (hs : homestate) : unit =
-  let sleep = hs.tam_state |> get_sleep
-  and cleanliness = hs.tam_state |> get_cleanliness
-  and hunger = hs.tam_state |> get_hunger
-  and age = hs.tam_state |> get_age
-  and happy = hs.tam_state |> get_happy in
+let draw_status_name () =
   draw_message 50 (get_status_height 4) 20 Graphics.black "Happy:";
   draw_message 50 (get_status_height 3) 20 Graphics.black "Sleep:";
   draw_message 50 (get_status_height 2) 20 Graphics.black "Clean:";
   draw_message 50 (get_status_height 1) 20 Graphics.black "Hunger:";
-  draw_message 50 (get_status_height 0) 20 Graphics.black "Age:";
-  draw_message 120 (get_status_height 4) 25 Graphics.black
-    (string_of_int happy);
-  draw_message 120 (get_status_height 3) 25 Graphics.black
-    (string_of_int sleep);
-  draw_message 120 (get_status_height 2) 25 Graphics.black
-    (string_of_int cleanliness);
-  draw_message 120 (get_status_height 1) 25 Graphics.black
-    (string_of_int hunger);
-  draw_message 120 (get_status_height 0) 25 Graphics.black
-    (string_of_int age)
+  draw_message 50 (get_status_height 0) 20 Graphics.black "Age:"
+
+let draw_status_value
+    (happy : string)
+    (sleep : string)
+    (cleanliness : string)
+    (hunger : string)
+    (age : string) =
+  draw_message 120 (get_status_height 4) 25 Graphics.black happy;
+  draw_message 120 (get_status_height 3) 25 Graphics.black sleep;
+  draw_message 120 (get_status_height 2) 25 Graphics.black cleanliness;
+  draw_message 120 (get_status_height 1) 25 Graphics.black hunger;
+  draw_message 120 (get_status_height 0) 25 Graphics.black age
+
+let get_status_animations (hs : homestate) : unit =
+  let sleep = hs.tam_state |> get_sleep |> string_of_int
+  and cleanliness = hs.tam_state |> get_cleanliness |> string_of_int
+  and hunger = hs.tam_state |> get_hunger |> string_of_int
+  and age = hs.tam_state |> get_age |> string_of_int
+  and happy = hs.tam_state |> get_happy |> string_of_int in
+  draw_status_name ();
+  draw_status_value happy sleep cleanliness hunger age
 
 let get_poop_animations (hs : homestate) : unit =
   let scaled_cleanliness = (hs.tam_state |> get_cleanliness) / 10 in
@@ -299,14 +306,24 @@ let step (state : viewstate) : unit =
   (* Update animations every [delta] frames *)
   if state.tick mod delta = 0 then
     state.animations <- increment_anims state.animations;
-  (* if state.tick mod delta = 0 then *)
   if true then ignore (State.step my_home.tam_state);
   state.tick <- (state.tick + 1) mod delta
 
-let predraw (state : viewstate) : unit =
+let predraw_setup (state : viewstate) =
   draw_pixels_ll 0 0 120 10 Graphics.black;
   draw_pixels_ll 0 110 120 10 Graphics.black;
-  clear_center state;
+  clear_center state
+
+let predraw_helper (date : string) (time : string) =
+  draw_message 75
+    (default_vs.maxy * default_vs.scale * 42 / 60)
+    25 Graphics.black date;
+  draw_message 75
+    (default_vs.maxy * default_vs.scale * 38 / 60)
+    25 Graphics.black time
+
+let predraw (state : viewstate) : unit =
+  predraw_setup state;
   let {
     tm_sec = sec;
     tm_min = min;
@@ -317,16 +334,9 @@ let predraw (state : viewstate) : unit =
   } =
     localtime (time ())
   in
-  let date =
-    Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday
-  in
-  let time = Printf.sprintf "%02d:%02d:%02d" hour min sec in
-  draw_message 75
-    (default_vs.maxy * default_vs.scale * 42 / 60)
-    25 Graphics.black date;
-  draw_message 75
-    (default_vs.maxy * default_vs.scale * 38 / 60)
-    25 Graphics.black time;
+  predraw_helper
+    (Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday)
+    (Printf.sprintf "%02d:%02d:%02d" hour min sec);
   if hour < 18 && hour > 6 then draw_img 100 80 sun
   else draw_img 100 80 moon;
   get_status_animations my_home;
