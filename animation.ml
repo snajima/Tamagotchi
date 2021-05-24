@@ -143,8 +143,11 @@ let inventory_icon_f2 =
 
 let poop = pixel_array_from_json "poop" homescreen_anim_json
 
-let poop_shovel =
-  pixel_array_from_json "poop_shovel" homescreen_anim_json
+let poop_shovel_f1 =
+  pixel_array_from_json "poop_shovel_f1" homescreen_anim_json
+
+let poop_shovel_f2 =
+  pixel_array_from_json "poop_shovel_f2" homescreen_anim_json
 
 let z_icon = pixel_array_from_json "z_icon" homescreen_anim_json
 
@@ -458,8 +461,8 @@ let sleep_anim_elder =
 
 let clean_anim =
   {
-    frames = [ poop_shovel; poop_shovel; poop_shovel ];
-    total = 3;
+    frames = [ poop_shovel_f1; poop_shovel_f2 ];
+    total = 2;
     current = 0;
     cx = 60;
     cy = 60;
