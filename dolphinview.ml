@@ -57,8 +57,6 @@ let dolphin_init s =
   g.game <- init_game ();
   s.animations <- [ { rock_static with cx = lane_cx 0; cy = 120 } ];
   draw_pixels_ll 0 0 5 120 Graphics.black;
-  (* draw_pixels_ll 35 0 5 120 Graphics.black; *)
-  (* draw_pixels_ll 75 0 5 120 Graphics.black; *)
   draw_pixels_ll 115 0 5 120 Graphics.black
 
 let dolphin_exit s =
