@@ -56,7 +56,6 @@ let drum_key s c =
   | 'a' -> g.game <- process_left g.game
   | 's' -> g.game <- process_middle g.game
   | 'd' -> g.game <- process_right g.game
-  | 'x' -> raise End
   | _ -> print_endline "Invalid Key_pressed"
 
 let b_anims_helper

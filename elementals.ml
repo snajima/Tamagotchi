@@ -16,8 +16,6 @@ type gamestate = {
   wins : int;
   losses : int;
   currently_animated : bool;
-  start_anim : bool;
-  mutable end_anim : bool;
 }
 
 (* ----------------------- Internal functions ------------------------- *)
@@ -30,23 +28,20 @@ let end_game (gs : gamestate) : bool = gs.wins = 2 || gs.losses = 2
   element and the player's current element [gs.ours] gets reset to
   nothing.*)
 let after_update (gs : gamestate) : gamestate =
-  if end_game gs then raise (Gameover (gs.wins = 2))
-  else Random.self_init ();
-    let element =
-      match Random.int 3 with
-      | 0 -> Fire
-      | 1 -> Water
-      | 2 -> Leaf
-      | _ -> failwith "impossible"
-    in
-    {
-      gs with
-      opponent = (element, 100);
-      ours = (Nothing, 0);
-      currently_animated = false;
-      start_anim = true;
-      end_anim = false;
-    }
+  if end_game gs then raise (Gameover (gs.wins = 2));
+  let element =
+    match Random.int 3 with
+    | 0 -> Fire
+    | 1 -> Water
+    | 2 -> Leaf
+    | _ -> failwith "impossible"
+  in
+  {
+    gs with
+    opponent = (element, 100);
+    ours = (Nothing, 0);
+    currently_animated = false;
+  }
 
 (*[next_helper gs] increments the second value of the [gs.our] and
   [gs.opponent] integers which denotes the location of each animation
@@ -58,7 +53,6 @@ let rec next_helper (gs : gamestate) : gamestate =
       gs with
       ours = (fst gs.ours, snd gs.ours + 1);
       opponent = (fst gs.opponent, snd gs.opponent - 1);
-      start_anim = false;
     }
 
 (* ------------------------ External functions ------------------------- *)
@@ -77,8 +71,6 @@ let init_game () : gamestate =
     wins = 0;
     losses = 0;
     currently_animated = false;
-    start_anim = false;
-    end_anim = true;
   }
 
 let win_loss (gs : gamestate) : gamestate =
@@ -86,12 +78,9 @@ let win_loss (gs : gamestate) : gamestate =
     (fst gs.ours = Water && fst gs.opponent = Leaf)
     || (fst gs.ours = Fire && fst gs.opponent = Water)
     || (fst gs.ours = Leaf && fst gs.opponent = Fire)
-  then
-    after_update { gs with losses = gs.losses + 1 }
-  else if fst gs.ours = fst gs.opponent then
-    after_update gs
-  else
-    after_update { gs with wins = gs.wins + 1 }
+  then after_update { gs with losses = gs.losses + 1 }
+  else if fst gs.ours = fst gs.opponent then after_update gs
+  else after_update { gs with wins = gs.wins + 1 }
 
 let get_ours (gs : gamestate) : element * int = gs.ours
 
@@ -101,7 +90,7 @@ let get_wins (gs : gamestate) : int = gs.wins
 
 let get_losses (gs : gamestate) : int = gs.losses
 
-let get_currently_animated (gs : gamestate) : bool = 
+let get_currently_animated (gs : gamestate) : bool =
   gs.currently_animated
 
 let play_water (gs : gamestate) : gamestate =
@@ -119,4 +108,4 @@ let play_leaf (gs : gamestate) : gamestate =
 let next (gs : gamestate) : gamestate =
   if gs.currently_animated then
     try next_helper gs with WinnerDetermined -> win_loss gs
-  else { gs with start_anim = false; }
+  else gs

@@ -12,9 +12,9 @@ type color =
 
     - The lane the player is currently in
     - The number of steps that have occured in the game simulation
-    - The positions of all the rocks in the current game simulation
+    - The positions of all the beats in the current game simulation
 
-    Note that since adding rocks involves randomness, calling [next] on
+    Note that since adding beats involves randomness, calling [next] on
     two identical gamestates may not result in the same result *)
 type beat =
   | Right of int
@@ -37,7 +37,7 @@ type beat =
     - The range from the drum in which a "bad" hit is detected
     - The number of beats until game over
 
-    Note that since adding rocks involves randomness, calling [next] on
+    Note that since adding beats involves randomness, calling [next] on
     two identical gamestates may not result in the same result *)
 type gamestate
 

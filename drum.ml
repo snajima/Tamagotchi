@@ -84,7 +84,7 @@ let fall_beat (height, c) : int * color =
   if height <= 0 then raise Miss else (height - 1, c)
 
 (** [fall_beats] reduces the height of a list of beats, removing beats
-    that fall offscreen, and returns the resulting list of rocks *)
+    that fall offscreen, and returns the resulting list of beats *)
 let rec fall_beats (gs : gamestate) : gamestate =
   match gs.beats with
   | [] -> gs
