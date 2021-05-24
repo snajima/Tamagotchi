@@ -51,11 +51,16 @@ val sleep_icon_static : animation
     in the toolbar in the homescreen *)
 val toilet_icon_static : animation
 
-(* Changed later anyways *)
+(** [dolphin_icon_static] is an [animation] that renders the dolphin button
+    in the toolbar in the homescreen *)
 val dolphin_icon_static : animation
 
+(** [drum_icon_static] is an [animation] that renders the drum button
+    in the toolbar in the homescreen *)
 val drum_icon_static : animation
 
+(** [elementals_icon_static] is an [animation] that renders the elementals 
+(robot) button in the toolbar in the homescreen *)
 val elementals_icon_static : animation
 
 (** [eat_icon_bobble] is an [animation] that renders the eat button in
@@ -72,11 +77,19 @@ val sleep_icon_bobble : animation
     over *)
 val toilet_icon_bobble : animation
 
-(* Change later anyways *)
+(** [dolphin_icon_bobble] is an [animation] that renders the dolphin button
+    in the toolbar in the homescreen when the option is being hovered
+    over *)
 val dolphin_icon_bobble : animation
 
+(** [drum_icon_bobble] is an [animation] that renders the drum button
+    in the toolbar in the homescreen when the option is being hovered
+    over *)
 val drum_icon_bobble : animation
 
+(** [toilet_icon_bobble] is an [animation] that renders the elementals (robot)
+    button in the toolbar in the homescreen when the option is being hovered
+    over *)
 val elementals_icon_bobble : animation
 
 (** [drum_anim] is an [animation] that renders a Tamagotchi drumming
