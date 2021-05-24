@@ -348,12 +348,12 @@ let dolphin_num_rock_test (name : string) actual_value expected_out :
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:num_rocks_printer
 
-(** [repeated_next n gamestate] returns the result of applying the
+(** [dolphin_repeated_next n gamestate] returns the result of applying the
     Dolphin.next function on [gamestate] [n] time *)
-let rec repeated_next (n : int) (gamestate : Dolphin.gamestate) :
+let rec dolphin_repeated_next (n : int) (gamestate : Dolphin.gamestate) :
     Dolphin.gamestate =
   if n = 0 then gamestate
-  else repeated_next (n - 1) (gamestate |> Dolphin.next)
+  else dolphin_repeated_next (n - 1) (gamestate |> Dolphin.next)
 
 let dolphin_test =
   let open Dolphin in
@@ -534,17 +534,17 @@ let beats_num_beat_test (name : string) actual_value expected_out :
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:num_beats_printer
 
-(** [repeated_next n gamestate] returns the result of applying the
-    Dolphin.next function on [gamestate] [n] time *)
-let rec repeated_next (n : int) (gamestate : Dolphin.gamestate) :
+(** [drum_repeated_next n gamestate] returns the result of applying the
+    Drum.next function on [gamestate] [n] time *)
+let rec drum_repeated_next (n : int) (gamestate : Drum.gamestate) :
     Dolphin.gamestate =
   if n = 0 then gamestate
-  else repeated_next (n - 1) (gamestate |> Dolphin.next)
+  else drum_repeated_next (n - 1) (gamestate |> Drum.next)
 
 let drum_test =
   let open Drum in
   [
-    (* ----------------- Observer: get_dolphin_lane ------------------- *)
+    (* ----------------- Observer: get_drum_lane ------------------- *)
     (* -------------------------- One --------------------------- *)
     dolphin_lane_test "Middle to Right"
       (init_game () |> process_right |> get_dolphin_lane)
@@ -599,36 +599,36 @@ let drum_test =
       ( init_game () |> process_left |> process_left |> process_left
       |> get_dolphin_lane )
       Left;
-    (* --------------------- Observer: get_rocks ---------------------- *)
+    (* --------------------- Observer: get_beats ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
        0, 2 *)
     (* The application of the gamestate functions are delayed since the
-       seed needs to be reset each time the [dolphin_rock_test_w_seed]
+       seed needs to be reset each time the [drum_beats_test_w_seed]
        function is called *)
-    dolphin_rock_test_w_seed "Adding one rock - middle lane"
+    drum_beats_test_w_seed "Adding one rock - middle lane"
       (fun gs -> gs |> add_rock |> next |> get_rocks)
       [ (1, 60) ];
-    dolphin_rock_test_w_seed "Adding two rock - left, right lanes"
+    drum_beats_test_w_seed "Adding two rock - left, right lanes"
       (fun gs -> gs |> add_rock |> add_rock |> next |> get_rocks)
       [ (0, 60); (2, 60) ];
-    dolphin_rock_test_w_seed "Add rock |> next |> add 2 rocks"
+    drum_beats_test_w_seed "Add rock |> next |> add 2 rocks"
       (fun gs ->
         gs |> add_rock |> next |> add_rock |> add_rock |> next
         |> get_rocks)
       [ (2, 60); (2, 60); (0, 59) ];
-    dolphin_rock_test_w_seed
+    drum_beats_test_w_seed
       "Repeat (Add rock |> next) three times then add one last rock"
       (fun gs ->
         gs |> add_rock |> next |> add_rock |> next |> add_rock |> next
         |> add_rock |> next |> get_rocks)
       [ (0, 60); (0, 59); (0, 58); (2, 57) ];
-    dolphin_rock_test_w_seed
+    drum_beats_test_w_seed
       "Repeat (Add rock |> next) three times then add one last rock"
       (fun gs ->
         gs |> add_rock |> next |> add_rock |> next |> add_rock |> next
         |> add_rock |> next |> get_rocks)
       [ (0, 60); (1, 59); (2, 58); (2, 57) ];
-    dolphin_rock_test_w_seed "Add one rock and fall to bottom"
+    drum_beats_test_w_seed "Add one rock and fall to bottom"
       (fun gs -> gs |> add_rock |> repeated_next 52 |> get_rocks)
       [ (1, 9) ];
     (* --------------------- Observer: num_rocks ---------------------- *)
