@@ -1,3 +1,9 @@
+(**The state module is used to keep track and update the Tamagotchi's
+   state. A Tamagotchi's state consists of its breed, lifestage, sleep
+   level, cleanliness level , hunger level, happiness level, age, money,
+   and inventory. Different actions that the player takes, like playing
+   games or making the Tamagotchi sleep, will change these states.*)
+
 (** Type [item] represents an item that is possible for the Tamagotchi
     to have. Each item has the following:
 
@@ -168,10 +174,11 @@ val increment_happy : tamagotchi -> tamagotchi
 val decrement_happy : tamagotchi -> tamagotchi
 
 (** [step tam] increases the Tamagotchi's [tam] step state [tam.step] by
-    1 and is called every millisecond. Each step is equivilent to one
-    day in real life, so everytime [tam.step] is a multiple of 365, the
-    Tamogatchi will celebrate its birthday. For each birthday, [tam.age]
-    will increase by 1, [tam.cleanliness] will decrease by 10,
-    [tam.hunger] will decrease by 10, [tam.happy] will decrease by 10,
-    and [tam.sleep] will decrease by 10.*)
+    1 and is called constantly by a time frame dictated in the homemode
+    module. Each step is equivilent to one day in real life, so
+    everytime [tam.step] is a multiple of 365, the Tamogatchi will
+    celebrate its birthday. For each birthday, [tam.age] will increase
+    by 1, [tam.cleanliness] will decrease by 10, [tam.hunger] will
+    decrease by 10, [tam.happy] will decrease by 10, and [tam.sleep]
+    will decrease by 10.*)
 val step : tamagotchi -> tamagotchi

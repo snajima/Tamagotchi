@@ -97,12 +97,32 @@ let reset_game_flags () =
   my_game_flags.drum <- false;
   my_game_flags.elements <- false
 
+let lifestage_to_anim
+    (lifestage : string)
+    baby_anim
+    adult_anim
+    elder_anim : Animation.animation =
+  match lifestage with
+  | "Baby" | "Teenager" -> baby_anim
+  | "Adult" -> adult_anim
+  | "Senior" -> elder_anim
+  | _ -> adult_anim
+
 let get_avatar_animations (hs : homestate) : Animation.animation =
   match hs.active_anim with
-  | Eating -> eat_anim
-  | Sleeping -> sleep_anim
+  | Eating ->
+      lifestage_to_anim
+        (State.get_lifestage hs.tam_state)
+        eat_anim_baby eat_anim_adult eat_anim_elder
+  | Sleeping ->
+      lifestage_to_anim
+        (State.get_lifestage hs.tam_state)
+        sleep_anim_baby sleep_anim_adult sleep_anim_elder
   | Cleaning -> clean_anim
-  | Idle -> avatar
+  | Idle ->
+      lifestage_to_anim
+        (State.get_lifestage hs.tam_state)
+        avatar_baby avatar_adult avatar_elder
 
 let reset_avatar_animations (hs : homestate) =
   hs.active_anim <- Idle;
@@ -141,6 +161,10 @@ let get_toolbar_animations (hs : homestate) : Animation.animation list =
         play_icon_static; shop_icon_static; inventory_icon_bobble;
       ]
 
+let get_status_height (order : int) : int =
+  let y_spacing = 8 and y_start = 35 and scale = 4 in
+  (y_start + (y_spacing * order)) * scale
+
 let get_status_animations (hs : homestate) : unit =
   let sleep = hs.tam_state |> get_sleep
   and cleanliness = hs.tam_state |> get_cleanliness
@@ -148,18 +172,22 @@ let get_status_animations (hs : homestate) : unit =
   and age = hs.tam_state |> get_age
   and happy = hs.tam_state |> get_happy in
   (* Status Name *)
-  draw_message 50 (80 * 4) 25 Graphics.black "Happy:";
-  draw_message 50 (70 * 4) 25 Graphics.black "Sleep:";
-  draw_message 50 (60 * 4) 25 Graphics.black "Clean:";
-  draw_message 50 (50 * 4) 25 Graphics.black "Hunger:";
-  draw_message 50 (40 * 4) 25 Graphics.black "Age:";
+  draw_message 50 (get_status_height 4) 20 Graphics.black "Happy:";
+  draw_message 50 (get_status_height 3) 20 Graphics.black "Sleep:";
+  draw_message 50 (get_status_height 2) 20 Graphics.black "Clean:";
+  draw_message 50 (get_status_height 1) 20 Graphics.black "Hunger:";
+  draw_message 50 (get_status_height 0) 20 Graphics.black "Age:";
   (* Status Value *)
-  draw_message 120 (80 * 4) 30 Graphics.black (string_of_int happy);
-  draw_message 120 (70 * 4) 30 Graphics.black (string_of_int sleep);
-  draw_message 120 (60 * 4) 30 Graphics.black
+  draw_message 120 (get_status_height 4) 25 Graphics.black
+    (string_of_int happy);
+  draw_message 120 (get_status_height 3) 25 Graphics.black
+    (string_of_int sleep);
+  draw_message 120 (get_status_height 2) 25 Graphics.black
     (string_of_int cleanliness);
-  draw_message 120 (50 * 4) 30 Graphics.black (string_of_int hunger);
-  draw_message 120 (40 * 4) 30 Graphics.black (string_of_int age)
+  draw_message 120 (get_status_height 1) 25 Graphics.black
+    (string_of_int hunger);
+  draw_message 120 (get_status_height 0) 25 Graphics.black
+    (string_of_int age)
 
 let get_poop_animations (hs : homestate) : unit =
   let scaled_cleanliness = (hs.tam_state |> get_cleanliness) / 10 in
@@ -225,9 +253,7 @@ let except s ex =
 let key s c =
   (* draw_pixel s.x s.y s.scale s.fc; *)
   (match c with
-  | '1' -> Dolphinview.draw ()
-  | '2' -> Drumview.draw ()
-  | '3' -> Elementalsview.draw ()
+  | '1' -> ignore (State.increment_age my_home.tam_state)
   | 'a' ->
       my_home.active_icon <-
         (my_home.active_icon - 1 + my_home.total_icons)

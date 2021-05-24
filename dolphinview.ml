@@ -69,7 +69,7 @@ let dolphin_exit s =
 let dolphin_except s ex =
   match ex with
   | Dolphin.Gameover score ->
-      gameover_screen 500 score "You're Trash"
+      gameover_screen 500 score "Game Over"
         { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
         s
       (* print_endline (string_of_int score) *)

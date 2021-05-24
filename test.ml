@@ -5,25 +5,32 @@ open State
 (* -------------------------------------------------------------------- *)
 (* -------------------------- State Testing --------------------------- *)
 (* -------------------------------------------------------------------- *)
+(*Objects and inventory lists used for testing*)
+let piano = { name = "piano"; cost = 10 }
+
+let violin = { name = "violin"; cost = 5 }
+
 (*Printer functions*)
 let num_printer num : string = string_of_int num
 
 let string_printer str : string = str
 
+(*Helper functions for testing*)
 let str_feature_test name a b =
   name >:: fun ctxt -> assert_equal a b ~printer:string_printer
 
-(*Helper functions for testing*)
 let num_feature_test name a b =
   name >:: fun ctxt -> assert_equal a b ~printer:num_printer
+
+let equal_sets_test name a b = name >:: fun ctxt -> assert_equal a b
 
 let death_exc name fxn = name >:: fun ctxt -> assert_raises Death fxn
 
 let negative_money_exc name fxn =
   name >:: fun ctxt -> assert_raises NegativeMoney fxn
 
-(** [repeated_step n tam] returns the result of applying the State.step
-    function on [tam] [n] time *)
+(* [repeated_step n tam] returns the result of applying the State.step
+   function on [tam] [n] time *)
 let rec repeated_step n tam =
   if n = 0 then tam else repeated_step (n - 1) (step tam)
 
@@ -105,45 +112,45 @@ let state_tests =
       (init_tam "./json/senior.json" |> get_cleanliness);
     (* ---------------------- Set Cleanliness ----------------------- *)
     num_feature_test "clean of baby -20" 80
-      (init_tam "./json/baby.json"
-      |> set_cleanliness (-20) |> get_cleanliness);
+      ( init_tam "./json/baby.json"
+      |> set_cleanliness (-20) |> get_cleanliness );
     num_feature_test "clean of teen -20" 67
-      (init_tam "./json/teen.json"
-      |> set_cleanliness (-20) |> get_cleanliness);
+      ( init_tam "./json/teen.json"
+      |> set_cleanliness (-20) |> get_cleanliness );
     num_feature_test "clean of senior -20" 50
-      (init_tam "./json/senior.json"
-      |> set_cleanliness (-20) |> get_cleanliness);
+      ( init_tam "./json/senior.json"
+      |> set_cleanliness (-20) |> get_cleanliness );
     death_exc "death clean of teen" (fun () ->
         init_tam "./json/teen.json" |> set_cleanliness (-87));
     num_feature_test "negative edge case clean of baby" 1
-      (init_tam "./json/baby.json"
-      |> set_cleanliness (-99) |> get_cleanliness);
+      ( init_tam "./json/baby.json"
+      |> set_cleanliness (-99) |> get_cleanliness );
     num_feature_test "positive edge case clean of teen" 100
-      (init_tam "./json/teen.json"
-      |> set_cleanliness 13 |> get_cleanliness);
+      ( init_tam "./json/teen.json"
+      |> set_cleanliness 13 |> get_cleanliness );
     num_feature_test "over 100 clean of senior" 100
-      (init_tam "./json/senior.json"
-      |> set_cleanliness 300 |> get_cleanliness);
+      ( init_tam "./json/senior.json"
+      |> set_cleanliness 300 |> get_cleanliness );
     (* -------------------- Increment Cleanliness --------------------- *)
     num_feature_test "increment clean of baby" 100
-      (init_tam "./json/baby.json"
-      |> increment_cleanliness |> get_cleanliness);
+      ( init_tam "./json/baby.json"
+      |> increment_cleanliness |> get_cleanliness );
     num_feature_test "increment clean of teen" 92
-      (init_tam "./json/teen.json"
-      |> increment_cleanliness |> get_cleanliness);
+      ( init_tam "./json/teen.json"
+      |> increment_cleanliness |> get_cleanliness );
     num_feature_test "increment clean of senior" 75
-      (init_tam "./json/senior.json"
-      |> increment_cleanliness |> get_cleanliness);
+      ( init_tam "./json/senior.json"
+      |> increment_cleanliness |> get_cleanliness );
     (* ---------------------------- Step ----------------------------- *)
     num_feature_test "step clean of baby" 90
-      (init_tam "./json/baby.json"
-      |> repeated_step 460 |> get_cleanliness);
+      ( init_tam "./json/baby.json"
+      |> repeated_step 460 |> get_cleanliness );
     num_feature_test "step clean of teen" 77
-      (init_tam "./json/teen.json"
-      |> repeated_step 460 |> get_cleanliness);
+      ( init_tam "./json/teen.json"
+      |> repeated_step 460 |> get_cleanliness );
     num_feature_test "step clean of senior" 60
-      (init_tam "./json/senior.json"
-      |> repeated_step 460 |> get_cleanliness);
+      ( init_tam "./json/senior.json"
+      |> repeated_step 460 |> get_cleanliness );
     (* ------------------ Observer: get_hunger -------------------- *)
     (* ------------------------ No Change ------------------------- *)
     num_feature_test "hunger of baby" 100
@@ -266,19 +273,19 @@ let state_tests =
         init_tam "./json/senior.json" |> set_money (-11));
     (* ------------------ Observer: get_inventory -------------------- *)
     (* ------------------------ No Change ------------------------- *)
-    num_feature_test "money of baby" 0
-      (init_tam "./json/baby.json" |> get_money);
-    num_feature_test "money of teen" 10
-      (init_tam "./json/teen.json" |> get_money);
-    num_feature_test "money of senior" 10
-      (init_tam "./json/senior.json" |> get_money);
+    equal_sets_test "inventory of baby" []
+      (init_tam "./json/baby.json" |> get_inventory);
+    equal_sets_test "inventory of teen" [ piano ]
+      (init_tam "./json/teen.json" |> get_inventory);
+    equal_sets_test "inventory of senior" [ piano ]
+      (init_tam "./json/senior.json" |> get_inventory);
     (* ------------------------ Set Item ------------------------- *)
-    num_feature_test "set money of baby 10" 10
-      (init_tam "./json/baby.json" |> set_money 10 |> get_money);
-    num_feature_test "set money of teen -10" 0
-      (init_tam "./json/teen.json" |> set_money (-10) |> get_money);
-    negative_money_exc "senior in debt" (fun () ->
-        init_tam "./json/senior.json" |> set_money (-11));
+    equal_sets_test "add piano to baby" [ piano ]
+      (init_tam "./json/baby.json" |> set_item piano |> get_inventory);
+    equal_sets_test "add piano to teen" [ piano; piano ]
+      (init_tam "./json/teen.json" |> set_item piano |> get_inventory);
+    equal_sets_test "add violin to senior" [ violin; piano ]
+      (init_tam "./json/senior.json" |> set_item violin |> get_inventory);
   ]
 
 (* -------------------------------------------------------------------- *)
@@ -361,8 +368,8 @@ let dolphin_test =
       Left;
     (* -------------------------- Two --------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right"
-      (init_game () |> process_right |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_right
+      |> get_dolphin_lane )
       Right;
     dolphin_lane_test "Middle |> Left |> Left"
       (init_game () |> process_left |> process_left |> get_dolphin_lane)
@@ -375,36 +382,36 @@ let dolphin_test =
       Middle;
     (* ------------------------- Three -------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right |> Right"
-      (init_game () |> process_right |> process_right |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_right |> process_right
+      |> get_dolphin_lane )
       Right;
     dolphin_lane_test "Middle |> Right |> Right |> Left"
-      (init_game () |> process_right |> process_right |> process_left
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_right |> process_left
+      |> get_dolphin_lane )
       Middle;
     dolphin_lane_test "Middle |> Right |> Left |> Right"
-      (init_game () |> process_right |> process_left |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_left |> process_right
+      |> get_dolphin_lane )
       Right;
     dolphin_lane_test "Middle |> Left |> Right |> Right"
-      (init_game () |> process_left |> process_right |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_left |> process_right |> process_right
+      |> get_dolphin_lane )
       Right;
     dolphin_lane_test "Middle |> Left |> Left |> Right"
-      (init_game () |> process_left |> process_left |> process_right
-     |> get_dolphin_lane)
+      ( init_game () |> process_left |> process_left |> process_right
+      |> get_dolphin_lane )
       Middle;
     dolphin_lane_test "Middle |> Left |> Right |> Left"
-      (init_game () |> process_left |> process_right |> process_left
-     |> get_dolphin_lane)
+      ( init_game () |> process_left |> process_right |> process_left
+      |> get_dolphin_lane )
       Left;
     dolphin_lane_test "Middle |> Right |> Left |> Left"
-      (init_game () |> process_right |> process_left |> process_left
-     |> get_dolphin_lane)
+      ( init_game () |> process_right |> process_left |> process_left
+      |> get_dolphin_lane )
       Left;
     dolphin_lane_test "Middle |> Left |> Left |> Left"
-      (init_game () |> process_left |> process_left |> process_left
-     |> get_dolphin_lane)
+      ( init_game () |> process_left |> process_left |> process_left
+      |> get_dolphin_lane )
       Left;
     (* --------------------- Observer: get_rocks ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
@@ -462,8 +469,65 @@ let dolphin_test =
 (* ----------------------- Elementalist Testing ----------------------- *)
 (* -------------------------------------------------------------------- *)
 
+(*Printer functions*)
+let our_opponent_printer (player : Elementals.element * int) =
+  match fst player with
+  | Fire -> "Fire, " ^ string_of_int (snd player)
+  | Water -> "Water, " ^ string_of_int (snd player)
+  | Leaf -> "Leaf, " ^ string_of_int (snd player)
+  | Nothing -> "Nothing, " ^ string_of_int (snd player)
+
+let win_loss_printer (win_loss : int) = string_of_int win_loss
+
+let currently_animated_printer (currently_animated : bool) =
+  string_of_bool currently_animated
+
+(*Helper functions to construct test cases*)
+(* let our_opponent_test name expected_value actual_value =
+  name >:: fun ctxt ->
+  assert_equal expected_value actual_value ~printer:our_opponent_printer *)
+
+let our_opponent_test
+  ?(seed = 1)
+  (name : string)
+  gamestate_func
+  expected_out : test =
+Random.init 1;
+name >:: fun _ ->
+assert_equal expected_out
+  (Elementals.init_game () |> gamestate_func)
+  ~printer:our_opponent_printer
+
+let win_loss_test name expected_value actual_value =
+  name >:: fun ctxt ->
+  assert_equal expected_value actual_value ~printer:win_loss_printer
+
+let currently_animated_test name expected_value actual_value =
+    name >:: fun ctxt ->
+    assert_equal expected_value actual_value ~printer: currently_animated_printer
+
+let elementals_test =
+  open Elementals in 
+  [
+  (* ----------------------- Observer: get_ours ------------------------ *)
+  (* ---------------------------- Initial ------------------------------ *)
+  our_opponent_test "initial our" (fun () -> ()) (Nothing, 0)
+  (* ------------------------- Play Something -------------------------- *)
+
+  (* --------------------- Observer: get_opponent ---------------------- *)
+  (* ---------------------------- Initial ------------------------------ *)
+  our_opponent_test "initial opponent" (fun () -> ()) (Water, 100)
+  (* ------------------------- Play Something -------------------------- *)
+
+  (* ----------------------- Observer: get_wins ------------------------ *)
+
+  (* ---------------------- Observer: get_losses ----------------------- *)
+
+  (* ---------------- Observer: get_currently_animated ----------------- *)
+
+  ]
 let suite =
   "test suite for Tamagotchi Final Project"
-  >::: List.flatten [ state_tests; dolphin_test ]
+  >::: List.flatten [ state_tests; dolphin_test; elementals_test ]
 
 let _ = run_test_tt_main suite

@@ -48,11 +48,11 @@ let hor_scale (num : int) (p_array : pixel_array) : pixel_array =
 let scale (num : int) (p_array : pixel_array) : pixel_array =
   p_array |> vert_scale num |> hor_scale num
 
-let mirror (img : image) : image =
+let mirror (pixel_array : pixel_array) : pixel_array =
   let array_rev array =
     Array.to_list array |> List.rev |> Array.of_list
   in
-  Array.map array_rev (dump_image img) |> make_image
+  Array.map array_rev pixel_array
 
 let n = 0x000000
 
@@ -257,6 +257,36 @@ let inventory_icon_bobble =
 
 let drum_json = Yojson.Basic.from_file "./json/drum.json"
 
+let idle_drummer = pixel_array_from_json "idle_drummer" drum_json
+
+let right_drum = pixel_array_from_json "right_drum" drum_json
+
+let left_drum = pixel_array_from_json "left_drum" drum_json
+
+let drum_anim =
+  {
+    frames = [ idle_drummer; right_drum; left_drum ];
+    total = 3;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let idle_drummer_anim =
+  {
+    frames = [ idle_drummer ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let right_drum_anim =
+  { frames = [ right_drum ]; total = 1; current = 0; cx = 60; cy = 60 }
+
+let left_drum_anim =
+  { frames = [ left_drum ]; total = 1; current = 0; cx = 60; cy = 60 }
+
 let dolphin_json = Yojson.Basic.from_file "./json/dolphin.json"
 
 let dolphin = pixel_array_from_json "dolphin" dolphin_json
@@ -269,15 +299,10 @@ let white_sq = pixel_array_from_json "white_icon" drum_json
 
 let gg = pixel_array_from_json "gg" dolphin_json
 
-(* let don_anim = { frames = [ don_1; don_2 ]; total = 2; current = 0;
-   cx = 0; cy = 0; } *)
-let tombstone = pixel_array_from_json "tombstone" homescreen_anim_json
+let tombstone = pixel_array_from_json "grave" homescreen_anim_json
 
 let don_anim =
   { frames = [ black_sq ]; total = 1; current = 0; cx = 0; cy = 0 }
-
-(* let ka_anim = { frames = [ ka_1; ka_2 ]; total = 2; current = 0; cx =
-   0; cy = 0; } *)
 
 let ka_anim =
   { frames = [ white_sq ]; total = 1; current = 0; cx = 0; cy = 0 }
@@ -293,14 +318,7 @@ let gg_static =
   }
 
 let tam_death =
-  {
-    (* TODO: Stephen replease the poop with the gravestone plz *)
-    frames = [ tombstone ];
-    total = 1;
-    current = 0;
-    cx = 0;
-    cy = 0;
-  }
+  { frames = [ tombstone ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 and t = 0xFFFFFF
 
@@ -313,10 +331,10 @@ let elder_animation_json =
   Yojson.Basic.from_file "./json/elder_animation.json"
 
 let neutral_f1_elder =
-  pixel_array_from_json "neutral_f1" baby_animation_json
+  pixel_array_from_json "neutral_f1" elder_animation_json
 
 let neutral_f2_elder =
-  pixel_array_from_json "neutral_f2" baby_animation_json
+  pixel_array_from_json "neutral_f2" elder_animation_json
 
 let wide_f1_elder = pixel_array_from_json "wide_f1" elder_animation_json
 
@@ -391,18 +409,29 @@ let water_anim =
 let shoot = pixel_array_from_json "shoot" elementals_json
 
 let shoot_anim =
-  {
-    frames = [ idle_adult; shoot ];
-    total = 2;
-    current = 0;
-    cx = 0;
-    cy = 0;
-  }
+  { frames = [ mirror shoot ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 let robot = pixel_array_from_json "robot" elementals_json
 
 let robot_anim =
   { frames = [ robot ]; total = 1; current = 0; cx = 0; cy = 0 }
+
+let cloud_f1 = pixel_array_from_json "cloud_f1" elementals_json
+
+let cloud_f2 = pixel_array_from_json "cloud_f2" elementals_json
+
+let cloud_f3 = pixel_array_from_json "cloud_f3" elementals_json
+
+let cloud_f4 = pixel_array_from_json "cloud_f4" elementals_json
+
+let cloud_anim =
+  {
+    frames = [ cloud_f1; cloud_f2; cloud_f3; cloud_f4 ];
+    total = 4;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
 
 (** Temporary animation frame for MS1 *)
 let eat_anim_adult =
@@ -496,21 +525,7 @@ let avatar_elder =
   }
 
 let rock_static =
-  {
-    (* Temporary art for rocks *)
-    frames = [ rock ];
-    total = 1;
-    current = 0;
-    cx = 0;
-    cy = 0;
-  }
+  { frames = [ rock ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 let dolphin_static =
-  {
-    (* Temporary art for dolphin *)
-    frames = [ dolphin ];
-    total = 1;
-    current = 0;
-    cx = 0;
-    cy = 0;
-  }
+  { frames = [ dolphin ]; total = 1; current = 0; cx = 0; cy = 0 }
