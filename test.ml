@@ -3,6 +3,58 @@ open Homemode
 open State
 
 (* -------------------------------------------------------------------- *)
+(* ---------------------------- Test Plan ----------------------------- *)
+(* -------------------------------------------------------------------- *)
+(* OUnit Testing vs. Manual Testing ------------------------------------
+   Almost all our modules are comprised of pairs. There is a engine
+   component that provides functionality of the simulation and there is
+   a visual part that provides the information for the visual rendering
+   on the GUI. We designed the engines — dolphin, drum, elementals,
+   state - to be purely functional to ease the testing. Due to the
+   functional and deterministic nature of the engines, it is natural to
+   have them be OUnit tested. With the certainty that the engines are
+   simulating things correctly, we know that our games/state updating
+   will be working as intended. With the finicky nature of frontend
+   programming, the modules that are responsible for the visual
+   rendering mainly involve draw commands to the GUI which cannot be
+   tested easily with OUnit. As such, we chose to manually test all
+   these visual modules - dolphinview, drumview, elementalsview,
+   homemode, gui, animation *)
+
+(* How Test Cases were developed && Why This Testing Demonstrates
+   Correctness of the System -----------------------------------------
+   With reference to the lectures regarding testing, we designed out
+   test cases through the lens of observers, mutators and generators.
+   Ideally we would all combinations of observers with the mutators and
+   generators, however, in our case some matchings did not make sense --
+   for example in the dolphin.ml game engine, the process_middle
+   function does have anything to do with any of the observers. Thus we
+   ended up losening up on this requirement. Instead of testing every
+   single possible combination, we simply structure our testing by
+   observer. We designed a OUnit helper function and printer for each
+   observer and wrote a suite of tests for each observer in each module.
+   In these tests we tested all relevant mutators and generators. In the
+   process of coming up with relevant combinations of the mutator and
+   generator functions we first tested in a glassbox manner -- for ex.
+   after changing a lane left, check if the lane is actually left, and
+   repeat for all possible lane swaps. For observers that provided a
+   more property based value -- for example num_rocks returns the total
+   number of rocks -- we leveraged randomisation with our mutator
+   functions to view the module's behaviour under stress. Like so, we
+   ensure that our engine will behave as expected with any observer,
+   mutator and generator functions. We believe that this demonstrates
+   correctness since if we ensure that with all combinations of
+   observer, mutator and generator functions, our module behaviours as
+   we expect then we know that our game simulation will be sound. With
+   the correctness of the engine certain, we simply need to focus on
+   ensuring that we have a visual indication that corresponds to what is
+   being simulated in the engine. Since the aesthetics of visual
+   elements are subjective, the "correctness" of the visual component is
+   much more flexible. But after many nights of tweaks and fixes, we are
+   very proud of how it looks. We hope you enjoy play with our
+   Tamagotchi! *)
+
+(* -------------------------------------------------------------------- *)
 (* -------------------------- State Testing --------------------------- *)
 (* -------------------------------------------------------------------- *)
 (*[piano] is a record representing the piano item*)
@@ -470,10 +522,6 @@ let dolphin_test =
       (init_game () |> add_rock |> add_rock |> add_rock |> num_rocks)
       3;
   ]
-
-(* -------------------------------------------------------------------- *)
-(* ------------------------- Homemode Testing ------------------------- *)
-(* -------------------------------------------------------------------- *)
 
 (* -------------------------------------------------------------------- *)
 (* --------------------------- Drum Testing --------------------------- *)
