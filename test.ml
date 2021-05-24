@@ -483,49 +483,54 @@ let currently_animated_printer (currently_animated : bool) =
   string_of_bool currently_animated
 
 (*Helper functions to construct test cases*)
-(* let our_opponent_test name expected_value actual_value =
-  name >:: fun ctxt ->
-  assert_equal expected_value actual_value ~printer:our_opponent_printer *)
+(* let our_opponent_test name expected_value actual_value = name >:: fun
+   ctxt -> assert_equal expected_value actual_value
+   ~printer:our_opponent_printer *)
 
 let our_opponent_test
-  ?(seed = 1)
-  (name : string)
-  gamestate_func
-  expected_out : test =
-Random.init 1;
-name >:: fun _ ->
-assert_equal expected_out
-  (Elementals.init_game () |> gamestate_func)
-  ~printer:our_opponent_printer
+    ?(seed = 1)
+    (name : string)
+    gamestate_func
+    expected_out : test =
+  Random.init 1;
+  name >:: fun _ ->
+  assert_equal expected_out
+    (Elementals.init_game () |> gamestate_func)
+    ~printer:our_opponent_printer
 
 let win_loss_test name expected_value actual_value =
   name >:: fun ctxt ->
   assert_equal expected_value actual_value ~printer:win_loss_printer
 
 let currently_animated_test name expected_value actual_value =
-    name >:: fun ctxt ->
-    assert_equal expected_value actual_value ~printer: currently_animated_printer
+  name >:: fun ctxt ->
+  assert_equal expected_value actual_value
+    ~printer:currently_animated_printer
 
 let elementals_test =
-  open Elementals in 
+  let open Elementals in
   [
-  (* ----------------------- Observer: get_ours ------------------------ *)
-  (* ---------------------------- Initial ------------------------------ *)
-  our_opponent_test "initial our" (fun () -> ()) (Nothing, 0)
-  (* ------------------------- Play Something -------------------------- *)
+    (* ----------------------- Observer: get_ours ------------------------ *)
+    (* ---------------------------- Initial ------------------------------ *)
+    our_opponent_test "initial our"
+      (fun () -> ())
+      (Nothing, 0)
+      (* ----------------------- Play Something ------------------------ *)
 
-  (* --------------------- Observer: get_opponent ---------------------- *)
-  (* ---------------------------- Initial ------------------------------ *)
-  our_opponent_test "initial opponent" (fun () -> ()) (Water, 100)
-  (* ------------------------- Play Something -------------------------- *)
+      (* --------------------- Observer: get_opponent ---------------------- *)
+      (* ---------------------------- Initial ------------------------------ *)
+      our_opponent_test "initial opponent"
+      (fun () -> ())
+      (Water, 100);
+    (* ------------------------ Play Something ------------------------- *)
 
-  (* ----------------------- Observer: get_wins ------------------------ *)
+    (* ---------------------- Observer: get_wins ----------------------- *)
 
-  (* ---------------------- Observer: get_losses ----------------------- *)
+    (* --------------------- Observer: get_losses ---------------------- *)
 
-  (* ---------------- Observer: get_currently_animated ----------------- *)
-
+    (* --------------- Observer: get_currently_animated ---------------- *)
   ]
+
 let suite =
   "test suite for Tamagotchi Final Project"
   >::: List.flatten [ state_tests; dolphin_test; elementals_test ]

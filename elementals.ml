@@ -10,29 +10,23 @@ exception Gameover of bool
 
 exception WinnerDetermined
 
-(* --------------------- Data Vars ----------------------- *)
-let max_height = 60
-
 type gamestate = {
-  (* --------------------- Data ------------------------ *)
   ours : element * int;
-  (* snd of tuple is position of element for animating *)
   opponent : element * int;
   wins : int;
   losses : int;
   currently_animated : bool;
 }
 
-(* ----------------- Internal functions ------------------- *)
-
-(**who is 1 if it is checking ours else it is 0*)
-let check_nothing (gs : gamestate) (who : int) : bool =
-  if who = 0 then
-    match fst gs.opponent with Nothing -> true | _ -> false
-  else match fst gs.ours with Nothing -> true | _ -> false
-
+(* ----------------------- Internal functions ------------------------- *)
+(*[end_game gs] returns a boolean that is true if the elementals game is
+  ended. This happens is the player has incurred 2 wins or losses.*)
 let end_game (gs : gamestate) : bool = gs.wins = 2 || gs.losses = 2
 
+(*[after_update gs] checks if the elementals game has ended. If not, the
+  opponent's current element [gs.opponent] gets updated to a random
+  element and the player's current element [gs.ours] gets reset to
+  nothing.*)
 let after_update (gs : gamestate) : gamestate =
   if end_game gs then raise (Gameover (gs.wins = 2))
   else Random.self_init ();
@@ -60,6 +54,9 @@ let after_update (gs : gamestate) : gamestate =
       }
   | _ -> failwith "impossible"
 
+(*[next_helper gs] increments the second value of the [gs.our] and
+  [gs.opponent] integers which denotes the location of each animation
+  until [WinnerDetermined] is raised.*)
 let rec next_helper (gs : gamestate) : gamestate =
   if snd gs.ours > 50 then raise WinnerDetermined
   else
@@ -69,7 +66,7 @@ let rec next_helper (gs : gamestate) : gamestate =
       opponent = (fst gs.opponent, snd gs.opponent - 1);
     }
 
-(* ----------------- External functions ------------------- *)
+(* ------------------------ External functions ------------------------- *)
 
 let init_game () : gamestate =
   Random.self_init ();
