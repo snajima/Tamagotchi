@@ -14,7 +14,7 @@ type button =
   | Sleep
   | Toilet
   | Play
-  | Shop
+  | Drum
   | Inventory
 
 type avatar_anim =
@@ -60,7 +60,7 @@ let button_of_int (active_icon_num : int) =
   | 1 -> Sleep
   | 2 -> Toilet
   | 3 -> Play
-  | 4 -> Shop
+  | 4 -> Drum
   | 5 -> Inventory
   | _ -> failwith "Impossible: Precondition violation"
 
@@ -84,7 +84,7 @@ let activate_button (active_button : button) =
   | Play ->
       Dolphinview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
-  | Shop ->
+  | Drum ->
       Drumview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
   | Inventory ->
@@ -135,37 +135,37 @@ let reset_avatar_animations (hs : homestate) =
 let eat_active =
   [
     eat_icon_bobble; sleep_icon_static; toilet_icon_static;
-    play_icon_static; shop_icon_static; inventory_icon_static;
+    play_icon_static; drum_icon_static; inventory_icon_static;
   ]
 
 let sleep_active =
   [
     eat_icon_static; sleep_icon_bobble; toilet_icon_static;
-    play_icon_static; shop_icon_static; inventory_icon_static;
+    play_icon_static; drum_icon_static; inventory_icon_static;
   ]
 
 let clean_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_bobble;
-    play_icon_static; shop_icon_static; inventory_icon_static;
+    play_icon_static; drum_icon_static; inventory_icon_static;
   ]
 
 let play_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_static;
-    play_icon_bobble; shop_icon_static; inventory_icon_static;
+    play_icon_bobble; drum_icon_static; inventory_icon_static;
   ]
 
-let shop_active =
+let drum_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_static;
-    play_icon_static; shop_icon_bobble; inventory_icon_static;
+    play_icon_static; drum_icon_bobble; inventory_icon_static;
   ]
 
 let inventory_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_static;
-    play_icon_static; shop_icon_static; inventory_icon_bobble;
+    play_icon_static; drum_icon_static; inventory_icon_bobble;
   ]
 
 let get_toolbar_animations (hs : homestate) : Animation.animation list =
@@ -174,7 +174,7 @@ let get_toolbar_animations (hs : homestate) : Animation.animation list =
   | Sleep -> sleep_active
   | Toilet -> clean_active
   | Play -> play_active
-  | Shop -> shop_active
+  | Drum -> drum_active
   | Inventory -> inventory_active
 
 let get_status_height (order : int) : int =

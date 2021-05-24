@@ -109,7 +109,7 @@ let toilet_icon =
 
 let play_icon = pixel_array_from_json "play_icon" homescreen_anim_json
 
-let shop_icon = pixel_array_from_json "shop_icon" homescreen_anim_json
+let drum_icon = pixel_array_from_json "drum_icon" homescreen_anim_json
 
 let inventory_icon =
   pixel_array_from_json "inventory_icon" homescreen_anim_json
@@ -126,8 +126,8 @@ let toilet_icon_f1 =
 let play_icon_f1 =
   pixel_array_from_json "play_icon_f1" homescreen_anim_json
 
-let shop_icon_f1 =
-  pixel_array_from_json "shop_icon_f1" homescreen_anim_json
+let drum_icon_f1 =
+  pixel_array_from_json "drum_icon_f1" homescreen_anim_json
 
 let inventory_icon_f1 =
   pixel_array_from_json "inventory_icon_f1" homescreen_anim_json
@@ -144,8 +144,8 @@ let toilet_icon_f2 =
 let play_icon_f2 =
   pixel_array_from_json "play_icon_f2" homescreen_anim_json
 
-let shop_icon_f2 =
-  pixel_array_from_json "shop_icon_f2" homescreen_anim_json
+let drum_icon_f2 =
+  pixel_array_from_json "drum_icon_f2" homescreen_anim_json
 
 let inventory_icon_f2 =
   pixel_array_from_json "inventory_icon_f2" homescreen_anim_json
@@ -204,9 +204,9 @@ let play_icon_static =
     cy = bot_row_cy;
   }
 
-let shop_icon_static =
+let drum_icon_static =
   {
-    frames = [ shop_icon ];
+    frames = [ drum_icon ];
     total = 1;
     current = 0;
     cx = 60;
@@ -250,10 +250,10 @@ let play_icon_bobble =
     total = 2;
   }
 
-let shop_icon_bobble =
+let drum_icon_bobble =
   {
-    shop_icon_static with
-    frames = [ shop_icon_f1; shop_icon_f2 ];
+    drum_icon_static with
+    frames = [ drum_icon_f1; drum_icon_f2 ];
     total = 2;
   }
 
