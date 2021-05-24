@@ -107,7 +107,8 @@ let sleep_icon = pixel_array_from_json "sleep_icon" homescreen_anim_json
 let toilet_icon =
   pixel_array_from_json "toilet_icon" homescreen_anim_json
 
-let play_icon = pixel_array_from_json "play_icon" homescreen_anim_json
+let dolphin_icon =
+  pixel_array_from_json "dolphin_icon" homescreen_anim_json
 
 let drum_icon = pixel_array_from_json "drum_icon" homescreen_anim_json
 
@@ -123,8 +124,8 @@ let sleep_icon_f1 =
 let toilet_icon_f1 =
   pixel_array_from_json "toilet_icon_f1" homescreen_anim_json
 
-let play_icon_f1 =
-  pixel_array_from_json "play_icon_f1" homescreen_anim_json
+let dolphin_icon_f1 =
+  pixel_array_from_json "dolphin_icon_f1" homescreen_anim_json
 
 let drum_icon_f1 =
   pixel_array_from_json "drum_icon_f1" homescreen_anim_json
@@ -141,8 +142,8 @@ let sleep_icon_f2 =
 let toilet_icon_f2 =
   pixel_array_from_json "toilet_icon_f2" homescreen_anim_json
 
-let play_icon_f2 =
-  pixel_array_from_json "play_icon_f2" homescreen_anim_json
+let dolphin_icon_f2 =
+  pixel_array_from_json "dolphin_icon_f2" homescreen_anim_json
 
 let drum_icon_f2 =
   pixel_array_from_json "drum_icon_f2" homescreen_anim_json
@@ -195,9 +196,9 @@ let toilet_icon_static =
     cy = top_row_cy;
   }
 
-let play_icon_static =
+let dolphin_icon_static =
   {
-    frames = [ play_icon ];
+    frames = [ dolphin_icon ];
     total = 1;
     current = 0;
     cx = 15;
@@ -243,10 +244,10 @@ let toilet_icon_bobble =
     total = 2;
   }
 
-let play_icon_bobble =
+let dolphin_icon_bobble =
   {
-    play_icon_static with
-    frames = [ play_icon_f1; play_icon_f2 ];
+    dolphin_icon_static with
+    frames = [ dolphin_icon_f1; dolphin_icon_f2 ];
     total = 2;
   }
 

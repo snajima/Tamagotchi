@@ -13,7 +13,7 @@ type button =
   | Eat
   | Sleep
   | Toilet
-  | Play
+  | Dolphin
   | Drum
   | Inventory
 
@@ -59,7 +59,7 @@ let button_of_int (active_icon_num : int) =
   | 0 -> Eat
   | 1 -> Sleep
   | 2 -> Toilet
-  | 3 -> Play
+  | 3 -> Dolphin
   | 4 -> Drum
   | 5 -> Inventory
   | _ -> failwith "Impossible: Precondition violation"
@@ -81,7 +81,7 @@ let activate_button (active_button : button) =
       my_home.anim_counter <- default_anim_length;
       ignore (State.increment_cleanliness my_home.tam_state);
       ignore (State.decrement_happy my_home.tam_state)
-  | Play ->
+  | Dolphin ->
       Dolphinview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
   | Drum ->
@@ -135,37 +135,37 @@ let reset_avatar_animations (hs : homestate) =
 let eat_active =
   [
     eat_icon_bobble; sleep_icon_static; toilet_icon_static;
-    play_icon_static; drum_icon_static; inventory_icon_static;
+    dolphin_icon_static; drum_icon_static; inventory_icon_static;
   ]
 
 let sleep_active =
   [
     eat_icon_static; sleep_icon_bobble; toilet_icon_static;
-    play_icon_static; drum_icon_static; inventory_icon_static;
+    dolphin_icon_static; drum_icon_static; inventory_icon_static;
   ]
 
 let clean_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_bobble;
-    play_icon_static; drum_icon_static; inventory_icon_static;
+    dolphin_icon_static; drum_icon_static; inventory_icon_static;
   ]
 
-let play_active =
+let dolphin_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_static;
-    play_icon_bobble; drum_icon_static; inventory_icon_static;
+    dolphin_icon_bobble; drum_icon_static; inventory_icon_static;
   ]
 
 let drum_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_static;
-    play_icon_static; drum_icon_bobble; inventory_icon_static;
+    dolphin_icon_static; drum_icon_bobble; inventory_icon_static;
   ]
 
 let inventory_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_static;
-    play_icon_static; drum_icon_static; inventory_icon_bobble;
+    dolphin_icon_static; drum_icon_static; inventory_icon_bobble;
   ]
 
 let get_toolbar_animations (hs : homestate) : Animation.animation list =
@@ -173,7 +173,7 @@ let get_toolbar_animations (hs : homestate) : Animation.animation list =
   | Eat -> eat_active
   | Sleep -> sleep_active
   | Toilet -> clean_active
-  | Play -> play_active
+  | Dolphin -> dolphin_active
   | Drum -> drum_active
   | Inventory -> inventory_active
 
