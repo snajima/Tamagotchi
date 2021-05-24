@@ -30,29 +30,19 @@ let end_game (gs : gamestate) : bool = gs.wins = 2 || gs.losses = 2
 let after_update (gs : gamestate) : gamestate =
   if end_game gs then raise (Gameover (gs.wins = 2))
   else Random.self_init ();
-  match Random.int 3 with
-  | 0 ->
-      {
-        gs with
-        opponent = (Fire, 100);
-        ours = (Nothing, 0);
-        currently_animated = false;
-      }
-  | 1 ->
-      {
-        gs with
-        opponent = (Water, 100);
-        ours = (Nothing, 0);
-        currently_animated = false;
-      }
-  | 2 ->
-      {
-        gs with
-        opponent = (Leaf, 100);
-        ours = (Nothing, 0);
-        currently_animated = false;
-      }
-  | _ -> failwith "impossible"
+  let element =
+    match Random.int 3 with
+    | 0 -> Fire
+    | 1 -> Water
+    | 2 -> Leaf
+    | _ -> failwith "impossible"
+  in
+  {
+    gs with
+    opponent = (element, 100);
+    ours = (Nothing, 0);
+    currently_animated = false;
+  }
 
 (*[next_helper gs] increments the second value of the [gs.our] and
   [gs.opponent] integers which denotes the location of each animation
@@ -70,32 +60,20 @@ let rec next_helper (gs : gamestate) : gamestate =
 
 let init_game () : gamestate =
   Random.self_init ();
-  match Random.int 3 with
-  | 0 ->
-      {
-        ours = (Nothing, 0);
-        opponent = (Fire, 100);
-        wins = 0;
-        losses = 0;
-        currently_animated = false;
-      }
-  | 1 ->
-      {
-        ours = (Nothing, 0);
-        opponent = (Water, 100);
-        wins = 0;
-        losses = 0;
-        currently_animated = false;
-      }
-  | 2 ->
-      {
-        ours = (Nothing, 0);
-        opponent = (Leaf, 100);
-        wins = 0;
-        losses = 0;
-        currently_animated = false;
-      }
-  | _ -> failwith "impossible"
+  let element =
+    match Random.int 3 with
+    | 0 -> Fire
+    | 1 -> Water
+    | 2 -> Leaf
+    | _ -> failwith "impossible"
+  in
+  {
+    ours = (Nothing, 0);
+    opponent = (element, 100);
+    wins = 0;
+    losses = 0;
+    currently_animated = false;
+  }
 
 let win_loss (gs : gamestate) : gamestate =
   if
