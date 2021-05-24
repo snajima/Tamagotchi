@@ -33,10 +33,10 @@ type gamestate = {
 exception Offscreen
 
 (** [fall_rock] reduces the height of a single rock. It is a helper
-    function that is to be used as a subprocess of [fall_rocks] 
-    
-    Raises: [Offscreen] if the height of a rock is less than 
-    or equal to 1. *)
+    function that is to be used as a subprocess of [fall_rocks]
+
+    Raises: [Offscreen] if the height of a rock is less than or equal to
+    1. *)
 let fall_rock (level, height) : int * int =
   if height <= 1 then raise Offscreen else (level, height - 1)
 

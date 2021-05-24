@@ -19,8 +19,8 @@ let g =
     row_scale = 120 / Drum.max_height;
   }
 
-  let vs : viewstate = { default_vs with animations = [] }
-  
+let vs : viewstate = { default_vs with animations = [] }
+
 let lane_width = 25
 
 let game = init_game ()
@@ -39,27 +39,22 @@ let drum_exit s =
 let drum_except s ex =
   match ex with
   | Drum.Gameover score ->
-    Graphics.clear_graph ();
-    draw_message
-    (default_vs.maxx * default_vs.scale / 2 + 50)
-    ((default_vs.maxy * default_vs.scale) - 20)
-    25 Graphics.black
-    "Sets of beats left: 0";
-    gameover_screen 500 (get_score g.game) "Game Over"
-      { drum_anim with cx = vs.maxx / 2; cy = vs.maxy / 2 + 20 }
-      s
+      Graphics.clear_graph ();
+      draw_message
+        ((default_vs.maxx * default_vs.scale / 2) + 50)
+        ((default_vs.maxy * default_vs.scale) - 20)
+        25 Graphics.black "Sets of beats left: 0";
+      gameover_screen 500 (get_score g.game) "Game Over"
+        { drum_anim with cx = vs.maxx / 2; cy = (vs.maxy / 2) + 20 }
+        s
   | _ -> raise ex
 
 let drum_key s c =
   match c with
-  | 'a' ->
-      g.game <- process_left g.game
-  | 's' ->
-      g.game <- process_middle g.game
-  | 'd' ->
-      g.game <- process_right g.game
-  | 'x' ->
-      raise End
+  | 'a' -> g.game <- process_left g.game
+  | 's' -> g.game <- process_middle g.game
+  | 'd' -> g.game <- process_right g.game
+  | 'x' -> raise End
   | _ -> print_endline "Invalid Key_pressed"
 
 let rec get_beats_anims
@@ -86,21 +81,16 @@ let rec get_beats_anims
 
 let get_player_anims (beat_type : Drum.beat) : Animation.animation =
   match beat_type with
-  | (Left _) ->
-    {
-      left_drum_anim with
-      cx = vs.maxx / 2; cy = vs.maxy / 2 + 20
-    }
-  | (Right _) -> 
-    {
-      right_drum_anim with
-      cx = vs.maxx / 2; cy = vs.maxy / 2 + 20
-    }
-  | Idle -> 
-    {
-      idle_drummer_anim with
-      cx = vs.maxx / 2; cy = vs.maxy / 2 + 20
-    }
+  | Left _ ->
+      { left_drum_anim with cx = vs.maxx / 2; cy = (vs.maxy / 2) + 20 }
+  | Right _ ->
+      { right_drum_anim with cx = vs.maxx / 2; cy = (vs.maxy / 2) + 20 }
+  | Idle ->
+      {
+        idle_drummer_anim with
+        cx = vs.maxx / 2;
+        cy = (vs.maxy / 2) + 20;
+      }
 
 let get_animations (game : Drum.gamestate) : Animation.animation list =
   let beat_anims = get_beats_anims (get_beats g.game) [] in
@@ -123,23 +113,22 @@ let drum_predraw s =
   draw_pixels 15 60 1 11 Graphics.black;
   draw_pixels 10 65 10 1 Graphics.black;
   draw_pixels 10 55 10 1 Graphics.black;
-  draw_pixels 50 105
-    120 lane_width Graphics.white;
+  draw_pixels 50 105 120 lane_width Graphics.white;
   draw_message
-    (default_vs.maxx * default_vs.scale / 2 + 50)
+    ((default_vs.maxx * default_vs.scale / 2) + 50)
     ((default_vs.maxy * default_vs.scale) - 20)
     25 Graphics.black
-    ("Sets of beats left: " ^ (string_of_int (get_num_beats g.game)));
+    ("Sets of beats left: " ^ string_of_int (get_num_beats g.game));
   draw_message
-    (default_vs.maxx * default_vs.scale / 2 + 130)
+    ((default_vs.maxx * default_vs.scale / 2) + 130)
     ((default_vs.maxy * default_vs.scale) - 45)
     25 Graphics.black
-    ("Combo: " ^ (string_of_int (get_combo g.game)));
+    ("Combo: " ^ string_of_int (get_combo g.game));
   draw_message
-    (default_vs.maxx * default_vs.scale / 2 + 130)
+    ((default_vs.maxx * default_vs.scale / 2) + 130)
     ((default_vs.maxy * default_vs.scale) - 70)
     25 Graphics.black
-    ("Score: " ^ (string_of_int (get_score g.game)))
+    ("Score: " ^ string_of_int (get_score g.game))
 
 let draw () =
   draw_loop vs drum_init drum_exit drum_key drum_except drum_step
