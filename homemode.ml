@@ -132,38 +132,50 @@ let reset_avatar_animations (hs : homestate) =
   hs.active_anim <- Idle;
   hs.anim_counter <- 0
 
+let eat_active =
+  [
+    eat_icon_bobble; sleep_icon_static; toilet_icon_static;
+    play_icon_static; shop_icon_static; inventory_icon_static;
+  ]
+
+let sleep_active =
+  [
+    eat_icon_static; sleep_icon_bobble; toilet_icon_static;
+    play_icon_static; shop_icon_static; inventory_icon_static;
+  ]
+
+let clean_active =
+  [
+    eat_icon_static; sleep_icon_static; toilet_icon_bobble;
+    play_icon_static; shop_icon_static; inventory_icon_static;
+  ]
+
+let play_active =
+  [
+    eat_icon_static; sleep_icon_static; toilet_icon_static;
+    play_icon_bobble; shop_icon_static; inventory_icon_static;
+  ]
+
+let shop_active =
+  [
+    eat_icon_static; sleep_icon_static; toilet_icon_static;
+    play_icon_static; shop_icon_bobble; inventory_icon_static;
+  ]
+
+let inventory_active =
+  [
+    eat_icon_static; sleep_icon_static; toilet_icon_static;
+    play_icon_static; shop_icon_static; inventory_icon_bobble;
+  ]
+
 let get_toolbar_animations (hs : homestate) : Animation.animation list =
   match button_of_int hs.active_icon with
-  | Eat ->
-      [
-        eat_icon_bobble; sleep_icon_static; toilet_icon_static;
-        play_icon_static; shop_icon_static; inventory_icon_static;
-      ]
-  | Sleep ->
-      [
-        eat_icon_static; sleep_icon_bobble; toilet_icon_static;
-        play_icon_static; shop_icon_static; inventory_icon_static;
-      ]
-  | Toilet ->
-      [
-        eat_icon_static; sleep_icon_static; toilet_icon_bobble;
-        play_icon_static; shop_icon_static; inventory_icon_static;
-      ]
-  | Play ->
-      [
-        eat_icon_static; sleep_icon_static; toilet_icon_static;
-        play_icon_bobble; shop_icon_static; inventory_icon_static;
-      ]
-  | Shop ->
-      [
-        eat_icon_static; sleep_icon_static; toilet_icon_static;
-        play_icon_static; shop_icon_bobble; inventory_icon_static;
-      ]
-  | Inventory ->
-      [
-        eat_icon_static; sleep_icon_static; toilet_icon_static;
-        play_icon_static; shop_icon_static; inventory_icon_bobble;
-      ]
+  | Eat -> eat_active
+  | Sleep -> sleep_active
+  | Toilet -> clean_active
+  | Play -> play_active
+  | Shop -> shop_active
+  | Inventory -> inventory_active
 
 let get_status_height (order : int) : int =
   let y_spacing = 8 and y_start = 35 and scale = 4 in
@@ -175,13 +187,11 @@ let get_status_animations (hs : homestate) : unit =
   and hunger = hs.tam_state |> get_hunger
   and age = hs.tam_state |> get_age
   and happy = hs.tam_state |> get_happy in
-  (* Status Name *)
   draw_message 50 (get_status_height 4) 20 Graphics.black "Happy:";
   draw_message 50 (get_status_height 3) 20 Graphics.black "Sleep:";
   draw_message 50 (get_status_height 2) 20 Graphics.black "Clean:";
   draw_message 50 (get_status_height 1) 20 Graphics.black "Hunger:";
   draw_message 50 (get_status_height 0) 20 Graphics.black "Age:";
-  (* Status Value *)
   draw_message 120 (get_status_height 4) 25 Graphics.black
     (string_of_int happy);
   draw_message 120 (get_status_height 3) 25 Graphics.black
@@ -264,13 +274,11 @@ let key s c =
   | 'd' ->
       my_home.active_icon <-
         (my_home.active_icon + 1 + my_home.total_icons)
-        mod my_home.total_icons;
-      print_endline (string_of_int my_home.active_icon)
+        mod my_home.total_icons
   | 's' -> my_home.active_icon |> button_of_int |> activate_button
   | 'x' -> raise End
   | _ -> ());
-  s.animations <- get_animations my_home;
-  print_endline (Char.escaped c)
+  s.animations <- get_animations my_home
 
 let clear_center (state : viewstate) : unit =
   Graphics.set_color state.bc;
