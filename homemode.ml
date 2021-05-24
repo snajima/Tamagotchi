@@ -15,7 +15,7 @@ type button =
   | Toilet
   | Dolphin
   | Drum
-  | Inventory
+  | Elementals
 
 type avatar_anim =
   | Eating
@@ -24,7 +24,7 @@ type avatar_anim =
   | Idle
 
 type homestate = {
-  (* 0 = Eat, 1 = Sleep, 2 = Toilet, 3 = Play, 4 = Shop, 5 = Inventory *)
+  (* 0 = Eat, 1 = Sleep, 2 = Toilet, 3 = Dolphin, 4 = Drum, 5 = Elementals *)
   mutable tam_state : tamagotchi;
   total_icons : int;
   mutable active_icon : int;
@@ -61,7 +61,7 @@ let button_of_int (active_icon_num : int) =
   | 2 -> Toilet
   | 3 -> Dolphin
   | 4 -> Drum
-  | 5 -> Inventory
+  | 5 -> Elementals
   | _ -> failwith "Impossible: Precondition violation"
 
 let activate_button (active_button : button) =
@@ -87,7 +87,7 @@ let activate_button (active_button : button) =
   | Drum ->
       Drumview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
-  | Inventory ->
+  | Elementals ->
       Elementalsview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
 
@@ -135,37 +135,37 @@ let reset_avatar_animations (hs : homestate) =
 let eat_active =
   [
     eat_icon_bobble; sleep_icon_static; toilet_icon_static;
-    dolphin_icon_static; drum_icon_static; inventory_icon_static;
+    dolphin_icon_static; drum_icon_static; elementals_icon_static;
   ]
 
 let sleep_active =
   [
     eat_icon_static; sleep_icon_bobble; toilet_icon_static;
-    dolphin_icon_static; drum_icon_static; inventory_icon_static;
+    dolphin_icon_static; drum_icon_static; elementals_icon_static;
   ]
 
 let clean_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_bobble;
-    dolphin_icon_static; drum_icon_static; inventory_icon_static;
+    dolphin_icon_static; drum_icon_static; elementals_icon_static;
   ]
 
 let dolphin_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_static;
-    dolphin_icon_bobble; drum_icon_static; inventory_icon_static;
+    dolphin_icon_bobble; drum_icon_static; elementals_icon_static;
   ]
 
 let drum_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_static;
-    dolphin_icon_static; drum_icon_bobble; inventory_icon_static;
+    dolphin_icon_static; drum_icon_bobble; elementals_icon_static;
   ]
 
-let inventory_active =
+let elementals_active =
   [
     eat_icon_static; sleep_icon_static; toilet_icon_static;
-    dolphin_icon_static; drum_icon_static; inventory_icon_bobble;
+    dolphin_icon_static; drum_icon_static; elementals_icon_bobble;
   ]
 
 let get_toolbar_animations (hs : homestate) : Animation.animation list =
@@ -175,7 +175,7 @@ let get_toolbar_animations (hs : homestate) : Animation.animation list =
   | Toilet -> clean_active
   | Dolphin -> dolphin_active
   | Drum -> drum_active
-  | Inventory -> inventory_active
+  | Elementals -> elementals_active
 
 let get_status_height (order : int) : int =
   let y_spacing = 8 and y_start = 35 and scale = 4 in

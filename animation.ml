@@ -112,8 +112,8 @@ let dolphin_icon =
 
 let drum_icon = pixel_array_from_json "drum_icon" homescreen_anim_json
 
-let inventory_icon =
-  pixel_array_from_json "inventory_icon" homescreen_anim_json
+let elementals_icon =
+  pixel_array_from_json "elementals_icon" homescreen_anim_json
 
 let eat_icon_f1 =
   pixel_array_from_json "eat_icon_f1" homescreen_anim_json
@@ -130,8 +130,8 @@ let dolphin_icon_f1 =
 let drum_icon_f1 =
   pixel_array_from_json "drum_icon_f1" homescreen_anim_json
 
-let inventory_icon_f1 =
-  pixel_array_from_json "inventory_icon_f1" homescreen_anim_json
+let elementals_icon_f1 =
+  pixel_array_from_json "elementals_icon_f1" homescreen_anim_json
 
 let eat_icon_f2 =
   pixel_array_from_json "eat_icon_f2" homescreen_anim_json
@@ -148,8 +148,8 @@ let dolphin_icon_f2 =
 let drum_icon_f2 =
   pixel_array_from_json "drum_icon_f2" homescreen_anim_json
 
-let inventory_icon_f2 =
-  pixel_array_from_json "inventory_icon_f2" homescreen_anim_json
+let elementals_icon_f2 =
+  pixel_array_from_json "elementals_icon_f2" homescreen_anim_json
 
 let poop = pixel_array_from_json "poop" homescreen_anim_json
 
@@ -214,9 +214,9 @@ let drum_icon_static =
     cy = bot_row_cy;
   }
 
-let inventory_icon_static =
+let elementals_icon_static =
   {
-    frames = [ inventory_icon ];
+    frames = [ elementals_icon ];
     total = 1;
     current = 0;
     cx = 105;
@@ -258,10 +258,10 @@ let drum_icon_bobble =
     total = 2;
   }
 
-let inventory_icon_bobble =
+let elementals_icon_bobble =
   {
-    inventory_icon_static with
-    frames = [ inventory_icon_f1; inventory_icon_f2 ];
+    elementals_icon_static with
+    frames = [ elementals_icon_f1; elementals_icon_f2 ];
     total = 2;
   }
 

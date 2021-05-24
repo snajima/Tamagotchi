@@ -53,7 +53,7 @@ val dolphin_icon_static : animation
 
 val drum_icon_static : animation
 
-val inventory_icon_static : animation
+val elementals_icon_static : animation
 
 (** [eat_icon_bobble] is an [animation] that renders the eat button in
     the toolbar in the homescreen when the option is being hovered over *)
@@ -74,7 +74,7 @@ val dolphin_icon_bobble : animation
 
 val drum_icon_bobble : animation
 
-val inventory_icon_bobble : animation
+val elementals_icon_bobble : animation
 
 (** [drum_anim] is an [animation] that renders a Tamagotchi drumming
     used to indicate progress in the Drum game *)
