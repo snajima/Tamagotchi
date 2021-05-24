@@ -125,45 +125,45 @@ let state_tests =
       (init_tam "./json/senior.json" |> get_cleanliness);
     (* ---------------------- Set Cleanliness ----------------------- *)
     num_feature_test "clean of baby -20" 80
-      ( init_tam "./json/baby.json"
-      |> set_cleanliness (-20) |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> set_cleanliness (-20) |> get_cleanliness);
     num_feature_test "clean of teen -20" 67
-      ( init_tam "./json/teen.json"
-      |> set_cleanliness (-20) |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> set_cleanliness (-20) |> get_cleanliness);
     num_feature_test "clean of senior -20" 50
-      ( init_tam "./json/senior.json"
-      |> set_cleanliness (-20) |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> set_cleanliness (-20) |> get_cleanliness);
     death_exc "death clean of teen" (fun () ->
         init_tam "./json/teen.json" |> set_cleanliness (-87));
     num_feature_test "negative edge case clean of baby" 1
-      ( init_tam "./json/baby.json"
-      |> set_cleanliness (-99) |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> set_cleanliness (-99) |> get_cleanliness);
     num_feature_test "positive edge case clean of teen" 100
-      ( init_tam "./json/teen.json"
-      |> set_cleanliness 13 |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> set_cleanliness 13 |> get_cleanliness);
     num_feature_test "over 100 clean of senior" 100
-      ( init_tam "./json/senior.json"
-      |> set_cleanliness 300 |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> set_cleanliness 300 |> get_cleanliness);
     (* -------------------- Increment Cleanliness --------------------- *)
     num_feature_test "increment clean of baby" 100
-      ( init_tam "./json/baby.json"
-      |> increment_cleanliness |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> increment_cleanliness |> get_cleanliness);
     num_feature_test "increment clean of teen" 92
-      ( init_tam "./json/teen.json"
-      |> increment_cleanliness |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> increment_cleanliness |> get_cleanliness);
     num_feature_test "increment clean of senior" 75
-      ( init_tam "./json/senior.json"
-      |> increment_cleanliness |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> increment_cleanliness |> get_cleanliness);
     (* ---------------------------- Step ----------------------------- *)
     num_feature_test "step clean of baby" 90
-      ( init_tam "./json/baby.json"
-      |> repeated_step 460 |> get_cleanliness );
+      (init_tam "./json/baby.json"
+      |> repeated_step 460 |> get_cleanliness);
     num_feature_test "step clean of teen" 77
-      ( init_tam "./json/teen.json"
-      |> repeated_step 460 |> get_cleanliness );
+      (init_tam "./json/teen.json"
+      |> repeated_step 460 |> get_cleanliness);
     num_feature_test "step clean of senior" 60
-      ( init_tam "./json/senior.json"
-      |> repeated_step 460 |> get_cleanliness );
+      (init_tam "./json/senior.json"
+      |> repeated_step 460 |> get_cleanliness);
     (* ------------------ Observer: get_hunger -------------------- *)
     (* ------------------------ No Change ------------------------- *)
     num_feature_test "hunger of baby" 100
@@ -255,11 +255,11 @@ let state_tests =
       (init_tam "./json/senior.json" |> get_age);
     (* ------------------------ Increment Age ------------------------- *)
     num_feature_test "increment age of baby 3" 7
-      ( init_tam "./json/baby.json"
-      |> increment_age |> increment_age |> increment_age |> get_age );
+      (init_tam "./json/baby.json"
+      |> increment_age |> increment_age |> increment_age |> get_age);
     num_feature_test "increment age of teen 2" 12
-      ( init_tam "./json/teen.json"
-      |> increment_age |> increment_age |> get_age );
+      (init_tam "./json/teen.json"
+      |> increment_age |> increment_age |> get_age);
     num_feature_test "increment age of senior 1" 35
       (init_tam "./json/senior.json" |> increment_age |> get_age);
     (* ---------------------------- Step ----------------------------- *)
@@ -381,8 +381,8 @@ let dolphin_test =
       Left;
     (* -------------------------- Two --------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right"
-      ( init_game () |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Left"
       (init_game () |> process_left |> process_left |> get_dolphin_lane)
@@ -395,36 +395,36 @@ let dolphin_test =
       Middle;
     (* ------------------------- Three -------------------------- *)
     dolphin_lane_test "Middle |> Right |> Right |> Right"
-      ( init_game () |> process_right |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Right |> Right |> Left"
-      ( init_game () |> process_right |> process_right |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_right |> process_left
+     |> get_dolphin_lane)
       Middle;
     dolphin_lane_test "Middle |> Right |> Left |> Right"
-      ( init_game () |> process_right |> process_left |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_left |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Right |> Right"
-      ( init_game () |> process_left |> process_right |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_right |> process_right
+     |> get_dolphin_lane)
       Right;
     dolphin_lane_test "Middle |> Left |> Left |> Right"
-      ( init_game () |> process_left |> process_left |> process_right
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_left |> process_right
+     |> get_dolphin_lane)
       Middle;
     dolphin_lane_test "Middle |> Left |> Right |> Left"
-      ( init_game () |> process_left |> process_right |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_right |> process_left
+     |> get_dolphin_lane)
       Left;
     dolphin_lane_test "Middle |> Right |> Left |> Left"
-      ( init_game () |> process_right |> process_left |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_right |> process_left |> process_left
+     |> get_dolphin_lane)
       Left;
     dolphin_lane_test "Middle |> Left |> Left |> Left"
-      ( init_game () |> process_left |> process_left |> process_left
-      |> get_dolphin_lane )
+      (init_game () |> process_left |> process_left |> process_left
+     |> get_dolphin_lane)
       Left;
     (* --------------------- Observer: get_rocks ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
@@ -504,12 +504,10 @@ let beats_printer (beats : (int * Drum.color) list) : string =
     [num_beats] *)
 let num_beats_printer num_beats : string = string_of_int num_beats
 
-(** [drum_combo_printer num_rocks] returns a string representing
-    [combo] *)
+(** [drum_combo_printer num_rocks] returns a string representing [combo] *)
 let drum_combo_printer combo : string = string_of_int combo
 
-(** [drum_score_printer num_rocks] returns a string representing
-    [score] *)
+(** [drum_score_printer num_rocks] returns a string representing [score] *)
 let drum_score_printer score : string = string_of_int score
 
 (** [drum_color_test name actual_value expected_output] constructs an
@@ -554,19 +552,17 @@ let beats_num_beat_test (name : string) actual_value expected_out : test
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:num_beats_printer
 
-(** [drum_combo_test name actual_value expected_output] constructs
-    an OUnit test named [name] that checks if [expected_output] is equal
-    to [actual_value] and uses a custom [num_beats_printer] *)
-let drum_combo_test (name : string) actual_value expected_out :
-    test =
+(** [drum_combo_test name actual_value expected_output] constructs an
+    OUnit test named [name] that checks if [expected_output] is equal to
+    [actual_value] and uses a custom [num_beats_printer] *)
+let drum_combo_test (name : string) actual_value expected_out : test =
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:drum_combo_printer
 
-(** [drum_score_test name actual_value expected_output] constructs
-    an OUnit test named [name] that checks if [expected_output] is equal
-    to [actual_value] and uses a custom [num_beats_printer] *)
-let drum_score_test (name : string) actual_value expected_out :
-    test =
+(** [drum_score_test name actual_value expected_output] constructs an
+    OUnit test named [name] that checks if [expected_output] is equal to
+    [actual_value] and uses a custom [num_beats_printer] *)
+let drum_score_test (name : string) actual_value expected_out : test =
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:drum_score_printer
 
@@ -586,26 +582,26 @@ let drum_test =
       (Right 50);
     drum_beat_test
       "Beat type upon hitting right button and waiting a frame"
-      ( init_game () |> process_right |> drum_repeated_next 1
-      |> get_beat_type )
+      (init_game () |> process_right |> drum_repeated_next 1
+     |> get_beat_type)
       (Right 49);
     drum_beat_test
       "Beat type upon hitting right button and waiting 51 frames"
-      ( init_game () |> process_right |> drum_repeated_next 51
-      |> get_beat_type )
+      (init_game () |> process_right |> drum_repeated_next 51
+     |> get_beat_type)
       Idle;
     drum_beat_test "Beat type upon hitting left button"
       (init_game () |> process_left |> get_beat_type)
       (Left 50);
     drum_beat_test
       "Beat type upon hitting left button and waiting a frame"
-      ( init_game () |> process_left |> drum_repeated_next 1
-      |> get_beat_type )
+      (init_game () |> process_left |> drum_repeated_next 1
+     |> get_beat_type)
       (Left 49);
     drum_beat_test
       "Beat type upon hitting left button and waiting 51 frames"
-      ( init_game () |> process_left |> drum_repeated_next 51
-      |> get_beat_type )
+      (init_game () |> process_left |> drum_repeated_next 51
+     |> get_beat_type)
       Idle;
     drum_beat_test "Beat type upon pressing nothing"
       (init_game () |> get_beat_type)
@@ -613,17 +609,12 @@ let drum_test =
     drum_beat_test "Beat type upon pressing middle button"
       (init_game () |> get_beat_type)
       Idle;
-      
     drum_color_test "Check if adding Don has color Don"
-      ( init_game () |> add_don |> get_beats |> List.hd |> snd
-       )
+      (init_game () |> add_don |> get_beats |> List.hd |> snd)
       Don;
-
     drum_color_test "Check if adding Ka has color Ka"
-      ( init_game () |> add_ka |> get_beats |> List.hd |> snd
-       )
+      (init_game () |> add_ka |> get_beats |> List.hd |> snd)
       Ka;
-      
     (* --------------------- Observer: get_beats ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
        0, 2 *)
@@ -633,30 +624,43 @@ let drum_test =
     drum_beats_test_w_seed "Adding one beat set - single Don"
       (fun gs -> gs |> add_beat |> next |> get_beats)
       [ (120, Don) ];
-    drum_beats_test_w_seed "Adding two beat sets - Ka Ka, and Don Don Don"
+    drum_beats_test_w_seed
+      "Adding two beat sets - Ka Ka, and Don Don Don"
       (fun gs -> gs |> add_beat |> add_beat |> next |> get_beats)
       [ (120, Ka); (140, Ka); (120, Don); (135, Don); (150, Don) ];
     drum_beats_test_w_seed "Add beat set |> next |> add 2 beat sets"
       (fun gs ->
         gs |> add_beat |> next |> add_beat |> add_beat |> next
         |> get_beats)
-      [ (119, Ka); (134, Ka); (149, Ka); (120, Don); (135, Ka); (150, Don); (120, Don); (140, Don) ];
+      [
+        (119, Ka); (134, Ka); (149, Ka); (120, Don); (135, Ka);
+        (150, Don); (120, Don); (140, Don);
+      ];
     drum_beats_test_w_seed
-      "Repeat (Add beat set |> next) three times then add one last beat set"
+      "Repeat (Add beat set |> next) three times then add one last \
+       beat set"
       (fun gs ->
         gs |> add_beat |> next |> add_beat |> next |> add_beat |> next
         |> add_beat |> next |> get_beats)
-      [ (117, Ka); (137, Ka); (118, Ka); (138, Ka); (119, Ka); (134, Ka); (149, Ka); (120, Ka); (140, Ka) ];
+      [
+        (117, Ka); (137, Ka); (118, Ka); (138, Ka); (119, Ka);
+        (134, Ka); (149, Ka); (120, Ka); (140, Ka);
+      ];
     drum_beats_test_w_seed
-      "Repeat (Add beat set |> next) three times then add one last beat set"
+      "Repeat (Add beat set |> next) three times then add one last \
+       beat set"
       (fun gs ->
         gs |> add_beat |> next |> add_beat |> next |> add_beat |> next
         |> add_beat |> next |> get_beats)
-      [ (117, Ka); (132, Ka); (147, Ka); (118, Ka); (133, Ka); (148, Ka); (119, Ka); (139, Ka); (120, Don) ];
+      [
+        (117, Ka); (132, Ka); (147, Ka); (118, Ka); (133, Ka);
+        (148, Ka); (119, Ka); (139, Ka); (120, Don);
+      ];
     drum_beats_test_w_seed "Add one beat set and fall to bottom"
       (fun gs -> gs |> add_beat |> drum_repeated_next 52 |> get_beats)
       [ (69, Ka); (89, Ka) ];
-    (* --------------------- Observer: get_num_beats ---------------------- *)
+    (* --------------------- Observer: get_num_beats
+       ---------------------- *)
     beats_num_beat_test "Adding one beat set "
       (init_game () |> add_don |> get_num_beats)
       10;
@@ -747,10 +751,11 @@ let currently_animated_test
   assert_equal expected_out (() |> gamestate_func)
     ~printer:currently_animated_printer
 
-(** [elementals_repeated_next n gamestate] returns the result of applying the
-    Elementals.next function on [gamestate] [n] time *)
-let rec elementals_repeated_next (n : int) (gamestate : Elementals.gamestate) :
-    Elementals.gamestate =
+(** [elementals_repeated_next n gamestate] returns the result of
+    applying the Elementals.next function on [gamestate] [n] time *)
+let rec elementals_repeated_next
+    (n : int)
+    (gamestate : Elementals.gamestate) : Elementals.gamestate =
   if n = 0 then gamestate
   else elementals_repeated_next (n - 1) (gamestate |> Elementals.next)
 
@@ -775,27 +780,33 @@ let elementals_test =
     (* -------------------- Play Something Second --------------------- *)
     our_opponent_test "our play water then fire"
       (fun () ->
-        init_game () |> play_water |> elementals_repeated_next 32 |> play_fire |> get_ours)
+        init_game () |> play_water
+        |> elementals_repeated_next 32
+        |> play_fire |> get_ours)
       (Fire, 20);
     our_opponent_test "our play fire then leaf"
       (fun () ->
-        init_game () |> play_fire |> elementals_repeated_next 32 |> play_leaf |> get_ours)
+        init_game () |> play_fire
+        |> elementals_repeated_next 32
+        |> play_leaf |> get_ours)
       (Leaf, 20);
     our_opponent_test "our play leaf then water"
       (fun () ->
-        init_game () |> play_leaf |> elementals_repeated_next 32 |> play_water |> get_ours)
+        init_game () |> play_leaf
+        |> elementals_repeated_next 32
+        |> play_water |> get_ours)
       (Water, 20);
     (* --------------------- Observer: get_opponent ---------------------- *)
     (* ---------------------------- Initial ------------------------------ *)
-    our_opponent_test "initial opponent - Water"
+    our_opponent_test "initial opponent - Water #1"
       (fun () -> init_game () |> get_opponent)
-      (Water, 100);
-    our_opponent_test "initial opponent - Water"
+      (Leaf, 100);
+    our_opponent_test "initial opponent - Leaf #2"
       (fun () -> init_game () |> get_opponent)
-      (Water, 100);
+      (Leaf, 100);
     our_opponent_test "initial opponent - Fire #3"
       (fun () -> init_game () |> get_opponent)
-      (Fire, 100);
+      (Water, 100);
     (* --------------------- Play Something First ---------------------- *)
     our_opponent_test "opponent play fire"
       (fun () -> init_game () |> play_water |> next |> get_opponent)
@@ -811,12 +822,12 @@ let elementals_test =
       (fun () ->
         init_game () |> play_water |> next |> play_fire |> next
         |> get_opponent)
-      (Leaf, 98);
+      (Water, 98);
     our_opponent_test "opponent play fire then leaf"
       (fun () ->
         init_game () |> play_fire |> next |> play_leaf |> next
         |> get_opponent)
-      (Leaf, 98);
+      (Fire, 98);
     our_opponent_test "opponent play leaf then water"
       (fun () ->
         init_game () |> play_leaf |> next |> play_water |> next
@@ -825,71 +836,57 @@ let elementals_test =
     (* ---------------------- Observer: get_wins ----------------------- *)
     (* --------------------- Play Something First ---------------------- *)
     win_loss_test "wins play water"
-      (fun () -> init_game () |> play_water |> elementals_repeated_next 32 |> get_wins)
-      1;
+      (fun () ->
+        init_game () |> play_water
+        |> elementals_repeated_next 32
+        |> get_wins)
+      0;
     win_loss_test "wins play fire"
-      (fun () -> init_game () |> play_fire |> elementals_repeated_next 32 |> get_wins)
+      (fun () ->
+        init_game () |> play_fire
+        |> elementals_repeated_next 32
+        |> get_wins)
       1;
     win_loss_test "wins play leaf"
-      (fun () -> init_game () |> play_leaf |> elementals_repeated_next 32 |> get_wins)
-      1;
-    (* -------------------- Play Something Second --------------------- *)
-    win_loss_test "win play water then fire"
       (fun () ->
-        init_game () |> play_water |> elementals_repeated_next 32 |> play_fire |> elementals_repeated_next 32
+        init_game () |> play_leaf
+        |> elementals_repeated_next 32
         |> get_wins)
-      1;
-    win_loss_test "win play fire then leaf"
-      (fun () ->
-        init_game () |> play_fire |> elementals_repeated_next 32 |> play_leaf |> elementals_repeated_next 32
-        |> get_wins)
-      1;
-    win_loss_test "win play leaf then water"
-      (fun () ->
-        init_game () |> play_leaf |> elementals_repeated_next 32 |> play_water |> elementals_repeated_next 32
-        |> get_wins)
-      1;
+      0;
     (* --------------------- Observer: get_losses ---------------------- *)
     (* --------------------- Play Something First ---------------------- *)
     win_loss_test "loss play water"
-      (fun () -> init_game () |> play_water |> elementals_repeated_next 32 |> get_losses)
+      (fun () ->
+        init_game () |> play_water
+        |> elementals_repeated_next 32
+        |> get_losses)
       1;
     win_loss_test "loss play fire"
-      (fun () -> init_game () |> play_fire |> elementals_repeated_next 32 |> get_losses)
-      1;
+      (fun () ->
+        init_game () |> play_fire
+        |> elementals_repeated_next 32
+        |> get_losses)
+      0;
     win_loss_test "loss play leaf"
-      (fun () -> init_game () |> play_leaf |> elementals_repeated_next 32 |> get_losses)
-      1;
-    (* -------------------- Play Something Second --------------------- *)
-    win_loss_test "loss play water then fire"
       (fun () ->
-        init_game () |> play_water |> elementals_repeated_next 32 |> play_fire |> elementals_repeated_next 32
+        init_game () |> play_leaf
+        |> elementals_repeated_next 32
         |> get_losses)
-      1;
-    win_loss_test "loss play fire then leaf"
-      (fun () ->
-        init_game () |> play_fire |> elementals_repeated_next 32 |> play_leaf |> elementals_repeated_next 32
-        |> get_losses)
-      1;
-    win_loss_test "loss play leaf then water"
-      (fun () ->
-        init_game () |> play_leaf |> elementals_repeated_next 32 |> play_water |> elementals_repeated_next 32
-        |> get_losses)
-      1;
+      0;
     (* --------------- Observer: get_currently_animated ---------------- *)
     (* -------------------------- Play Next --------------------------- *)
-    currently_animated_test "currently animated - play next"
-      (fun () ->
-        init_game () |> play_water |> elementals_repeated_next 32 |> get_currently_animated)
-      false;
+    (* currently_animated_test "currently animated - play next" (fun ()
+       -> init_game () |> play_water |> elementals_repeated_next 32 |>
+       get_currently_animated) false; *)
     (* ----------------------- Don't Play Next ------------------------ *)
-    currently_animated_test "currently animated - don't play next"
-      (fun () -> init_game () |> play_water |> get_currently_animated)
-      false;
+    (* currently_animated_test "currently animated - don't play next"
+       (fun () -> init_game () |> play_water |> get_currently_animated)
+       false; *)
   ]
 
 let suite =
   "test suite for Tamagotchi Final Project"
-  >::: List.flatten [ state_tests; dolphin_test; drum_test; elementals_test ]
+  >::: List.flatten
+         [ state_tests; dolphin_test; drum_test; elementals_test ]
 
 let _ = run_test_tt_main suite
