@@ -105,15 +105,7 @@ let drum_step s =
   if s.tick mod g.speed = 0 then s.animations <- get_animations g.game;
   s.tick <- (s.tick + 1) mod 4000
 
-let drum_predraw s =
-  (* TODO: Draw out pixels and calculate inputs of draw_pixels *)
-  draw_pixels (default_vs.maxx / 2) (default_vs.maxy / 2)
-    default_vs.maxx lane_width Graphics.white;
-  draw_pixels 5 60 1 10 Graphics.black;
-  draw_pixels 15 60 1 11 Graphics.black;
-  draw_pixels 10 65 10 1 Graphics.black;
-  draw_pixels 10 55 10 1 Graphics.black;
-  draw_pixels 50 105 120 lane_width Graphics.white;
+let drum_predraw_helper () =
   draw_message
     ((default_vs.maxx * default_vs.scale / 2) + 50)
     ((default_vs.maxy * default_vs.scale) - 20)
@@ -129,6 +121,17 @@ let drum_predraw s =
     ((default_vs.maxy * default_vs.scale) - 70)
     25 Graphics.black
     ("Score: " ^ string_of_int (get_score g.game))
+
+let drum_predraw s =
+  (* TODO: Draw out pixels and calculate inputs of draw_pixels *)
+  draw_pixels (default_vs.maxx / 2) (default_vs.maxy / 2)
+    default_vs.maxx lane_width Graphics.white;
+  draw_pixels 5 60 1 10 Graphics.black;
+  draw_pixels 15 60 1 11 Graphics.black;
+  draw_pixels 10 65 10 1 Graphics.black;
+  draw_pixels 10 55 10 1 Graphics.black;
+  draw_pixels 50 105 120 lane_width Graphics.white;
+  drum_predraw_helper ()
 
 let draw () =
   draw_loop vs drum_init drum_exit drum_key drum_except drum_step
