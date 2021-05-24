@@ -29,30 +29,30 @@ let end_game (gs : gamestate) : bool = gs.wins = 2 || gs.losses = 2
   nothing.*)
 let after_update (gs : gamestate) : gamestate =
   if end_game gs then raise (Gameover (gs.wins = 2))
-  else Random.self_init ();
-  match Random.int 3 with
-  | 0 ->
-      {
-        gs with
-        opponent = (Fire, 100);
-        ours = (Nothing, 0);
-        currently_animated = false;
-      }
-  | 1 ->
-      {
-        gs with
-        opponent = (Water, 100);
-        ours = (Nothing, 0);
-        currently_animated = false;
-      }
-  | 2 ->
-      {
-        gs with
-        opponent = (Leaf, 100);
-        ours = (Nothing, 0);
-        currently_animated = false;
-      }
-  | _ -> failwith "impossible"
+  else
+    match Random.int 3 with
+    | 0 ->
+        {
+          gs with
+          opponent = (Fire, 100);
+          ours = (Nothing, 0);
+          currently_animated = false;
+        }
+    | 1 ->
+        {
+          gs with
+          opponent = (Water, 100);
+          ours = (Nothing, 0);
+          currently_animated = false;
+        }
+    | 2 ->
+        {
+          gs with
+          opponent = (Leaf, 100);
+          ours = (Nothing, 0);
+          currently_animated = false;
+        }
+    | _ -> failwith "impossible"
 
 (*[next_helper gs] increments the second value of the [gs.our] and
   [gs.opponent] integers which denotes the location of each animation
@@ -69,7 +69,6 @@ let rec next_helper (gs : gamestate) : gamestate =
 (* ------------------------ External functions ------------------------- *)
 
 let init_game () : gamestate =
-  Random.self_init ();
   match Random.int 3 with
   | 0 ->
       {
@@ -102,15 +101,15 @@ let win_loss (gs : gamestate) : gamestate =
     (fst gs.ours = Water && fst gs.opponent = Leaf)
     || (fst gs.ours = Fire && fst gs.opponent = Water)
     || (fst gs.ours = Leaf && fst gs.opponent = Fire)
-  then (
+  then
     (* print_endline "You lost"; *)
-    after_update { gs with losses = gs.losses + 1 } )
-  else if fst gs.ours = fst gs.opponent then (
+    after_update { gs with losses = gs.losses + 1 }
+  else if fst gs.ours = fst gs.opponent then
     (* print_endline "You drew"; *)
-    after_update gs )
-  else (
+    after_update gs
+  else
     (* print_endline "You won"; *)
-    after_update { gs with wins = gs.wins + 1 } )
+    after_update { gs with wins = gs.wins + 1 }
 
 let get_ours (gs : gamestate) : element * int = gs.ours
 
