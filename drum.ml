@@ -100,6 +100,8 @@ let rec fall_beats (gs : gamestate) : gamestate =
     is 0 *)
 let game_over (gs : gamestate) : bool = gs.num_beats <= 0
 
+(** [range_helper] draws the message based on if the hit type was [Good], 
+  [Ok], or [Bad] *)
 let range_helper (message : string) : unit =
   draw_pixels 10 90 25 10 Graphics.white;
   draw_message 50
@@ -183,6 +185,15 @@ let calc_beats
     (otherwise : (int * color) list)
     (gs : gamestate) : (int * color) list =
   match hit_type with OutOfRange -> gs.beats | _ -> otherwise
+
+let process_helper (bt_type : beat) (hit_type : hit) (gs : gamestate) (bts : (int * color) list) : gamestate =
+  {
+    gs with
+    beat_type = bt_type;
+    score = calc_score hit_type gs;
+    combo = calc_combo hit_type gs;
+    beats = calc_beats hit_type bts gs;
+  }
 
 (* ------------------------------------------------------------- *)
 (* -------------------- External functions --------------------- *)
