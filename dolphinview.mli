@@ -16,14 +16,14 @@ val dolphin_except : Gui.viewstate -> exn -> unit
     draw loop *)
 val dolphin_key : Gui.viewstate -> char -> unit
 
-(** [dolphin_predraw] handles any rendering that must precede the
-    rendering of animations from the main GUI draw loop *)
-val dolphin_predraw : Gui.viewstate -> unit
-
-(** [dolphin_predraw] handles any neccessary changes to the
+(** [dolphin_step] handles any necessary changes to the
     [Gui.viewstate] each frame during execution of the main GUI draw
     loop *)
 val dolphin_step : Gui.viewstate -> unit
+
+(** [dolphin_predraw] handles any rendering that must precede the
+    rendering of animations from the main GUI draw loop *)
+val dolphin_predraw : Gui.viewstate -> unit
 
 (** [draw] launches the custom GUI draw loop with the specific handlers
     for the Dolphin game *)

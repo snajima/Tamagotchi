@@ -36,7 +36,7 @@ let elementals_except s ex =
         draw_message
           (default_vs.maxx * default_vs.scale / 2)
           ((default_vs.maxy * default_vs.scale) - 40)
-          50 red
+          50 black
           (string_of_int 2 ^ " - " ^ string_of_int (get_losses g.game));
         gameover_screen_no_score 500 "Congrats, you win!"
           { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
@@ -47,7 +47,7 @@ let elementals_except s ex =
         draw_message
           (default_vs.maxx * default_vs.scale / 2)
           ((default_vs.maxy * default_vs.scale) - 40)
-          50 red
+          50 black
           (string_of_int (get_wins g.game) ^ " - " ^ string_of_int 2);
         gameover_screen_no_score 500 "Boo, you lost!"
           { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
@@ -118,7 +118,7 @@ let elementals_predraw s =
   draw_message
     (default_vs.maxx * default_vs.scale / 2)
     ((default_vs.maxy * default_vs.scale) - 40)
-    50 red
+    50 black
     ( string_of_int (get_wins g.game)
     ^ " - "
     ^ string_of_int (get_losses g.game) )
