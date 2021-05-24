@@ -553,8 +553,6 @@ let eat_f2_baby = pixel_array_from_json "eat_f2" baby_animation_json
 
 let eat_f3_baby = pixel_array_from_json "eat_f3" baby_animation_json
 
-let sleeping_baby = pixel_array_from_json "sleeping" baby_animation_json
-
 let neutral_f1_adult = pixel_array_from_json "neutral_f1" animation_json
 
 let neutral_f2_adult = pixel_array_from_json "neutral_f2" animation_json
@@ -570,8 +568,6 @@ let eat_f1_adult = pixel_array_from_json "eat_f1" animation_json
 let eat_f2_adult = pixel_array_from_json "eat_f2" animation_json
 
 let eat_f3_adult = pixel_array_from_json "eat_f3" animation_json
-
-let sleeping_adult = pixel_array_from_json "sleeping" animation_json
 
 (* ---------------------------------------------------------------- *)
 (* ---------------------- Other Animations ------------------------ *)
