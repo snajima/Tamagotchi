@@ -306,14 +306,24 @@ let step (state : viewstate) : unit =
   (* Update animations every [delta] frames *)
   if state.tick mod delta = 0 then
     state.animations <- increment_anims state.animations;
-  (* if state.tick mod delta = 0 then *)
   if true then ignore (State.step my_home.tam_state);
   state.tick <- (state.tick + 1) mod delta
 
-let predraw (state : viewstate) : unit =
+let predraw_setup (state : viewstate) =
   draw_pixels_ll 0 0 120 10 Graphics.black;
   draw_pixels_ll 0 110 120 10 Graphics.black;
-  clear_center state;
+  clear_center state
+
+let predraw_helper (date : string) (time : string) =
+  draw_message 75
+    (default_vs.maxy * default_vs.scale * 42 / 60)
+    25 Graphics.black date;
+  draw_message 75
+    (default_vs.maxy * default_vs.scale * 38 / 60)
+    25 Graphics.black time
+
+let predraw (state : viewstate) : unit =
+  predraw_setup state;
   let {
     tm_sec = sec;
     tm_min = min;
@@ -324,16 +334,9 @@ let predraw (state : viewstate) : unit =
   } =
     localtime (time ())
   in
-  let date =
-    Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday
-  in
-  let time = Printf.sprintf "%02d:%02d:%02d" hour min sec in
-  draw_message 75
-    (default_vs.maxy * default_vs.scale * 42 / 60)
-    25 Graphics.black date;
-  draw_message 75
-    (default_vs.maxy * default_vs.scale * 38 / 60)
-    25 Graphics.black time;
+  predraw_helper
+    (Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday)
+    (Printf.sprintf "%02d:%02d:%02d" hour min sec);
   if hour < 18 && hour > 6 then draw_img 100 80 sun
   else draw_img 100 80 moon;
   get_status_animations my_home;
