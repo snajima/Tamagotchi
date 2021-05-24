@@ -49,7 +49,7 @@ val sleep_icon_static : animation
 val toilet_icon_static : animation
 
 (* Changed later anyways *)
-val play_icon_static : animation
+val dolphin_icon_static : animation
 
 val drum_icon_static : animation
 
@@ -70,7 +70,7 @@ val sleep_icon_bobble : animation
 val toilet_icon_bobble : animation
 
 (* Change later anyways *)
-val play_icon_bobble : animation
+val dolphin_icon_bobble : animation
 
 val drum_icon_bobble : animation
 
