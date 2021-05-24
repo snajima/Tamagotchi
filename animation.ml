@@ -277,15 +277,18 @@ let right_drum = pixel_array_from_json "right_drum" drum_json
 
 let left_drum = pixel_array_from_json "left_drum" drum_json
 
-let idle_drummer_baby = pixel_array_from_json "idle_drummer_baby" drum_json
+let idle_drummer_baby =
+  pixel_array_from_json "idle_drummer_baby" drum_json
 
 let right_drum_baby = pixel_array_from_json "right_drum_baby" drum_json
 
 let left_drum_baby = pixel_array_from_json "left_drum_baby" drum_json
 
-let idle_drummer_elder = pixel_array_from_json "idle_drummer_elder" drum_json
+let idle_drummer_elder =
+  pixel_array_from_json "idle_drummer_elder" drum_json
 
-let right_drum_elder = pixel_array_from_json "right_drum_elder" drum_json
+let right_drum_elder =
+  pixel_array_from_json "right_drum_elder" drum_json
 
 let left_drum_elder = pixel_array_from_json "left_drum_elder" drum_json
 
@@ -331,10 +334,22 @@ let idle_drummer_anim_baby =
   }
 
 let right_drum_anim_baby =
-    { frames = [ right_drum_baby ]; total = 1; current = 0; cx = 60; cy = 60 }
-  
+  {
+    frames = [ right_drum_baby ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
 let left_drum_anim_baby =
-  { frames = [ left_drum_baby ]; total = 1; current = 0; cx = 60; cy = 60 }
+  {
+    frames = [ left_drum_baby ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
 
 let idle_drummer_anim_elder =
   {
@@ -346,10 +361,22 @@ let idle_drummer_anim_elder =
   }
 
 let right_drum_anim_elder =
-  { frames = [ right_drum_elder ]; total = 1; current = 0; cx = 60; cy = 60 }
+  {
+    frames = [ right_drum_elder ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
 
 let left_drum_anim_elder =
-  { frames = [ left_drum_elder ]; total = 1; current = 0; cx = 60; cy = 60 }
+  {
+    frames = [ left_drum_elder ];
+    total = 1;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
 
 let don_anim =
   { frames = [ black_sq ]; total = 1; current = 0; cx = 0; cy = 0 }
@@ -481,8 +508,32 @@ let poop_shovel_f1_elder =
 let poop_shovel_f2_elder =
   pixel_array_from_json "poop_shovel_f2" elder_animation_json
 
-let sleeping_elder =
-  pixel_array_from_json "sleeping" elder_animation_json
+let sleeping_f1_baby =
+  pixel_array_from_json "sleeping_f1" baby_animation_json
+
+let sleeping_f1_adult =
+  pixel_array_from_json "sleeping_f1" animation_json
+
+let sleeping_f1_elder =
+  pixel_array_from_json "sleeping_f1" elder_animation_json
+
+let sleeping_f2_baby =
+  pixel_array_from_json "sleeping_f2" baby_animation_json
+
+let sleeping_f2_adult =
+  pixel_array_from_json "sleeping_f2" animation_json
+
+let sleeping_f2_elder =
+  pixel_array_from_json "sleeping_f2" elder_animation_json
+
+let sleeping_f3_baby =
+  pixel_array_from_json "sleeping_f3" baby_animation_json
+
+let sleeping_f3_adult =
+  pixel_array_from_json "sleeping_f3" animation_json
+
+let sleeping_f3_elder =
+  pixel_array_from_json "sleeping_f3" elder_animation_json
 
 let neutral_f1_baby =
   pixel_array_from_json "neutral_f1" baby_animation_json
@@ -561,8 +612,8 @@ let eat_anim_elder =
 
 let sleep_anim_baby =
   {
-    frames = [ sleeping_baby ];
-    total = 1;
+    frames = [ sleeping_f1_baby; sleeping_f2_baby; sleeping_f3_baby ];
+    total = 3;
     current = 0;
     cx = 60;
     cy = 60;
@@ -570,8 +621,8 @@ let sleep_anim_baby =
 
 let sleep_anim_adult =
   {
-    frames = [ sleeping_adult ];
-    total = 1;
+    frames = [ sleeping_f1_adult; sleeping_f2_adult; sleeping_f3_adult ];
+    total = 3;
     current = 0;
     cx = 60;
     cy = 60;
@@ -579,8 +630,8 @@ let sleep_anim_adult =
 
 let sleep_anim_elder =
   {
-    frames = [ sleeping_elder ];
-    total = 1;
+    frames = [ sleeping_f1_elder; sleeping_f2_elder; sleeping_f3_elder ];
+    total = 3;
     current = 0;
     cx = 60;
     cy = 60;
