@@ -119,7 +119,10 @@ let get_avatar_animations (hs : homestate) : Animation.animation =
       lifestage_to_anim
         (State.get_lifestage hs.tam_state)
         sleep_anim_baby sleep_anim_adult sleep_anim_elder
-  | Cleaning -> clean_anim
+  | Cleaning ->
+      lifestage_to_anim
+        (State.get_lifestage hs.tam_state)
+        clean_anim_baby clean_anim_adult clean_anim_elder
   | Idle ->
       lifestage_to_anim
         (State.get_lifestage hs.tam_state)
@@ -193,17 +196,15 @@ let get_status_animations (hs : homestate) : unit =
 let get_poop_animations (hs : homestate) : unit =
   let scaled_cleanliness = (hs.tam_state |> get_cleanliness) / 10 in
   let poop_count = 10 - scaled_cleanliness in
-  for i = 1 to (poop_count / 4 + 1) do
-    if i = (poop_count / 4 + 1) then (
-      for j = 1 to (poop_count mod 4) do
-        draw_img (120 - 10 * i) (27 + (j * 10)) poop
+  for i = 1 to (poop_count / 4) + 1 do
+    if i = (poop_count / 4) + 1 then
+      for j = 1 to poop_count mod 4 do
+        draw_img (120 - (10 * i)) (27 + (j * 10)) poop
       done
-    )
-    else (
+    else
       for j = 1 to 4 do
-        draw_img (120 - 10 * i) (27 + (j * 10)) poop
+        draw_img (120 - (10 * i)) (27 + (j * 10)) poop
       done
-    )
   done
 
 let get_animations (hs : homestate) : Animation.animation list =
@@ -297,27 +298,28 @@ let predraw (state : viewstate) : unit =
   draw_pixels_ll 0 0 120 10 Graphics.black;
   draw_pixels_ll 0 110 120 10 Graphics.black;
   clear_center state;
-  let {tm_sec = sec;
-     tm_min = min;
-     tm_hour = hour;
-     tm_mday = mday;
-     tm_mon = mon;
-     tm_year = year;} = localtime (time ()) in
-  let date = Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday in 
+  let {
+    tm_sec = sec;
+    tm_min = min;
+    tm_hour = hour;
+    tm_mday = mday;
+    tm_mon = mon;
+    tm_year = year;
+  } =
+    localtime (time ())
+  in
+  let date =
+    Printf.sprintf "%04d-%02d-%02d" (year + 1900) (mon + 1) mday
+  in
   let time = Printf.sprintf "%02d:%02d:%02d" hour min sec in
-  draw_message
-      75
-     ((default_vs.maxy * default_vs.scale) * 42 / 60)
-     25 Graphics.black
-     date;
-  draw_message
-      75
-     ((default_vs.maxy * default_vs.scale) * 38 / 60)
-     25 Graphics.black
-     time;
-  if (hour < 18 && hour > 6)
-    then draw_img 100 80 sun
-    else draw_img 100 80 moon;
+  draw_message 75
+    (default_vs.maxy * default_vs.scale * 42 / 60)
+    25 Graphics.black date;
+  draw_message 75
+    (default_vs.maxy * default_vs.scale * 38 / 60)
+    25 Graphics.black time;
+  if hour < 18 && hour > 6 then draw_img 100 80 sun
+  else draw_img 100 80 moon;
   get_status_animations my_home;
   get_poop_animations my_home
 
