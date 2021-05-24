@@ -27,16 +27,16 @@ let elementals_exit s =
      screen*)
   ()
 
-let draw_score (win : bool) = 
+let draw_score (win : bool) =
   draw_pixels (default_vs.maxx / 2) (default_vs.maxy / 2)
-      default_vs.maxx default_vs.maxy white;
-  if win then ( 
+    default_vs.maxx default_vs.maxy white;
+  if win then
     draw_message
       (default_vs.maxx * default_vs.scale / 2)
       ((default_vs.maxy * default_vs.scale) - 40)
       50 black
       (string_of_int 2 ^ " - " ^ string_of_int (get_losses g.game))
-  ) else (
+  else (
     draw_pixels (default_vs.maxx / 2) (default_vs.maxy / 2)
       default_vs.maxx default_vs.maxy white;
     draw_message
@@ -49,14 +49,14 @@ let elementals_except s ex =
   match ex with
   | Elementals.Gameover w_l ->
       draw_score w_l;
-      if w_l then (
+      if w_l then
         gameover_screen_no_score 500 "Congrats, you win!"
           { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
-          s)
-      else (
+          s
+      else
         gameover_screen_no_score 500 "Boo, you lost!"
           { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
-          s)
+          s
   | _ -> raise ex
 
 let elementals_key s c =
@@ -66,13 +66,12 @@ let elementals_key s c =
   | 'd' -> g.game <- play_leaf g.game
   | _ -> print_endline "Invalid Key_pressed"
 
-let e_anims_helper (height : int) (lst_so_far : Animation.animation list) (anim : Animation.animation) : Animation.animation list = 
-  ({
-    anim with
-    cx = height * g.row_scale;
-    cy = default_vs.maxy / 2;
-  }
-  :: lst_so_far)
+let e_anims_helper
+    (height : int)
+    (lst_so_far : Animation.animation list)
+    (anim : Animation.animation) : Animation.animation list =
+  { anim with cx = height * g.row_scale; cy = default_vs.maxy / 2 }
+  :: lst_so_far
 
 let rec get_elems_anims
     (elements : (element * int) list)

@@ -576,7 +576,7 @@ let drum_test =
       Don;
 
     drum_color_test "Middle |> Right |> Right |> Right"
-      ( init_game () |> add_beat |> get_beats |> List.hd |> snd
+      ( init_game () |> add_beat |> get_beats |> List.tl |> List.hd |> snd
        )
       Don;
 (*       

@@ -57,14 +57,12 @@ let drum_key s c =
   | 'x' -> raise End
   | _ -> print_endline "Invalid Key_pressed"
 
-let b_anims_helper (height : int) (lst_so_far : Animation.animation list) (anim : Animation.animation) : Animation.animation list = 
-  ({
-    anim with
-    cx = height * g.row_scale;
-    cy = default_vs.maxy / 2;
-  }
-  :: lst_so_far)
-
+let b_anims_helper
+    (height : int)
+    (lst_so_far : Animation.animation list)
+    (anim : Animation.animation) : Animation.animation list =
+  { anim with cx = height * g.row_scale; cy = default_vs.maxy / 2 }
+  :: lst_so_far
 
 let rec get_beats_anims
     (beats : (int * Drum.color) list)
@@ -72,9 +70,9 @@ let rec get_beats_anims
   match beats with
   | [] -> lst_so_far
   | (height, Drum.Ka) :: t ->
-    get_beats_anims t (b_anims_helper height lst_so_far ka_anim)
+      get_beats_anims t (b_anims_helper height lst_so_far ka_anim)
   | (height, Drum.Don) :: t ->
-    get_beats_anims t (b_anims_helper height lst_so_far don_anim)
+      get_beats_anims t (b_anims_helper height lst_so_far don_anim)
 
 let get_player_anims (beat_type : Drum.beat) : Animation.animation =
   match beat_type with
