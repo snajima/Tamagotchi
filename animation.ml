@@ -147,12 +147,6 @@ let sun = pixel_array_from_json "sun" homescreen_anim_json
 
 let moon = pixel_array_from_json "moon" homescreen_anim_json
 
-let poop_shovel_f1 =
-  pixel_array_from_json "poop_shovel_f1" homescreen_anim_json
-
-let poop_shovel_f2 =
-  pixel_array_from_json "poop_shovel_f2" homescreen_anim_json
-
 let z_icon = pixel_array_from_json "z_icon" homescreen_anim_json
 
 (* ---------------------------------------------------------------- *)
@@ -352,6 +346,24 @@ let eat_f2_elder = pixel_array_from_json "eat_f2" elder_animation_json
 
 let eat_f3_elder = pixel_array_from_json "eat_f3" elder_animation_json
 
+let poop_shovel_f1_baby =
+  pixel_array_from_json "poop_shovel_f1" baby_animation_json
+
+let poop_shovel_f2_baby =
+  pixel_array_from_json "poop_shovel_f2" baby_animation_json
+
+let poop_shovel_f1_adult =
+  pixel_array_from_json "poop_shovel_f1" animation_json
+
+let poop_shovel_f2_adult =
+  pixel_array_from_json "poop_shovel_f2" animation_json
+
+let poop_shovel_f1_elder =
+  pixel_array_from_json "poop_shovel_f1" elder_animation_json
+
+let poop_shovel_f2_elder =
+  pixel_array_from_json "poop_shovel_f2" elder_animation_json
+
 let sleeping_elder =
   pixel_array_from_json "sleeping" elder_animation_json
 
@@ -492,9 +504,27 @@ let sleep_anim_elder =
     cy = 60;
   }
 
-let clean_anim =
+let clean_anim_baby =
   {
-    frames = [ poop_shovel_f1; poop_shovel_f2 ];
+    frames = [ poop_shovel_f1_baby; poop_shovel_f2_baby ];
+    total = 2;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let clean_anim_elder =
+  {
+    frames = [ poop_shovel_f1_elder; poop_shovel_f2_elder ];
+    total = 2;
+    current = 0;
+    cx = 60;
+    cy = 60;
+  }
+
+let clean_anim_adult =
+  {
+    frames = [ poop_shovel_f1_adult; poop_shovel_f2_adult ];
     total = 2;
     current = 0;
     cx = 60;
