@@ -32,21 +32,21 @@ let end_game (gs : gamestate) : bool = gs.wins = 2 || gs.losses = 2
 let after_update (gs : gamestate) : gamestate =
   if end_game gs then raise (Gameover (gs.wins = 2))
   else Random.self_init ();
-  let element =
-    match Random.int 3 with
-    | 0 -> Fire
-    | 1 -> Water
-    | 2 -> Leaf
-    | _ -> failwith "impossible"
-  in
-  {
-    gs with
-    opponent = (element, 100);
-    ours = (Nothing, 0);
-    currently_animated = false;
-    start_anim = true;
-    end_anim = false;
-  }
+    let element =
+      match Random.int 3 with
+      | 0 -> Fire
+      | 1 -> Water
+      | 2 -> Leaf
+      | _ -> failwith "impossible"
+    in
+    {
+      gs with
+      opponent = (element, 100);
+      ours = (Nothing, 0);
+      currently_animated = false;
+      start_anim = true;
+      end_anim = false;
+    }
 
 (*[next_helper gs] increments the second value of the [gs.our] and
   [gs.opponent] integers which denotes the location of each animation
@@ -64,7 +64,6 @@ let rec next_helper (gs : gamestate) : gamestate =
 (* ------------------------ External functions ------------------------- *)
 
 let init_game () : gamestate =
-  Random.self_init ();
   let element =
     match Random.int 3 with
     | 0 -> Fire
@@ -101,6 +100,9 @@ let get_opponent (gs : gamestate) : element * int = gs.opponent
 let get_wins (gs : gamestate) : int = gs.wins
 
 let get_losses (gs : gamestate) : int = gs.losses
+
+let get_currently_animated (gs : gamestate) : bool = 
+  gs.currently_animated
 
 let play_water (gs : gamestate) : gamestate =
   if gs.currently_animated then gs

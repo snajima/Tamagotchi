@@ -79,6 +79,10 @@ val get_wins : gamestate -> int
     the player currently has*)
 val get_losses : gamestate -> int
 
+(** [get_currently_animated gs] returns a bool representing if the animation
+    is currently happening *)
+val get_currently_animated : gamestate -> bool 
+
 (** [play_water gs] checks if the game is being animated or not. If it
     isn't then it updates the player's element [gs.ours] to playing
     water.*)

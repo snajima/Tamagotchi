@@ -5,32 +5,45 @@ open State
 (* -------------------------------------------------------------------- *)
 (* -------------------------- State Testing --------------------------- *)
 (* -------------------------------------------------------------------- *)
-(*Objects and inventory lists used for testing*)
+(*[piano] is a record representing the piano item*)
 let piano = { name = "piano"; cost = 10 }
 
+(*[violin] is a record representing the violin item*)
 let violin = { name = "violin"; cost = 5 }
 
-(*Printer functions*)
-let num_printer num : string = string_of_int num
+(*[num_printer num] returns the string representing numberic values of a
+  Tamagotchi's state*)
+let state_num_printer num : string = string_of_int num
 
-let string_printer str : string = str
+(*[string_printer str] returns the string representing string values of
+  a Tamagotchi's state*)
+let state_string_printer str : string = str
 
-(*Helper functions for testing*)
+(*[str_feature_test name a b] constructs an OUnit test named [name] that
+  checks if [a] is equal to [b] and uses a custom [state_string_printer]*)
 let str_feature_test name a b =
-  name >:: fun ctxt -> assert_equal a b ~printer:string_printer
+  name >:: fun ctxt -> assert_equal a b ~printer:state_string_printer
 
+(*[num_feature_test name a b] constructs an OUnit test named [name] that
+  checks if [a] is equal to [b] and uses a custom [state_num_printer]*)
 let num_feature_test name a b =
-  name >:: fun ctxt -> assert_equal a b ~printer:num_printer
+  name >:: fun ctxt -> assert_equal a b ~printer:state_num_printer
 
+(*[equal_sets_test name a b] constructs an OUnit test named [name] that
+  checks if [a] is equal to [b] to be used on lists.*)
 let equal_sets_test name a b = name >:: fun ctxt -> assert_equal a b
 
+(*[death_exc name fxn] constructs an OUnit test named [name] that checks
+  if [fxn] will raise [Death] exception.*)
 let death_exc name fxn = name >:: fun ctxt -> assert_raises Death fxn
 
+(*[negative_money_exc name fxn] constructs an OUnit test named [name]
+  that checks if [fxn] will raise [NegativeMoney] exception.*)
 let negative_money_exc name fxn =
   name >:: fun ctxt -> assert_raises NegativeMoney fxn
 
 (* [repeated_step n tam] returns the result of applying the State.step
-   function on [tam] [n] time *)
+   function on [tam] [n] times. *)
 let rec repeated_step n tam =
   if n = 0 then tam else repeated_step (n - 1) (step tam)
 
@@ -348,10 +361,10 @@ let dolphin_num_rock_test (name : string) actual_value expected_out :
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:num_rocks_printer
 
-(** [dolphin_repeated_next n gamestate] returns the result of applying the
-    Dolphin.next function on [gamestate] [n] time *)
-let rec dolphin_repeated_next (n : int) (gamestate : Dolphin.gamestate) :
-    Dolphin.gamestate =
+(** [dolphin_repeated_next n gamestate] returns the result of applying
+    the Dolphin.next function on [gamestate] [n] time *)
+let rec dolphin_repeated_next (n : int) (gamestate : Dolphin.gamestate)
+    : Dolphin.gamestate =
   if n = 0 then gamestate
   else dolphin_repeated_next (n - 1) (gamestate |> Dolphin.next)
 
@@ -443,7 +456,8 @@ let dolphin_test =
         |> add_rock |> next |> get_rocks)
       [ (0, 60); (1, 59); (2, 58); (2, 57) ];
     dolphin_rock_test_w_seed "Add one rock and fall to bottom"
-      (fun gs -> gs |> add_rock |> dolphin_repeated_next 52 |> get_rocks)
+      (fun gs ->
+        gs |> add_rock |> dolphin_repeated_next 52 |> get_rocks)
       [ (1, 9) ];
     (* --------------------- Observer: num_rocks ---------------------- *)
     dolphin_num_rock_test "Adding one rock "
@@ -467,9 +481,7 @@ let dolphin_test =
 
 (** [color_printer color] returns a string representing [color] *)
 let color_printer (color : Drum.color) : string =
-  match color with
-  | Don -> "Don"
-  | Ka -> "Ka"
+  match color with Don -> "Don" | Ka -> "Ka"
 
 (** [beat_printer beat] returns a string representing [beat] *)
 let beat_printer (beat : Drum.beat) : string =
@@ -520,8 +532,8 @@ let drum_beat_test (name : string) actual_value expected_out : test =
     initialized Dolphin.gamestate and uses a custom [beats_printer]
 
     Note that gamestate_func allows for delayed application of the
-    Drum.add_beat functions. The purpose of this is to allow the seed
-    to be set before the add_beat methods (which involve randomness) to
+    Drum.add_beat functions. The purpose of this is to allow the seed to
+    be set before the add_beat methods (which involve randomness) to
     allow for testing*)
 let drum_beats_test_w_seed
     ?(seed = 1)
@@ -537,8 +549,8 @@ let drum_beats_test_w_seed
 (** [beats_num_beat_test name actual_value expected_output] constructs
     an OUnit test named [name] that checks if [expected_output] is equal
     to [actual_value] and uses a custom [num_beats_printer] *)
-let beats_num_beat_test (name : string) actual_value expected_out :
-    test =
+let beats_num_beat_test (name : string) actual_value expected_out : test
+    =
   name >:: fun _ ->
   assert_equal expected_out actual_value ~printer:num_beats_printer
 
@@ -572,20 +584,28 @@ let drum_test =
     drum_beat_test "Beat type upon hitting right button"
       (init_game () |> process_right |> get_beat_type)
       (Right 50);
-    drum_beat_test "Beat type upon hitting right button and waiting a frame"
-      (init_game () |> process_right |> drum_repeated_next 1 |> get_beat_type)
+    drum_beat_test
+      "Beat type upon hitting right button and waiting a frame"
+      ( init_game () |> process_right |> drum_repeated_next 1
+      |> get_beat_type )
       (Right 49);
-    drum_beat_test "Beat type upon hitting right button and waiting 51 frames"
-      (init_game () |> process_right |> drum_repeated_next 51 |> get_beat_type)
+    drum_beat_test
+      "Beat type upon hitting right button and waiting 51 frames"
+      ( init_game () |> process_right |> drum_repeated_next 51
+      |> get_beat_type )
       Idle;
     drum_beat_test "Beat type upon hitting left button"
       (init_game () |> process_left |> get_beat_type)
       (Left 50);
-    drum_beat_test "Beat type upon hitting left button and waiting a frame"
-      (init_game () |> process_left |> drum_repeated_next 1 |> get_beat_type)
+    drum_beat_test
+      "Beat type upon hitting left button and waiting a frame"
+      ( init_game () |> process_left |> drum_repeated_next 1
+      |> get_beat_type )
       (Left 49);
-    drum_beat_test "Beat type upon hitting left button and waiting 51 frames"
-      (init_game () |> process_left |> drum_repeated_next 51 |> get_beat_type)
+    drum_beat_test
+      "Beat type upon hitting left button and waiting 51 frames"
+      ( init_game () |> process_left |> drum_repeated_next 51
+      |> get_beat_type )
       Idle;
     drum_beat_test "Beat type upon pressing nothing"
       (init_game () |> get_beat_type)
@@ -652,24 +672,34 @@ let drum_test =
 (* ----------------------- Elementalist Testing ----------------------- *)
 (* -------------------------------------------------------------------- *)
 
-(*Printer functions*)
-(* let our_opponent_printer (player : Elementals.element * int) =
+(*[our_opponent_printer player] returns the string representing the
+  current element [player] played and the current position of the
+  [player] animation.*)
+let our_opponent_printer (player : Elementals.element * int) =
   match fst player with
   | Fire -> "Fire, " ^ string_of_int (snd player)
   | Water -> "Water, " ^ string_of_int (snd player)
   | Leaf -> "Leaf, " ^ string_of_int (snd player)
   | Nothing -> "Nothing, " ^ string_of_int (snd player)
 
+(*[win_loss_printer win_loss] returns the string the number of wins or
+  losses the player has.*)
 let win_loss_printer (win_loss : int) = string_of_int win_loss
 
+(*[currently_animated_printed currently_animated] returns the string
+  representing the boolean [currently_animated].*)
 let currently_animated_printer (currently_animated : bool) =
   string_of_bool currently_animated
 
-(*Helper functions to construct test cases*)
-(* let our_opponent_test name expected_value actual_value = name >:: fun
-   ctxt -> assert_equal expected_value actual_value
-   ~printer:our_opponent_printer *)
+(** [our_opponent_test name gamestate_func expected_out] constructs an
+    OUnit test named [name] that checks if [expected_out] is equal to
+    [gamestate_func] applied on () and uses a custom
+    [our_opponent_printer]
 
+    Note that gamestate_func allows for delayed application of the
+    Elementals.init_game and Elementals.win_loss functions. The purpose
+    of this is to allow the seed to be set before the init_game and
+    win_loss methods (which involve randomness) to allow for testing*)
 let our_opponent_test
     ?(seed = 1)
     (name : string)
@@ -677,18 +707,52 @@ let our_opponent_test
     expected_out : test =
   Random.init 1;
   name >:: fun _ ->
-  assert_equal expected_out
-    (Elementals.init_game () |> gamestate_func)
+  assert_equal expected_out (() |> gamestate_func)
     ~printer:our_opponent_printer
 
-let win_loss_test name expected_value actual_value =
-  name >:: fun ctxt ->
-  assert_equal expected_value actual_value ~printer:win_loss_printer
+(** [win_loss_test name gamestate_func expected_out] constructs an OUnit
+    test named [name] that checks if [expected_out] is equal to
+    [gamestate_func] applied on () and uses a custom [win_loss_printer]
 
-let currently_animated_test name expected_value actual_value =
-  name >:: fun ctxt ->
-  assert_equal expected_value actual_value
+    Note that gamestate_func allows for delayed application of the
+    Elementals.init_game and Elementals.win_loss functions. The purpose
+    of this is to allow the seed to be set before the init_game and
+    win_loss methods (which involve randomness) to allow for testing*)
+let win_loss_test
+    ?(seed = 1)
+    (name : string)
+    gamestate_func
+    expected_out : test =
+  Random.init 1;
+  name >:: fun _ ->
+  assert_equal expected_out (() |> gamestate_func)
+    ~printer:win_loss_printer
+
+(** [currently_animated_test name gamestate_func expected_out]
+    constructs an OUnit test named [name] that checks if [expected_out]
+    is equal to [gamestate_func] applied on () and uses a custom
+    [currently_animated_printer]
+
+    Note that gamestate_func allows for delayed application of the
+    Elementals.init_game and Elementals.win_loss functions. The purpose
+    of this is to allow the seed to be set before the init_game and
+    win_loss methods (which involve randomness) to allow for testing*)
+let currently_animated_test
+    ?(seed = 1)
+    (name : string)
+    gamestate_func
+    expected_out : test =
+  Random.init 1;
+  name >:: fun _ ->
+  assert_equal expected_out (() |> gamestate_func)
     ~printer:currently_animated_printer
+
+(** [elementals_repeated_next n gamestate] returns the result of applying the
+    Elementals.next function on [gamestate] [n] time *)
+let rec elementals_repeated_next (n : int) (gamestate : Elementals.gamestate) :
+    Elementals.gamestate =
+  if n = 0 then gamestate
+  else elementals_repeated_next (n - 1) (gamestate |> Elementals.next)
 
 let elementals_test =
   let open Elementals in
@@ -696,26 +760,136 @@ let elementals_test =
     (* ----------------------- Observer: get_ours ------------------------ *)
     (* ---------------------------- Initial ------------------------------ *)
     our_opponent_test "initial our"
-      (fun () -> ())
-      (Nothing, 0)
-      (* ----------------------- Play Something ------------------------ *)
-
-      (* --------------------- Observer: get_opponent ---------------------- *)
-      (* ---------------------------- Initial ------------------------------ *)
-      our_opponent_test "initial opponent"
-      (fun () -> ())
+      (fun () -> init_game () |> get_ours)
+      (Nothing, 0);
+    (* --------------------- Play Something First ---------------------- *)
+    our_opponent_test "our play water"
+      (fun () -> init_game () |> play_water |> get_ours)
+      (Water, 20);
+    our_opponent_test "our play fire"
+      (fun () -> init_game () |> play_fire |> get_ours)
+      (Fire, 20);
+    our_opponent_test "our play leaf"
+      (fun () -> init_game () |> play_leaf |> get_ours)
+      (Leaf, 20);
+    (* -------------------- Play Something Second --------------------- *)
+    our_opponent_test "our play water then fire"
+      (fun () ->
+        init_game () |> play_water |> elementals_repeated_next 32 |> play_fire |> get_ours)
+      (Fire, 20);
+    our_opponent_test "our play fire then leaf"
+      (fun () ->
+        init_game () |> play_fire |> elementals_repeated_next 32 |> play_leaf |> get_ours)
+      (Leaf, 20);
+    our_opponent_test "our play leaf then water"
+      (fun () ->
+        init_game () |> play_leaf |> elementals_repeated_next 32 |> play_water |> get_ours)
+      (Water, 20);
+    (* --------------------- Observer: get_opponent ---------------------- *)
+    (* ---------------------------- Initial ------------------------------ *)
+    our_opponent_test "initial opponent - Water"
+      (fun () -> init_game () |> get_opponent)
       (Water, 100);
-    (* ------------------------ Play Something ------------------------- *)
-
+    our_opponent_test "initial opponent - Water"
+      (fun () -> init_game () |> get_opponent)
+      (Water, 100);
+    our_opponent_test "initial opponent - Fire #3"
+      (fun () -> init_game () |> get_opponent)
+      (Fire, 100);
+    (* --------------------- Play Something First ---------------------- *)
+    our_opponent_test "opponent play fire"
+      (fun () -> init_game () |> play_water |> next |> get_opponent)
+      (Fire, 99);
+    our_opponent_test "opponent play leaf"
+      (fun () -> init_game () |> play_fire |> next |> get_opponent)
+      (Leaf, 99);
+    our_opponent_test "opponent play leaf"
+      (fun () -> init_game () |> play_leaf |> next |> get_opponent)
+      (Leaf, 99);
+    (* -------------------- Play Something Second --------------------- *)
+    our_opponent_test "opponent play water then fire"
+      (fun () ->
+        init_game () |> play_water |> next |> play_fire |> next
+        |> get_opponent)
+      (Leaf, 98);
+    our_opponent_test "opponent play fire then leaf"
+      (fun () ->
+        init_game () |> play_fire |> next |> play_leaf |> next
+        |> get_opponent)
+      (Leaf, 98);
+    our_opponent_test "opponent play leaf then water"
+      (fun () ->
+        init_game () |> play_leaf |> next |> play_water |> next
+        |> get_opponent)
+      (Water, 98);
     (* ---------------------- Observer: get_wins ----------------------- *)
-
+    (* --------------------- Play Something First ---------------------- *)
+    win_loss_test "wins play water"
+      (fun () -> init_game () |> play_water |> elementals_repeated_next 32 |> get_wins)
+      1;
+    win_loss_test "wins play fire"
+      (fun () -> init_game () |> play_fire |> elementals_repeated_next 32 |> get_wins)
+      1;
+    win_loss_test "wins play leaf"
+      (fun () -> init_game () |> play_leaf |> elementals_repeated_next 32 |> get_wins)
+      1;
+    (* -------------------- Play Something Second --------------------- *)
+    win_loss_test "win play water then fire"
+      (fun () ->
+        init_game () |> play_water |> elementals_repeated_next 32 |> play_fire |> elementals_repeated_next 32
+        |> get_wins)
+      1;
+    win_loss_test "win play fire then leaf"
+      (fun () ->
+        init_game () |> play_fire |> elementals_repeated_next 32 |> play_leaf |> elementals_repeated_next 32
+        |> get_wins)
+      1;
+    win_loss_test "win play leaf then water"
+      (fun () ->
+        init_game () |> play_leaf |> elementals_repeated_next 32 |> play_water |> elementals_repeated_next 32
+        |> get_wins)
+      1;
     (* --------------------- Observer: get_losses ---------------------- *)
-
+    (* --------------------- Play Something First ---------------------- *)
+    win_loss_test "loss play water"
+      (fun () -> init_game () |> play_water |> elementals_repeated_next 32 |> get_losses)
+      1;
+    win_loss_test "loss play fire"
+      (fun () -> init_game () |> play_fire |> elementals_repeated_next 32 |> get_losses)
+      1;
+    win_loss_test "loss play leaf"
+      (fun () -> init_game () |> play_leaf |> elementals_repeated_next 32 |> get_losses)
+      1;
+    (* -------------------- Play Something Second --------------------- *)
+    win_loss_test "loss play water then fire"
+      (fun () ->
+        init_game () |> play_water |> elementals_repeated_next 32 |> play_fire |> elementals_repeated_next 32
+        |> get_losses)
+      1;
+    win_loss_test "loss play fire then leaf"
+      (fun () ->
+        init_game () |> play_fire |> elementals_repeated_next 32 |> play_leaf |> elementals_repeated_next 32
+        |> get_losses)
+      1;
+    win_loss_test "loss play leaf then water"
+      (fun () ->
+        init_game () |> play_leaf |> elementals_repeated_next 32 |> play_water |> elementals_repeated_next 32
+        |> get_losses)
+      1;
     (* --------------- Observer: get_currently_animated ---------------- *)
-  ] *)
+    (* -------------------------- Play Next --------------------------- *)
+    currently_animated_test "currently animated - play next"
+      (fun () ->
+        init_game () |> play_water |> elementals_repeated_next 32 |> get_currently_animated)
+      false;
+    (* ----------------------- Don't Play Next ------------------------ *)
+    currently_animated_test "currently animated - don't play next"
+      (fun () -> init_game () |> play_water |> get_currently_animated)
+      false;
+  ]
 
 let suite =
   "test suite for Tamagotchi Final Project"
-  >::: List.flatten [ state_tests; dolphin_test; drum_test ]
+  >::: List.flatten [ state_tests; dolphin_test; drum_test; elementals_test ]
 
 let _ = run_test_tt_main suite
