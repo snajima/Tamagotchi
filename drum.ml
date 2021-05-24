@@ -89,7 +89,6 @@ let rec fall_beats (gs : gamestate) : gamestate =
   match gs.beats with
   | [] -> gs
   | h :: t -> (
-      print_endline(string_of_int (fst h));
       (* If beats fall offscreen, exclude from list of beats *)
       try
         {gs with beats = ((fall_beat h) :: (fall_beats {gs with beats = t}).beats)}
@@ -235,22 +234,10 @@ let process_left (gs : gamestate) : gamestate =
     match snd closest with
     | ht, Don ->
         let hit_type = range ht gs false in
-        {
-          gs with
-          beat_type = Left 50;
-          score = calc_score hit_type gs;
-          combo = calc_combo hit_type gs;
-          beats = calc_beats hit_type (fst closest) gs;
-        }
+        process_helper (Left 50) hit_type gs (fst closest)
     | ht, Ka ->
         let hit_type = range ht gs true in
-        {
-          gs with
-          beat_type = Left 50;
-          score = calc_score hit_type gs;
-          combo = calc_combo hit_type gs;
-          beats = calc_beats hit_type (fst closest) gs;
-        }
+        process_helper (Left 50) hit_type gs (fst closest)
 
 let process_middle (gs : gamestate) : gamestate = gs
 
@@ -265,22 +252,10 @@ let process_right (gs : gamestate) : gamestate =
     match snd closest with
     | ht, Don ->
         let hit_type = range ht gs true in
-        {
-          gs with
-          beat_type = Right 50;
-          score = calc_score hit_type gs;
-          combo = calc_combo hit_type gs;
-          beats = calc_beats hit_type (fst closest) gs;
-        }
+        process_helper (Right 50) hit_type gs (fst closest)
     | ht, Ka ->
         let hit_type = range ht gs false in
-        {
-          gs with
-          beat_type = Right 50;
-          score = calc_score hit_type gs;
-          combo = calc_combo hit_type gs;
-          beats = calc_beats hit_type (fst closest) gs;
-        }
+        process_helper (Right 50) hit_type gs (fst closest)
 
 let next (gs : gamestate) : gamestate =
   if game_over gs then raise (Gameover gs.score)
