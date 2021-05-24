@@ -5,7 +5,7 @@ type color =
   | Don
   | Ka
 
-type beat = 
+type beat =
   | Right of int
   | Idle
   | Left of int
@@ -30,7 +30,7 @@ type gamestate = {
   (* Multiplier for getting a [Good] rated input *)
   good_multiplier : float;
   (* Multiplier for getting a higher combo *)
-  combo_multiplier: int;
+  combo_multiplier : int;
   (* Player position *)
   player_x : int;
   (* Ranges for hit detection *)
@@ -41,94 +41,118 @@ type gamestate = {
   num_beats : int;
 }
 
-type hit = Good | Ok | Bad | OutOfRange
+type hit =
+  | Good
+  | Ok
+  | Bad
+  | OutOfRange
 
-let beats = [
-  [( max_height + 1, Don )];
-  [( max_height + 1, Ka )];
-  [( max_height + 1, Don ); ( max_height + 16, Don ); ( max_height + 31, Don )];
-  [( max_height + 1, Ka ); ( max_height + 16, Ka ); ( max_height + 31, Ka )];
-  [( max_height + 1, Don ); ( max_height + 16, Ka ); ( max_height + 31, Don )];
-  [( max_height + 1, Ka ); ( max_height + 16, Don ); ( max_height + 31, Ka )];
-  [( max_height + 1, Don ); ( max_height + 21, Don )];
-  [( max_height + 1, Ka ); ( max_height + 21, Ka )];
-]
+let beats =
+  [
+    [ (max_height + 1, Don) ]; [ (max_height + 1, Ka) ];
+    [
+      (max_height + 1, Don); (max_height + 16, Don);
+      (max_height + 31, Don);
+    ];
+    [
+      (max_height + 1, Ka); (max_height + 16, Ka); (max_height + 31, Ka);
+    ];
+    [
+      (max_height + 1, Don); (max_height + 16, Ka);
+      (max_height + 31, Don);
+    ];
+    [
+      (max_height + 1, Ka); (max_height + 16, Don); (max_height + 31, Ka);
+    ]; [ (max_height + 1, Don); (max_height + 21, Don) ];
+    [ (max_height + 1, Ka); (max_height + 21, Ka) ];
+  ]
 
 (* ------------------------------------------------------------- *)
 (* -------------------- Internal functions --------------------- *)
 (* ------------------------------------------------------------- *)
 
 (** Raised when a player misses a beat to reset combo counter. Note that
-    this exception is only raised by internal functions, it is not included
-    in the out-facing mli *)
+    this exception is only raised by internal functions, it is not
+    included in the out-facing mli *)
 exception Miss
 
 (** [fall_beat] reduces the height of a single beat. It is a helper
     function that is to be used as a subprocess of [fall_beats]
-    
-    Raises: [Miss] if the height of a beat is less than  
-    or equal to 0. *)
+
+    Raises: [Miss] if the height of a beat is less than or equal to 0. *)
 let fall_beat (height, c) : int * color =
   if height <= 0 then raise Miss else (height - 1, c)
 
 (** [fall_beats] reduces the height of a list of beats, removing beats
     that fall offscreen, and returns the resulting list of rocks *)
-let rec fall_beats (beat_lst : (int * color) list) : (int * color) list =
+let rec fall_beats (beat_lst : (int * color) list) : (int * color) list
+    =
   match beat_lst with
   | [] -> []
   | h :: t -> (
       (* If beats fall offscreen, exclude from list of beats *)
-      try fall_beat h :: fall_beats t with Miss -> fall_beats t )
+      try fall_beat h :: fall_beats t with Miss -> fall_beats t)
 
-(** [game_over] returns a boolean indicating if the number of beats left is 0 *)
-let game_over (gs : gamestate) : bool =
-  gs.num_beats <= 0
+(** [game_over] returns a boolean indicating if the number of beats left
+    is 0 *)
+let game_over (gs : gamestate) : bool = gs.num_beats <= 0
 
-(** [range] returns the type of hit based on distance between a beat and the 
-    player's x position. If the distance is less than [good_range], the
-    hit type returned is [Good], same logic with [Ok], and [Bad]. Otherwise,
-    returns a [OutOfRange] to not punish players for hitting a button
-    when no beats are nearby, intentionally or not *)
+(** [range] returns the type of hit based on distance between a beat and
+    the player's x position. If the distance is less than [good_range],
+    the hit type returned is [Good], same logic with [Ok], and [Bad].
+    Otherwise, returns a [OutOfRange] to not punish players for hitting
+    a button when no beats are nearby, intentionally or not *)
 let range (beat_x : int) (gs : gamestate) (right_beat : bool) : hit =
-  let diff = Int.abs (beat_x - gs.player_x) in 
-  if right_beat then (
+  let diff = Int.abs (beat_x - gs.player_x) in
+  if right_beat then
     if diff < gs.good_range then (
       draw_pixels 10 90 25 10 Graphics.white;
-      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Good!";
+      draw_message 50
+        ((default_vs.maxy * default_vs.scale / 2) + 120)
+        35 Graphics.black "Good!";
       Good)
     else if diff < gs.ok_range then (
       draw_pixels 10 90 25 10 Graphics.white;
-      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Ok";
+      draw_message 50
+        ((default_vs.maxy * default_vs.scale / 2) + 120)
+        35 Graphics.black "Ok";
       Ok)
     else if diff < gs.bad_range then (
       draw_pixels 10 90 25 10 Graphics.white;
-      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Bad";
+      draw_message 50
+        ((default_vs.maxy * default_vs.scale / 2) + 120)
+        35 Graphics.black "Bad";
       Bad)
     else OutOfRange
-  ) else (
-    if diff < gs.bad_range then (
-      draw_pixels 10 90 25 10 Graphics.white;
-      draw_message 50 ((default_vs.maxy * default_vs.scale / 2) + 120) 35 Graphics.black "Bad";
+  else if diff < gs.bad_range then (
+    draw_pixels 10 90 25 10 Graphics.white;
+    draw_message 50
+      ((default_vs.maxy * default_vs.scale / 2) + 120)
+      35 Graphics.black "Bad";
     Bad)
-    else OutOfRange
-  )
+  else OutOfRange
 
 (** Calculates the combo based on hit type
 
-    If hit type is [Good] or [Ok], increase score by a certain amount
-    If hit type is [Bad] or [OutOfRange], don't increase score *)
+    If hit type is [Good] or [Ok], increase score by a certain amount If
+    hit type is [Bad] or [OutOfRange], don't increase score *)
 let calc_score (hit_type : hit) (gs : gamestate) : int =
   match hit_type with
-  | Good -> gs.score + 500 + Float.to_int(gs.good_multiplier *. Int.to_float(gs.combo / gs.combo_multiplier)) * 200
-  | Ok -> gs.score + 300 + (gs.combo / gs.combo_multiplier) * 100
+  | Good ->
+      gs.score + 500
+      + Float.to_int
+          (gs.good_multiplier
+          *. Int.to_float (gs.combo / gs.combo_multiplier))
+        * 200
+  | Ok -> gs.score + 300 + (gs.combo / gs.combo_multiplier * 100)
   | _ -> gs.score
 
 (** Calculates the combo based on hit type
 
-    If hit type is [Good] or [Ok], continue combo (i.e. return combo + 1)
-    If hit type is [Bad] reset combo (i.e. return 0)
-    If hit type is [OutOfRange], don't punish players and return
-    itself (i.e. return combo) *)
+    If hit type is [Good] or [Ok], continue combo (i.e. return combo +
+    1) If hit type is [Bad] reset combo (i.e. return 0) If hit type is
+    [OutOfRange], don't punish players and return itself (i.e. return
+    combo) *)
 let calc_combo (hit_type : hit) (gs : gamestate) : int =
   match hit_type with
   | Good -> gs.combo + 1
@@ -136,34 +160,53 @@ let calc_combo (hit_type : hit) (gs : gamestate) : int =
   | Bad -> 0
   | OutOfRange -> gs.combo
 
-(** [closest_to_player] returns a list of beats and a beat in the tuple format
-  (beats list, beat) with fst of tuple containing every beat but the one
-  closest to the drum and snd of tuple being the element that got removed *)
-let rec closest_to_player (min : int) (beats : (int * color) list) (so_far : (int * color) list) (gs : gamestate) : ((int * color) list * (int * color)) = 
-  match beats with 
-  | h :: t -> (
-    let diff = Int.abs ((fst h) - gs.player_x) in
-    if min > diff then closest_to_player diff t (so_far @ [h]) gs else (so_far @ (List.tl beats), h)
-  )
-  | _ -> ([], (0, Ka)) 
+(** [closest_to_player] returns a list of beats and a beat in the tuple
+    format (beats list, beat) with fst of tuple containing every beat
+    but the one closest to the drum and snd of tuple being the element
+    that got removed *)
+let rec closest_to_player
+    (min : int)
+    (beats : (int * color) list)
+    (so_far : (int * color) list)
+    (gs : gamestate) : (int * color) list * (int * color) =
+  match beats with
+  | h :: t ->
+      let diff = Int.abs (fst h - gs.player_x) in
+      if min > diff then closest_to_player diff t (so_far @ [ h ]) gs
+      else (so_far @ List.tl beats, h)
+  | _ -> ([], (0, Ka))
 
-(** [calc_beats] either returns the beats already in the game (if hit type is 
-    [OutOfRange]), or returns the beats in the parameter [otherwise]. This
-    function is used to return the correct list of beats depending on if there
-    is a beat within range when a player inputs a button *)
-let calc_beats (hit_type : hit) (otherwise : (int * color) list) (gs : gamestate) : (int * color) list =
-  match hit_type with
-  | OutOfRange -> gs.beats
-  | _ -> otherwise
+(** [calc_beats] either returns the beats already in the game (if hit
+    type is [OutOfRange]), or returns the beats in the parameter
+    [otherwise]. This function is used to return the correct list of
+    beats depending on if there is a beat within range when a player
+    inputs a button *)
+let calc_beats
+    (hit_type : hit)
+    (otherwise : (int * color) list)
+    (gs : gamestate) : (int * color) list =
+  match hit_type with OutOfRange -> gs.beats | _ -> otherwise
 
 (* ------------------------------------------------------------- *)
 (* -------------------- External functions --------------------- *)
 (* ------------------------------------------------------------- *)
 
 let init_game () : gamestate =
-  { combo = 0; score = 0; beats = []; beat_type = Idle; good_multiplier = 1.6; combo_multiplier = 10; player_x = 10; good_range = 2; ok_range = 4; bad_range = 5; num_beats = 11 }
+  {
+    combo = 0;
+    score = 0;
+    beats = [];
+    beat_type = Idle;
+    good_multiplier = 1.6;
+    combo_multiplier = 10;
+    player_x = 10;
+    good_range = 2;
+    ok_range = 4;
+    bad_range = 5;
+    num_beats = 11;
+  }
 
-let get_beats (gs : gamestate) : ((int * color) list) = gs.beats
+let get_beats (gs : gamestate) : (int * color) list = gs.beats
 
 let get_num_beats (gs : gamestate) : int = gs.num_beats
 
@@ -172,69 +215,85 @@ let get_combo (gs : gamestate) : int = gs.combo
 let get_score (gs : gamestate) : int = gs.score
 
 let get_beat_type (gs : gamestate) : beat = gs.beat_type
-  
+
 let process_left (gs : gamestate) : gamestate =
-  if (List.length gs.beats = 0) then gs else (
-    let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
-    match (snd closest) with
-    | (ht, Don) -> (
-      let hit_type = range ht gs false in
-      { 
-        gs with 
-        beat_type = (Left 50);
-        score = calc_score hit_type gs;
-        combo = calc_combo hit_type gs;
-        beats = calc_beats hit_type (fst closest) gs;
-      }
-    )
-    | (ht, Ka) -> (
-      let hit_type = range ht gs true in
-      { 
-          gs with 
-          beat_type = (Left 50);
+  if List.length gs.beats = 0 then gs
+  else
+    let closest =
+      closest_to_player
+        (Int.abs (fst (List.hd gs.beats) - gs.player_x))
+        gs.beats [] gs
+    in
+    match snd closest with
+    | ht, Don ->
+        let hit_type = range ht gs false in
+        {
+          gs with
+          beat_type = Left 50;
           score = calc_score hit_type gs;
           combo = calc_combo hit_type gs;
           beats = calc_beats hit_type (fst closest) gs;
         }
-    )
-  )
+    | ht, Ka ->
+        let hit_type = range ht gs true in
+        {
+          gs with
+          beat_type = Left 50;
+          score = calc_score hit_type gs;
+          combo = calc_combo hit_type gs;
+          beats = calc_beats hit_type (fst closest) gs;
+        }
 
 let process_middle (gs : gamestate) : gamestate = gs
 
 let process_right (gs : gamestate) : gamestate =
-  if (List.length gs.beats = 0) then gs else (
-    let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
-    match (snd closest) with
-    | (ht, Don) -> (
-      let hit_type = range ht gs true in
-      { 
-        gs with 
-        beat_type = (Right 50);
-        score = calc_score hit_type gs;
-        combo = calc_combo hit_type gs;
-        beats = calc_beats hit_type (fst closest) gs;
-      }
-    )
-    | (ht, Ka) -> (
-      let hit_type = range ht gs false in
-      { 
-        gs with 
-        beat_type = (Right 50);
-        score = calc_score hit_type gs;
-        combo = calc_combo hit_type gs;
-        beats = calc_beats hit_type (fst closest) gs;
-      }
-    )
-  )
+  if List.length gs.beats = 0 then gs
+  else
+    let closest =
+      closest_to_player
+        (Int.abs (fst (List.hd gs.beats) - gs.player_x))
+        gs.beats [] gs
+    in
+    match snd closest with
+    | ht, Don ->
+        let hit_type = range ht gs true in
+        {
+          gs with
+          beat_type = Right 50;
+          score = calc_score hit_type gs;
+          combo = calc_combo hit_type gs;
+          beats = calc_beats hit_type (fst closest) gs;
+        }
+    | ht, Ka ->
+        let hit_type = range ht gs false in
+        {
+          gs with
+          beat_type = Right 50;
+          score = calc_score hit_type gs;
+          combo = calc_combo hit_type gs;
+          beats = calc_beats hit_type (fst closest) gs;
+        }
 
 let next (gs : gamestate) : gamestate =
-  if game_over gs then raise (Gameover gs.score) 
+  if game_over gs then raise (Gameover gs.score)
   else
     match gs.beat_type with
-    | (Left 0) -> { gs with beats = fall_beats gs.beats; beat_type = Idle }
-    | (Left x) -> { gs with beats = fall_beats gs.beats; beat_type = (Left (x - 1)) }
-    | (Right 0) -> { gs with beats = fall_beats gs.beats; beat_type = Idle }
-    | (Right x) -> { gs with beats = fall_beats gs.beats; beat_type = (Right (x - 1)) }
+    | Left 0 ->
+        { gs with beats = fall_beats gs.beats; beat_type = Idle }
+    | Left x ->
+        {
+          gs with
+          beats = fall_beats gs.beats;
+          beat_type = Left (x - 1);
+        }
+    | Right 0 ->
+        { gs with beats = fall_beats gs.beats; beat_type = Idle }
+    | Right x ->
+        {
+          gs with
+          beats = fall_beats gs.beats;
+          beat_type = Right (x - 1);
+        }
     | Idle -> { gs with beats = fall_beats gs.beats }
 
 let add_beat (gs : gamestate) : gamestate =
