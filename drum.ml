@@ -116,7 +116,7 @@ let range (beat_x : int) (gs : gamestate) (right_beat : bool) : hit =
   let diff = Int.abs (beat_x - gs.player_x) in
   if right_beat then
     if diff < gs.good_range then (
-      range_helper "Good";
+      range_helper "Good!";
       Good)
     else if diff < gs.ok_range then (
       range_helper "Ok";
