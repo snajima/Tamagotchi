@@ -73,12 +73,16 @@ let fall_beat (height, c) : int * color =
 
 (** [fall_beats] reduces the height of a list of beats, removing beats
     that fall offscreen, and returns the resulting list of rocks *)
-let rec fall_beats (beat_lst : (int * color) list) : (int * color) list =
-  match beat_lst with
-  | [] -> []
+let rec fall_beats (gs : gamestate) : gamestate =
+  match gs.beats with
+  | [] -> gs
   | h :: t -> (
+      print_endline(string_of_int (fst h));
       (* If beats fall offscreen, exclude from list of beats *)
-      try fall_beat h :: fall_beats t with Miss -> fall_beats t )
+      try
+        {gs with beats = ((fall_beat h) :: (fall_beats {gs with beats = t}).beats)}
+      with Miss -> {(fall_beats {gs with beats = t}) with combo = 0}
+  )
 
 (** [game_over] returns a boolean indicating if the number of beats left is 0 *)
 let game_over (gs : gamestate) : bool =
@@ -174,7 +178,7 @@ let get_score (gs : gamestate) : int = gs.score
 let get_beat_type (gs : gamestate) : beat = gs.beat_type
   
 let process_left (gs : gamestate) : gamestate =
-  if (List.length gs.beats = 0) then gs else (
+  if (List.length gs.beats = 0) then {gs with beat_type = (Left 50);} else (
     let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
     match (snd closest) with
     | (ht, Don) -> (
@@ -202,7 +206,7 @@ let process_left (gs : gamestate) : gamestate =
 let process_middle (gs : gamestate) : gamestate = gs
 
 let process_right (gs : gamestate) : gamestate =
-  if (List.length gs.beats = 0) then gs else (
+  if (List.length gs.beats = 0) then {gs with beat_type = (Right 50);} else (
     let closest = closest_to_player (Int.abs ((fst (List.hd gs.beats)) - gs.player_x)) (gs.beats) [] gs in
     match (snd closest) with
     | (ht, Don) -> (
@@ -231,11 +235,11 @@ let next (gs : gamestate) : gamestate =
   if game_over gs then raise (Gameover gs.score) 
   else
     match gs.beat_type with
-    | (Left 0) -> { gs with beats = fall_beats gs.beats; beat_type = Idle }
-    | (Left x) -> { gs with beats = fall_beats gs.beats; beat_type = (Left (x - 1)) }
-    | (Right 0) -> { gs with beats = fall_beats gs.beats; beat_type = Idle }
-    | (Right x) -> { gs with beats = fall_beats gs.beats; beat_type = (Right (x - 1)) }
-    | Idle -> { gs with beats = fall_beats gs.beats }
+    | (Left 0) -> {(fall_beats gs) with beat_type = Idle }
+    | (Left x) -> {(fall_beats gs) with beat_type = (Left (x - 1)) }
+    | (Right 0) -> {(fall_beats gs) with beat_type = Idle }
+    | (Right x) -> {(fall_beats gs) with beat_type = (Right (x - 1)) }
+    | Idle -> fall_beats gs
 
 let add_beat (gs : gamestate) : gamestate =
   let beat_set = List.nth beats (Random.int (List.length beats)) in

@@ -443,7 +443,7 @@ let dolphin_test =
         |> add_rock |> next |> get_rocks)
       [ (0, 60); (1, 59); (2, 58); (2, 57) ];
     dolphin_rock_test_w_seed "Add one rock and fall to bottom"
-      (fun gs -> gs |> add_rock |> repeated_next 52 |> get_rocks)
+      (fun gs -> gs |> add_rock |> dolphin_repeated_next 52 |> get_rocks)
       [ (1, 9) ];
     (* --------------------- Observer: num_rocks ---------------------- *)
     dolphin_num_rock_test "Adding one rock "
@@ -537,7 +537,7 @@ let beats_num_beat_test (name : string) actual_value expected_out :
 (** [drum_repeated_next n gamestate] returns the result of applying the
     Drum.next function on [gamestate] [n] time *)
 let rec drum_repeated_next (n : int) (gamestate : Drum.gamestate) :
-    Dolphin.gamestate =
+    Drum.gamestate =
   if n = 0 then gamestate
   else drum_repeated_next (n - 1) (gamestate |> Drum.next)
 
@@ -545,60 +545,53 @@ let drum_test =
   let open Drum in
   [
     (* ----------------- Observer: get_drum_lane ------------------- *)
-    (* -------------------------- One --------------------------- *)
-    dolphin_lane_test "Middle to Right"
-      (init_game () |> process_right |> get_dolphin_lane)
-      Right;
-    dolphin_lane_test "Middle to Left"
-      (init_game () |> process_left |> get_dolphin_lane)
-      Left;
-    (* -------------------------- Two --------------------------- *)
-    dolphin_lane_test "Middle |> Right |> Right"
-      ( init_game () |> process_right |> process_right
-      |> get_dolphin_lane )
-      Right;
-    dolphin_lane_test "Middle |> Left |> Left"
-      (init_game () |> process_left |> process_left |> get_dolphin_lane)
-      Left;
-    dolphin_lane_test "Middle |> Right |> Left"
-      (init_game () |> process_right |> process_left |> get_dolphin_lane)
-      Middle;
-    dolphin_lane_test "Middle |> Left |> Right"
-      (init_game () |> process_left |> process_right |> get_dolphin_lane)
-      Middle;
+    drum_beat_test "Beat type upon hitting right button"
+      (init_game () |> process_right |> get_beat_type)
+      (Right 50);
+    drum_beat_test "Beat type upon hitting right button and waiting a frame"
+      (init_game () |> process_right |> drum_repeated_next 1 |> get_beat_type)
+      (Right 49);
+    drum_beat_test "Beat type upon hitting right button and waiting 51 frames"
+      (init_game () |> process_right |> drum_repeated_next 51 |> get_beat_type)
+      Idle;
+    drum_beat_test "Beat type upon hitting left button"
+      (init_game () |> process_left |> get_beat_type)
+      (Left 50);
+    drum_beat_test "Beat type upon hitting left button and waiting a frame"
+      (init_game () |> process_left |> drum_repeated_next 1 |> get_beat_type)
+      (Left 49);
+    drum_beat_test "Beat type upon hitting left button and waiting 51 frames"
+      (init_game () |> process_left |> drum_repeated_next 51 |> get_beat_type)
+      Idle;
+    drum_beat_test "Beat type upon pressing nothing"
+      (init_game () |> get_beat_type)
+      Idle;
+    drum_beat_test "Beat type upon pressing middle button"
+      (init_game () |> get_beat_type)
+      Idle;
+      
     (* ------------------------- Three -------------------------- *)
-    dolphin_lane_test "Middle |> Right |> Right |> Right"
+    drum_color_test "Middle |> Right |> Right |> Right"
       ( init_game () |> process_right |> process_right |> process_right
       |> get_dolphin_lane )
       Right;
-    dolphin_lane_test "Middle |> Right |> Right |> Left"
+    drum_color_test "Middle |> Right |> Right |> Left"
       ( init_game () |> process_right |> process_right |> process_left
       |> get_dolphin_lane )
       Middle;
-    dolphin_lane_test "Middle |> Right |> Left |> Right"
+    drum_color_test "Middle |> Right |> Left |> Right"
       ( init_game () |> process_right |> process_left |> process_right
       |> get_dolphin_lane )
       Right;
-    dolphin_lane_test "Middle |> Left |> Right |> Right"
+    drum_color_test "Middle |> Left |> Right |> Right"
       ( init_game () |> process_left |> process_right |> process_right
       |> get_dolphin_lane )
       Right;
-    dolphin_lane_test "Middle |> Left |> Left |> Right"
+    drum_color_test "Middle |> Left |> Left |> Right"
       ( init_game () |> process_left |> process_left |> process_right
       |> get_dolphin_lane )
       Middle;
-    dolphin_lane_test "Middle |> Left |> Right |> Left"
-      ( init_game () |> process_left |> process_right |> process_left
-      |> get_dolphin_lane )
-      Left;
-    dolphin_lane_test "Middle |> Right |> Left |> Left"
-      ( init_game () |> process_right |> process_left |> process_left
-      |> get_dolphin_lane )
-      Left;
-    dolphin_lane_test "Middle |> Left |> Left |> Left"
-      ( init_game () |> process_left |> process_left |> process_left
-      |> get_dolphin_lane )
-      Left;
+(*       
     (* --------------------- Observer: get_beats ---------------------- *)
     (* Seed default is set to 1 - values are: 1, 2, 0, 0, 2, 2, 2, 0, 0,
        0, 2 *)
@@ -640,7 +633,7 @@ let drum_test =
       2;
       beats_num_beat_test "Adding three rocks "
       (init_game () |> add_rock |> add_rock |> add_rock |> num_rocks)
-      3;
+      3; *)
   ]
 
 (* -------------------------------------------------------------------- *)
@@ -648,7 +641,7 @@ let drum_test =
 (* -------------------------------------------------------------------- *)
 
 (*Printer functions*)
-let our_opponent_printer (player : Elementals.element * int) =
+(* let our_opponent_printer (player : Elementals.element * int) =
   match fst player with
   | Fire -> "Fire, " ^ string_of_int (snd player)
   | Water -> "Water, " ^ string_of_int (snd player)
@@ -707,10 +700,10 @@ let elementals_test =
     (* --------------------- Observer: get_losses ---------------------- *)
 
     (* --------------- Observer: get_currently_animated ---------------- *)
-  ]
+  ] *)
 
 let suite =
   "test suite for Tamagotchi Final Project"
-  >::: List.flatten [ state_tests; dolphin_test; elementals_test ]
+  >::: List.flatten [ state_tests; dolphin_test; drum_test ]
 
 let _ = run_test_tt_main suite
