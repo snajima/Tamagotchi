@@ -40,7 +40,7 @@ let elementals_except s ex =
           (string_of_int 2 ^ " - " ^ string_of_int (get_losses g.game));
         gameover_screen_no_score 500 "Congrats, you win!"
           { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
-          s)
+          s )
       else (
         draw_pixels (default_vs.maxx / 2) (default_vs.maxy / 2)
           default_vs.maxx default_vs.maxy white;
@@ -51,7 +51,7 @@ let elementals_except s ex =
           (string_of_int (get_wins g.game) ^ " - " ^ string_of_int 2);
         gameover_screen_no_score 500 "Boo, you lost!"
           { gg_static with cx = vs.maxx / 2; cy = vs.maxy / 2 }
-          s)
+          s )
   | _ -> raise ex
 
 let elementals_key s c =
@@ -69,28 +69,28 @@ let rec get_elems_anims
   | (_, 100) :: t -> get_elems_anims t lst_so_far
   | (Water, height) :: t ->
       get_elems_anims t
-        ({
-           water_anim with
-           cx = height * g.row_scale;
-           cy = default_vs.maxy / 2;
-         }
-         :: lst_so_far)
+        ( {
+            water_anim with
+            cx = height * g.row_scale;
+            cy = default_vs.maxy / 2;
+          }
+        :: lst_so_far )
   | (Fire, height) :: t ->
       get_elems_anims t
-        ({
-           fireball_anim with
-           cx = height * g.row_scale;
-           cy = default_vs.maxy / 2;
-         }
-         :: lst_so_far)
+        ( {
+            fireball_anim with
+            cx = height * g.row_scale;
+            cy = default_vs.maxy / 2;
+          }
+        :: lst_so_far )
   | (Leaf, height) :: t ->
       get_elems_anims t
-        ({
-           leaf_anim with
-           cx = height * g.row_scale;
-           cy = default_vs.maxy / 2;
-         }
-         :: lst_so_far)
+        ( {
+            leaf_anim with
+            cx = height * g.row_scale;
+            cy = default_vs.maxy / 2;
+          }
+        :: lst_so_far )
   | (Nothing, _) :: t -> get_elems_anims t lst_so_far
 
 let robot_and_tamagotchi =
@@ -119,9 +119,9 @@ let elementals_predraw s =
     (default_vs.maxx * default_vs.scale / 2)
     ((default_vs.maxy * default_vs.scale) - 40)
     50 black
-    (string_of_int (get_wins g.game)
+    ( string_of_int (get_wins g.game)
     ^ " - "
-    ^ string_of_int (get_losses g.game))
+    ^ string_of_int (get_losses g.game) )
 
 let draw () =
   draw_loop vs elementals_init elementals_exit elementals_key
