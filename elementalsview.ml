@@ -12,7 +12,8 @@ type game_var = {
   mutable lifestage : string;
 }
 
-let g = { game = init_game (); speed = 2; row_scale = 1; lifestage = "" }
+let g =
+  { game = init_game (); speed = 2; row_scale = 1; lifestage = "" }
 
 let vs : viewstate = { default_vs with animations = [] }
 
@@ -86,11 +87,13 @@ let rec get_elems_anims
   | (Nothing, _) :: t -> get_elems_anims t lst_so_far
 
 let robot_and_tamagotchi () =
-  let anim = match g.lifestage with
+  let anim =
+    match g.lifestage with
     | "Baby" | "Teenager" -> shoot_baby_anim
     | "Adult" -> shoot_anim
     | "Senior" -> shoot_elder_anim
-    | _ -> failwith "Impossible" in
+    | _ -> failwith "Impossible"
+  in
   [
     { robot_anim with cx = 105; cy = default_vs.maxy / 2 };
     { anim with cx = 15; cy = default_vs.maxy / 2 };

@@ -454,8 +454,8 @@ let shoot_anim =
 
 let shoot_baby_anim =
   {
-    frames = [ mirror shoot_baby; mirror shoot ];
-    total = 2;
+    frames = [ mirror shoot_baby ];
+    total = 1;
     current = 0;
     cx = 0;
     cy = 0;
