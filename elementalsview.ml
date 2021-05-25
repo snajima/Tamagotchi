@@ -9,9 +9,10 @@ type game_var = {
   mutable game : Elementals.gamestate;
   speed : int;
   row_scale : int;
+  mutable lifestage : string;
 }
 
-let g = { game = init_game (); speed = 2; row_scale = 1 }
+let g = { game = init_game (); speed = 2; row_scale = 1; lifestage = "" }
 
 let vs : viewstate = { default_vs with animations = [] }
 
@@ -84,17 +85,22 @@ let rec get_elems_anims
       get_elems_anims t (e_anims_helper height lst_so_far leaf_anim)
   | (Nothing, _) :: t -> get_elems_anims t lst_so_far
 
-let robot_and_tamagotchi =
+let robot_and_tamagotchi () =
+  let anim = match g.lifestage with
+    | "Baby" | "Teenager" -> shoot_baby_anim
+    | "Adult" -> shoot_anim
+    | "Senior" -> shoot_elder_anim
+    | _ -> failwith "Impossible" in
   [
     { robot_anim with cx = 105; cy = default_vs.maxy / 2 };
-    { shoot_anim with cx = 15; cy = default_vs.maxy / 2 };
+    { anim with cx = 15; cy = default_vs.maxy / 2 };
   ]
 
 let get_animations (game : Elementals.gamestate) :
     Animation.animation list =
   get_elems_anims
     [ get_ours g.game; get_opponent g.game ]
-    robot_and_tamagotchi
+    (robot_and_tamagotchi ())
 
 let elementals_step s =
   (* Step Game *)

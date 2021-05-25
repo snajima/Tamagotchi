@@ -168,9 +168,17 @@ val leaf_anim : animation
     the Elementalist game *)
 val water_anim : animation
 
-(** [shoot_anim] is an [animation] that the renders the player's
+(** [shoot_anim] is an [animation] that the renders the Tamagotchi's
     shooting motion in the Elementalist game *)
 val shoot_anim : animation
+
+(** [shoot_baby_anim] is an [animation] that the renders the baby Tamagotchi's
+    shooting motion in the Elementalist game *)
+val shoot_baby_anim : animation
+
+(** [shoot_elder_anim] is an [animation] that the renders the elder Tamagotchi's
+    shooting motion in the Elementalist game *)
+val shoot_elder_anim : animation
 
 (** [robot_anim] is an [animation] that the renders the enemy's shooting
     motion in the Elementalist game *)

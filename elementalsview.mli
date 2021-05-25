@@ -1,6 +1,23 @@
 (** Renders a visual representation of the [Elementals] game and
     provides handler functions for the execution of the GUI draw loop *)
 
+(** Type [game_vars] represents the variables that the game requires to run:
+    - [game] is the [gamestate] of [Drum]
+    - [speed] represents how fast the beats move (lower the faster)
+    - [beat_speed] represents how spaced aparts the beats are
+    - [row_scale] is used for animating (higher the smoother)
+    - [lifestage] is a mutable field for storing the lifestage from Homeview,
+    used solely for animating *)
+type game_var = {
+    mutable game : Elementals.gamestate;
+    speed : int;
+    row_scale : int;
+    mutable lifestage : string;
+}
+
+(** [g] is of type game_var and stores all global game variables *)
+val g : game_var
+
 (* Stores score *)
 exception Gameover of int
 

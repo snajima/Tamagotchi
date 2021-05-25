@@ -90,6 +90,7 @@ let activate_button (active_button : button) =
       Drumview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
   | Elementals ->
+      Elementalsview.g.lifestage <- State.get_lifestage my_home.tam_state;
       Elementalsview.draw ();
       ignore (State.set_happy 15 my_home.tam_state)
 

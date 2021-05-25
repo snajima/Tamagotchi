@@ -422,6 +422,10 @@ let water = pixel_array_from_json "water" elementals_json
 
 let shoot = pixel_array_from_json "shoot" elementals_json
 
+let shoot_baby = pixel_array_from_json "shoot_baby" elementals_json
+
+let shoot_elder = pixel_array_from_json "shoot_elder" elementals_json
+
 let robot = pixel_array_from_json "robot" elementals_json
 
 let cloud_f1 = pixel_array_from_json "cloud_f1" elementals_json
@@ -447,6 +451,12 @@ let water_anim =
 
 let shoot_anim =
   { frames = [ mirror shoot ]; total = 1; current = 0; cx = 0; cy = 0 }
+
+let shoot_baby_anim =
+  { frames = [ mirror shoot_baby ]; total = 1; current = 0; cx = 0; cy = 0 }
+
+let shoot_elder_anim =
+  { frames = [ mirror shoot_elder ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 let robot_anim =
   { frames = [ robot ]; total = 1; current = 0; cx = 0; cy = 0 }
