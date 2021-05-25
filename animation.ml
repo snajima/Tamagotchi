@@ -453,10 +453,22 @@ let shoot_anim =
   { frames = [ mirror shoot ]; total = 1; current = 0; cx = 0; cy = 0 }
 
 let shoot_baby_anim =
-  { frames = [ mirror shoot_baby ]; total = 1; current = 0; cx = 0; cy = 0 }
+  {
+    frames = [ mirror shoot_baby; mirror shoot ];
+    total = 2;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
 
 let shoot_elder_anim =
-  { frames = [ mirror shoot_elder ]; total = 1; current = 0; cx = 0; cy = 0 }
+  {
+    frames = [ mirror shoot_elder ];
+    total = 1;
+    current = 0;
+    cx = 0;
+    cy = 0;
+  }
 
 let robot_anim =
   { frames = [ robot ]; total = 1; current = 0; cx = 0; cy = 0 }
