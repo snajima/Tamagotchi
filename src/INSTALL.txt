@@ -1,9 +1,6 @@
-Instruction:
+Required Modules:
 
 opam install Graphics
 opam install ANSITerminal
 opam install yojson
 opam install ounit2
-
-Test Commands:
-- make play
