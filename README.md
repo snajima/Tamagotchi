@@ -12,7 +12,7 @@ In this project we attempt to implement the Tamagotchi experience using low-leve
 
 The player is also able to take care of their Tamagotchi pet by feeding it, letting it sleep, and cleaning up after it. In the home menu, the Tamagotchi’s statuses (happiness, sleep, cleanliness, and hunger) are displayed numerically, and if any of them drop to 0, the Tamagotchi passes away. As a result, the player has to strategically take care of their Tamagotchi. Subsequent features were also added like age and system time (which corresponds to either a sun or moon displayed on the home screen)
 
-<img src="assets/eat.gif" height="250"> <img src="assets/poop.gif" height="250"> <img src="assets/sleep.gif" height="250">
+<img src="assets/eat.gif" height="250"> <img src="assets/sleep.gif" height="250"> <img src="assets/poop.gif" height="250">
 
 ## Setup
 
