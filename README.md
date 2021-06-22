@@ -2,7 +2,7 @@
 
 _Final Project for CS 3110 - Functional Programming_
 
-By: Justin Ngai, Shungo Najima, Stephen Yu, Justin Zhang
+By: [Justin Ngai](https://justinngai.me/), Shungo Najima, Stephen Yu, Justin Zhang
 
 ## Overview:
 
